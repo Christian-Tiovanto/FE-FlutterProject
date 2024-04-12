@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:project/tian/PengajuanSurat.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(PengajuanSurat());
 }
 
 class MainApp extends StatelessWidget {
