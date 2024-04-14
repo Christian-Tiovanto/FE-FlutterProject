@@ -16,7 +16,24 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
         appBar: const _PengajuanSuratAppBarWidget(),
         body: Column(
           children: [
-            ContainerKolomPengajuanSurat(),
+            ContainerKolomPengajuanSuratWidget(
+              leadingText: "Dari",
+              titleContent: Text('One-linea with trailing widget',
+                  style: TextStyle(height: 1, fontSize: 15)),
+              trailingContent: Icon(Icons.keyboard_arrow_down_outlined),
+            ),
+            ContainerKolomPengajuanSuratWidget(
+              leadingText: "Kepada",
+              titleContent: Text('One-linea with trailing widget',
+                  style: TextStyle(height: 1, fontSize: 15)),
+              trailingContent: Icon(Icons.keyboard_arrow_down_outlined),
+            ),
+            ContainerKolomPengajuanSuratWidget(
+              leadingText: "Jenis Surat",
+              titleContent: Text('One-linea with trailing widget',
+                  style: TextStyle(height: 1, fontSize: 15)),
+              trailingContent: Icon(Icons.keyboard_arrow_down_outlined),
+            ),
           ],
         ),
       ),
@@ -25,10 +42,15 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
   }
 }
 
-class ContainerKolomPengajuanSurat extends StatelessWidget {
-  const ContainerKolomPengajuanSurat({
-    super.key,
-  });
+class ContainerKolomPengajuanSuratWidget extends StatelessWidget {
+  final String leadingText;
+  final Widget? titleContent;
+  final Icon? trailingContent;
+  const ContainerKolomPengajuanSuratWidget(
+      {super.key,
+      this.leadingText = "text",
+      this.titleContent,
+      this.trailingContent});
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +64,11 @@ class ContainerKolomPengajuanSurat extends StatelessWidget {
           horizontalTitleGap: 30,
           titleAlignment: ListTileTitleAlignment.center,
           leading: Text(
-            "Dari",
+            this.leadingText,
             style: TextStyle(fontSize: 15, height: 1),
           ),
-          title: Text('One-line with trailing widget',
-              style: TextStyle(height: 1, fontSize: 15)),
-          trailing: Icon(Icons.keyboard_arrow_down_outlined),
+          title: this.titleContent,
+          trailing: this.trailingContent,
         ),
       ),
     );
