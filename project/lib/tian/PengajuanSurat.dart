@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
+
 class PengajuanSurat extends StatefulWidget {
   const PengajuanSurat({super.key});
 
@@ -30,9 +32,9 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
             ),
             ContainerKolomPengajuanSuratWidget(
               leadingText: "Jenis Surat",
-              titleContent: Text('One-linea with trailing widget',
-                  style: TextStyle(height: 1, fontSize: 15)),
-              trailingContent: Icon(Icons.keyboard_arrow_down_outlined),
+              trailingContent: DropdownMenuExample(
+                ListData: ['1', '2', '3'],
+              ),
             ),
           ],
         ),
@@ -45,7 +47,7 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
 class ContainerKolomPengajuanSuratWidget extends StatelessWidget {
   final String leadingText;
   final Widget? titleContent;
-  final Icon? trailingContent;
+  final Widget? trailingContent;
   const ContainerKolomPengajuanSuratWidget(
       {super.key,
       this.leadingText = "text",
@@ -104,4 +106,84 @@ class _PengajuanSuratAppBarWidget extends StatelessWidget
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class DropdownMenuExample extends StatefulWidget {
+  final List<String>? ListData;
+  const DropdownMenuExample({super.key, this.ListData});
+
+  @override
+  State<DropdownMenuExample> createState() => _DropdownMenuExampleState();
+}
+
+class _DropdownMenuExampleState extends State<DropdownMenuExample> {
+  late String dropdownValue = widget.ListData!.first;
+
+  @override
+  Widget build(BuildContext context) {
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return Colors.blue;
+      }
+      return Colors.red;
+    }
+
+    return Container(
+      // height: 5,
+      color: Colors.black,
+      child: DropdownMenu<String>(
+        width: 200,
+        textStyle: TextStyle(height: 1),
+        inputDecorationTheme: InputDecorationTheme(
+          fillColor: Colors.blue,
+          filled: true,
+          isDense: true,
+          constraints: BoxConstraints.tight(Size.fromHeight(30)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(60),
+            borderSide: BorderSide(
+              color: Colors.grey,
+              width: 1,
+            ),
+          ),
+        ),
+        menuStyle: MenuStyle(
+            backgroundColor: MaterialStateProperty.resolveWith(getColor)),
+        initialSelection: widget.ListData!.first,
+        onSelected: (String? value) {
+          // This is called when the user selects an item.
+          setState(() {
+            dropdownValue = value!;
+          });
+        },
+        dropdownMenuEntries:
+            widget.ListData!.map<DropdownMenuEntry<String>>((String value) {
+          return DropdownMenuEntry<String>(
+              value: value,
+              label: value,
+              labelWidget: Text(
+                value,
+              ));
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class SelectedBorder extends RoundedRectangleBorder
+    implements MaterialStateOutlinedBorder {
+  const SelectedBorder();
+
+  @override
+  OutlinedBorder? resolve(Set<MaterialState> states) {
+    if (states.contains(MaterialState.selected)) {
+      return const RoundedRectangleBorder();
+    }
+    return null; // Defer to default value on the theme or widget.
+  }
 }
