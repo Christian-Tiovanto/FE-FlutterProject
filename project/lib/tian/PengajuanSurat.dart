@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -16,7 +17,7 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
     return MaterialApp(
       home: Scaffold(
         appBar: const _PengajuanSuratAppBarWidget(),
-        body: Column(
+        body: ListView(
           children: [
             ContainerKolomPengajuanSuratWidget(
               leadingText: "Dari",
@@ -36,10 +37,73 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
                 ListData: ['1', '2', '3'],
               ),
             ),
+            ContainerKolomPengajuanSuratWidget(
+              leadingText: "Jenis Surat",
+              trailingContent: DropdownMenuExample(
+                ListData: ['1', '2', '3'],
+              ),
+            ),
+            TextFieldExample(),
           ],
         ),
       ),
       debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class TextFieldExample extends StatefulWidget {
+  const TextFieldExample({super.key});
+
+  @override
+  State<TextFieldExample> createState() => _TextFieldExampleState();
+}
+
+class _TextFieldExampleState extends State<TextFieldExample> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      scrollPhysics: NeverScrollableScrollPhysics(),
+      decoration: InputDecoration(
+          hintText: "Subject",
+          constraints: BoxConstraints(minHeight: 100),
+          contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 8)),
+      maxLines: null,
+      controller: _controller,
+      onSubmitted: (String value) async {
+        await showDialog<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Thanks!'),
+              content: Text(
+                  'You typed "$value", which has length ${value.characters.length}.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }
@@ -58,20 +122,18 @@ class ContainerKolomPengajuanSuratWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: 10),
+      height: 40,
       decoration:
           const BoxDecoration(border: Border(bottom: BorderSide(width: 1))),
-      child: SizedBox(
-        height: 40,
-        child: ListTile(
-          horizontalTitleGap: 30,
-          titleAlignment: ListTileTitleAlignment.center,
-          leading: Text(
-            this.leadingText,
-            style: TextStyle(fontSize: 15, height: 1),
-          ),
-          title: this.titleContent,
-          trailing: this.trailingContent,
+      child: ListTile(
+        horizontalTitleGap: 30,
+        titleAlignment: ListTileTitleAlignment.center,
+        leading: Text(
+          this.leadingText,
+          style: TextStyle(fontSize: 15, height: 1),
         ),
+        title: this.titleContent,
+        trailing: this.trailingContent,
       ),
     );
   }
