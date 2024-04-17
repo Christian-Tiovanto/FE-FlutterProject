@@ -1,20 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:tugas_project/profile_page.dart';
-
-
-// class ProfilePageWidget extends StatelessWidget{  
-//   const ProfilePageWidget({super.key})
-
-//   @override
-//   Widget build(BuildContext context){
-//   return MaterialApp(
-//     home: Scaffold(
-//       appBar: AppBar(
-//         title: Text('Profile Page'),
-//       ),
-//       body: ProfilePage(),
-//     ),
-//   );}}
 
 class ProfilePageWidget extends StatelessWidget {
   const ProfilePageWidget({super.key});
