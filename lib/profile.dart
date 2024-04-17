@@ -8,6 +8,7 @@ class ProfilePageWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile Page'),
+        centerTitle: true, 
       ),
       body: ProfilePage(),
     );
@@ -36,7 +37,6 @@ class ProfilePage extends StatelessWidget{
               
             ),
           ),
-          SizedBox(height: 25),
           Center(
             child: Text(
               'Role : Direktur',
@@ -48,7 +48,6 @@ class ProfilePage extends StatelessWidget{
             'Email',
             style: TextStyle(fontSize:22, color: Colors.black),
           ),
-          SizedBox(height: 25),
           Text(
             'christiantiovano@com',
             style: TextStyle(fontSize: 20, color: Colors.black),
@@ -58,7 +57,6 @@ class ProfilePage extends StatelessWidget{
             'Nomor HP',
             style: TextStyle(fontSize: 20, color: Colors.black),
           ),
-          SizedBox(height: 25),
           Text(
             '012345678910',
             style: TextStyle(fontSize: 20, color: Colors.black),
