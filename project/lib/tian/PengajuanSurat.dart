@@ -43,7 +43,12 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
                 ListData: ['1', '2', '3'],
               ),
             ),
-            TextFieldExample(),
+            TextFieldExample(
+              isBorder: true,
+            ),
+            TextFieldExample(
+              isBorder: false,
+            ),
           ],
         ),
       ),
@@ -53,7 +58,8 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
 }
 
 class TextFieldExample extends StatefulWidget {
-  const TextFieldExample({super.key});
+  final bool isBorder;
+  const TextFieldExample({super.key, required this.isBorder});
 
   @override
   State<TextFieldExample> createState() => _TextFieldExampleState();
@@ -80,7 +86,7 @@ class _TextFieldExampleState extends State<TextFieldExample> {
       scrollPhysics: NeverScrollableScrollPhysics(),
       decoration: InputDecoration(
           hintText: "Subject",
-          constraints: BoxConstraints(minHeight: 100),
+          border: widget.isBorder ? UnderlineInputBorder() : InputBorder.none,
           contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 8)),
       maxLines: null,
       controller: _controller,
