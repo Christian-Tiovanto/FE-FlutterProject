@@ -1,16 +1,35 @@
 import 'package:flutter/material.dart';
 //import 'package:tugas_project/profile_page.dart';
 
-void main(){
-  runApp(MaterialApp(
-    home: Scaffold(
+
+// class ProfilePageWidget extends StatelessWidget{  
+//   const ProfilePageWidget({super.key})
+
+//   @override
+//   Widget build(BuildContext context){
+//   return MaterialApp(
+//     home: Scaffold(
+//       appBar: AppBar(
+//         title: Text('Profile Page'),
+//       ),
+//       body: ProfilePage(),
+//     ),
+//   );}}
+
+class ProfilePageWidget extends StatelessWidget {
+  const ProfilePageWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: AppBar(
         title: Text('Profile Page'),
       ),
       body: ProfilePage(),
-    ),
-  ));
+    );
+  }
 }
+
 
 class ProfilePage extends StatelessWidget{
   @override
@@ -22,7 +41,7 @@ class ProfilePage extends StatelessWidget{
         children: [
           Center(
             child: CircleAvatar(
-              radius: 50,
+              radius: 75,
             ),
           ),
           SizedBox(height: 25),

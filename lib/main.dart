@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_project/profile_page.dart';
+import 'package:tugas_project/profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: ProfilePage(),
+      home: ProfilePageWidget(),
     );
   }
 }
