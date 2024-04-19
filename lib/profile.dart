@@ -1,24 +1,37 @@
 import 'package:flutter/material.dart';
 
 class ProfilePageWidget extends StatelessWidget {
-  const ProfilePageWidget({super.key});
+  const ProfilePageWidget({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile Page'),
-        centerTitle: true, 
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: [ // Tambahkan actions
+          IconButton(
+            icon: Icon(Icons.logout), // Icon logout
+            onPressed: () {
+              // Tambahkan fungsi logout di sini
+            },
+          ),
+        ],
       ),
       body: ProfilePage(),
     );
   }
 }
 
-
-class ProfilePage extends StatelessWidget{
+class ProfilePage extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(25.0),
       child: Column(
@@ -34,7 +47,6 @@ class ProfilePage extends StatelessWidget{
             child: Text(
               'Nama : Christian Tiovano',
               style: TextStyle(fontSize: 22, color: Colors.black),
-              
             ),
           ),
           Center(
@@ -46,7 +58,7 @@ class ProfilePage extends StatelessWidget{
           SizedBox(height: 25),
           Text(
             'Email',
-            style: TextStyle(fontSize:22, color: Colors.black),
+            style: TextStyle(fontSize: 22, color: Colors.black),
           ),
           Text(
             'christiantiovano@com',
