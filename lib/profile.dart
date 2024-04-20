@@ -15,9 +15,9 @@ class ProfilePageWidget extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        actions: [ // Tambahkan actions
+        actions: [
           IconButton(
-            icon: Icon(Icons.logout), // Icon logout
+            icon: Icon(Icons.logout),
             onPressed: () {
               // Tambahkan fungsi logout di sini
             },
@@ -49,24 +49,35 @@ class ProfilePage extends StatelessWidget {
               style: TextStyle(fontSize: 22, color: Colors.black),
             ),
           ),
+          SizedBox(height: 10),
           Center(
             child: Text(
               'Role : Direktur',
               style: TextStyle(fontSize: 20, color: Colors.black),
             ),
           ),
-          SizedBox(height: 25),
+          SizedBox(height: 10),
+          Divider( // Tambahkan Divider di sini
+            color: Colors.grey,
+            thickness: 1,
+          ),
+          SizedBox(height: 10),
           Text(
-            'Email',
+            'Email :',
             style: TextStyle(fontSize: 22, color: Colors.black),
           ),
           Text(
             'christiantiovano@com',
             style: TextStyle(fontSize: 20, color: Colors.black),
           ),
-          SizedBox(height: 25),
+          SizedBox(height: 10),
+          Divider( // Tambahkan Divider di sini
+            color: Colors.grey,
+            thickness: 1,
+          ),
+          SizedBox(height: 10),
           Text(
-            'Nomor HP',
+            'Nomor HP :',
             style: TextStyle(fontSize: 20, color: Colors.black),
           ),
           Text(
