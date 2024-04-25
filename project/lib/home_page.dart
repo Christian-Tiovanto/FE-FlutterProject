@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/history_page.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -14,17 +15,61 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-
+  List<String>? selectedFilters = ['Urgent', 'Regular'];
+  final SearchController controller = SearchController();
   List<Map<String, dynamic>> _allusers = [
-    {"name": "andy", "age": "Surat Pengunduran Diri"},
-    {"name": "wandy", "age": "Surat Pengajuan Cuti"},
-    {"name": "wandy", "age": "Surat Pengajuan Cuti"},
-    {"name": "wandy", "age": "Surat Pengajuan Cuti"},
-    {"name": "wandy", "age": "Surat Pengajuan Cuti"},
-    {"name": "wandy", "age": "Surat Pengajuan Cuti"},
-    {"name": "wandy", "age": "Surat Pengajuan Cuti"},
-    {"name": "wandy", "age": "Surat Pengajuan Cuti"},
+    {
+      "name": "andy",
+      "Subject": "Surat Pengunduran Diri",
+      "tgl": "Apr 17",
+      "status": "Regular",
+      "progres": "Pending"
+    },
+    {
+      "name": "Devon",
+      "Subject": "Surat Pengajuan Cuti",
+      "tgl": "Apr 18",
+      "status": "Regular",
+      "progres": "Pending"
+    },
+    {
+      "name": "Chris",
+      "Subject": "Surat Pengajuan Pembelian Unit",
+      "tgl": "Apr 19",
+      "status": "Urgent",
+      "progres": "Finished"
+    },
+    {
+      "name": "Jerry",
+      "Subject": "Surat Pengajuan Cuti",
+      "tgl": "Apr 18",
+      "status": "Regular",
+      "progres": "Cancelled"
+    },
+    {
+      "name": "Jerry W",
+      "Subject": "Surat Pengajuan Pembelian Unit",
+      "tgl": "Apr 19",
+      "status": "Urgent",
+      "progres": "Pending"
+    },
+    {
+      "name": "Hadron",
+      "Subject": "Surat Pengajuan Cuti",
+      "tgl": "Apr 18",
+      "status": "Regular",
+      "progres": "Finished"
+    },
+    {
+      "name": "Lina ",
+      "Subject": "Surat Pengajuan Pembelian Unit",
+      "tgl": "Apr 19",
+      "status": "Urgent",
+      "progres": "Pending"
+    },
   ];
+
+  List<String> searchhistory = [];
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +86,232 @@ class _HomePageState extends State<HomePage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SearchBar(),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  SearchAnchor(
+                    viewSurfaceTintColor: Colors.white,
+                    // MENGUBAH BACKGROUND COLOR
+                    isFullScreen: true,
+                    //viewBackgroundColor: Colors.white,
+                    searchController: controller,
+                    viewHintText: 'Search in Mail',
+                    viewTrailing: [
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            searchhistory.add(controller.text);
+                            searchhistory =
+                                searchhistory.reversed.toSet().toList();
+                            controller.closeView(controller.text);
+                          });
+                        },
+                        icon: const Icon(Icons.search),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            controller.clear();
+                          },
+                          icon: const Icon(Icons.clear))
+                    ],
+                    builder: (context, controller) {
+                      return SearchBar(
+                        controller: controller,
+                        leading: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.search),
+                        ),
+                        trailing: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.mic),
+                          ),
+                        ],
+                        hintText: 'Search in Mail',
+                        onTap: () => controller.openView(),
+                      );
+                    },
+                    suggestionsBuilder: (context, controller) {
+                      return [
+                        Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Text('Recent Mail Searches'),
+                        ),
+                        Wrap(
+                          children:
+                              List.generate(searchhistory.length, (index) {
+                            final item = searchhistory[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: ChoiceChip(
+                                side: BorderSide(color: Colors.white),
+                                label: Text(item),
+                                selected: item == controller.text,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(24.0))),
+                                onSelected: (value) {
+                                  controller.text = item;
+                                  controller.closeView(item);
+                                },
+                              ),
+                            );
+                          }),
+                        ),
+                        if (controller.text.isNotEmpty) ...[
+                          const Divider(),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _allusers
+                                  .where((user) =>
+                                      user['progres'] == 'Pending' &&
+                                      (controller.text.isEmpty ||
+                                          user['name']
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(controller.text
+                                                  .toLowerCase())))
+                                  .length,
+                              itemBuilder: (context, index) {
+                                final filteredUsers = _allusers
+                                    .where((user) =>
+                                        user['progres'] == 'Pending' &&
+                                        (controller.text.isEmpty ||
+                                            user['name']
+                                                .toString()
+                                                .toLowerCase()
+                                                .contains(controller.text
+                                                    .toLowerCase())))
+                                    .toList();
+                                final user = filteredUsers[index];
+                                return InkWell(
+                                  onTap: () {
+                                    // Tambahkan logika yang ingin dilakukan saat card diklik di sini
+                                    print(
+                                        'Card clicked: ${filteredUsers[index]['name']}');
+                                  },
+                                  child: Container(
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    height: 94,
+                                    child: Card(
+                                      color: Colors.white,
+                                      elevation: 0,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ListTile(
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    horizontal: 16),
+                                            leading: Container(
+                                              padding: EdgeInsets.all(0),
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                    color: Colors.black,
+                                                    width: 2),
+                                              ),
+                                              child: CircleAvatar(
+                                                radius: 24,
+                                                backgroundColor: Colors.blue,
+                                                child: Text(
+                                                  filteredUsers[index]['name']
+                                                          [0]
+                                                      .toUpperCase(),
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 20,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            title: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  filteredUsers[index]['name'],
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 20),
+                                                ),
+                                                Text(
+                                                  _allusers[index]
+                                                      ['tgl'], // Tanggal disini
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 13),
+                                                ),
+                                              ],
+                                            ),
+                                            subtitle: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      '${filteredUsers[index]["Subject"].toString()}',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '${filteredUsers[index]["status"].toString()}', // Teks urgent disini
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 13,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                    height:
+                                                        9), // Jarak antara baris pertama dan kedua
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Container(
+                                                        color: Colors.green,
+                                                        height: 2.0,
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Container(
+                                                        color: Colors.red,
+                                                        height: 2.0,
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Container(
+                                                        color: Colors.black,
+                                                        height: 2.0,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ]
+                      ];
+                    },
+                  ),
                 ],
               ),
             ),
@@ -52,28 +322,39 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(11, 0, 0, 0),
+            padding: EdgeInsets.fromLTRB(11, 8, 0, 0),
             child: ElevatedButton.icon(
               label: Icon(
                 Icons.arrow_drop_down,
                 color: Colors.black,
               ),
-              icon: Text(
-                'Filter',
-                style: TextStyle(color: Colors.black),
-              ),
+              icon: selectedFilters != null && selectedFilters!.length > 1
+                  ? Text(
+                      "${selectedFilters![0]}+${selectedFilters!.length - 1}",
+                      style: TextStyle(color: Colors.black),
+                    )
+                  : selectedFilters!.isNotEmpty
+                      ? Text(
+                          "${selectedFilters![0]}",
+                          style: TextStyle(color: Colors.black),
+                        )
+                      : Text(
+                          'Filter',
+                          style: TextStyle(color: Colors.black),
+                        ),
               onPressed: () async {
-                final List<String>? selectedFilters =
-                    await showDialog<List<String>>(
+                final List<String>? Filter = await showDialog<List<String>>(
                   context: context,
                   builder: (BuildContext context) {
-                    return FilterPopup();
+                    return FilterPopup(selectedFilters: selectedFilters);
                   },
                 );
 
                 // Handle selected filters here
-                if (selectedFilters != null) {
-                  print('Selected filters: $selectedFilters');
+                if (Filter != null) {
+                  setState(() {
+                    selectedFilters = Filter;
+                  });
                 }
               },
               style: ButtonStyle(
@@ -111,131 +392,155 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: _allusers.length,
-              itemBuilder: (context, index) => InkWell(
-                onTap: () {
-                  // Tambahkan logika yang ingin dilakukan saat card diklik di sini
-                  print('Card clicked: ${_allusers[index]['name']}');
-                },
-                child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5),
-                  height: 94,
-                  child: Card(
-                    color: Colors.white,
-                    elevation: 0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                          leading: Container(
-                            padding: EdgeInsets.all(0),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.black, width: 2),
-                            ),
-                            child: CircleAvatar(
-                              radius: 24,
-                              backgroundColor: Colors.blue,
-                              child: Text(
-                                'B',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
+                itemCount: _allusers
+                    .where((user) =>
+                        user['progres'] == 'Pending' &&
+                        selectedFilters!.contains(user['status']) &&
+                        (controller.text.isEmpty ||
+                            user['name']
+                                .toString()
+                                .toLowerCase()
+                                .contains(controller.text.toLowerCase())))
+                    .length,
+                itemBuilder: (context, index) {
+                  final filteredUsers = _allusers
+                      .where((user) =>
+                          user['progres'] == 'Pending' &&
+                          selectedFilters!.contains(user['status']) &&
+                          (controller.text.isEmpty ||
+                              user['name']
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(controller.text.toLowerCase())))
+                      .toList();
+                  final user = filteredUsers[index];
+                  return InkWell(
+                    onTap: () {
+                      // Tambahkan logika yang ingin dilakukan saat card diklik di sini
+                      print('Card clicked: ${filteredUsers[index]['name']}');
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      height: 94,
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ListTile(
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 16),
+                              leading: Container(
+                                padding: EdgeInsets.all(0),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.black, width: 2),
+                                ),
+                                child: CircleAvatar(
+                                  radius: 24,
+                                  backgroundColor: Colors.blue,
+                                  child: Text(
+                                    filteredUsers[index]['name'][0]
+                                        .toUpperCase(),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                _allusers[index]['name'],
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 20),
-                              ),
-                              Text(
-                                'APR 17', // Tanggal disini
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 13),
-                              ),
-                            ],
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
+                              title: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '${_allusers[index]["age"].toString()}',
+                                    filteredUsers[index]['name'],
                                     style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                    ),
+                                        color: Colors.black, fontSize: 20),
                                   ),
                                   Text(
-                                    'URGENT', // Teks urgent disini
+                                    _allusers[index]['tgl'], // Tanggal disini
                                     style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 13,
-                                    ),
+                                        color: Colors.black, fontSize: 13),
                                   ),
                                 ],
                               ),
-                              SizedBox(
-                                  height:
-                                      9), // Jarak antara baris pertama dan kedua
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                    child: Container(
-                                      color: Colors.green,
-                                      height: 2.0,
-                                    ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '${filteredUsers[index]["Subject"].toString()}',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${filteredUsers[index]["status"].toString()}', // Teks urgent disini
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Expanded(
-                                    child: Container(
-                                      color: Colors.red,
-                                      height: 2.0,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      color: Colors.black,
-                                      height: 2.0,
-                                    ),
+                                  SizedBox(
+                                      height:
+                                          9), // Jarak antara baris pertama dan kedua
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          color: Colors.green,
+                                          height: 2.0,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          color: Colors.red,
+                                          height: 2.0,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          color: Colors.black,
+                                          height: 2.0,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
-            ),
+                  );
+                }),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         elevation: 10.0,
-        label: const Text("Pengajuan"),
+        label: Text("Pengajuan"),
         icon: Icon(Icons.edit),
-        onPressed: () {},
+        onPressed: () {
+          print("$selectedFilters,pengajuan");
+        },
       ),
       bottomNavigationBar: SalomonBottomBar(
         currentIndex: _selectedIndex,
         selectedItemColor: const Color(0xff6200ee),
         unselectedItemColor: const Color(0xff757575),
         onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
           if (index == 0) {
 // mai page
           } else if (index == 1) {
@@ -253,49 +558,6 @@ class _HomePageState extends State<HomePage> {
           _navBarItems[1],
           _navBarItems[2],
         ],
-      ),
-    );
-  }
-}
-
-class SearchBar extends StatelessWidget {
-  const SearchBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-      child: TextField(
-        decoration: InputDecoration(
-          labelText: 'Search In Mail',
-          contentPadding: EdgeInsets.symmetric(horizontal: 30.0),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide(color: Colors.white), // Set border default
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide(
-              color: Colors.white,
-            ), // Set border saat text field aktif
-          ),
-          filled: true,
-          fillColor: Colors.grey[200], // Warna latar belakang abu
-          suffixIcon: Padding(
-            padding: const EdgeInsets.only(right: 25.0),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.blue,
-              child: Text(
-                'AB', // Ganti dengan inisial pengguna
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
