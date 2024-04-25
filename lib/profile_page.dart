@@ -1,7 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    Container(color: Colors.red),
+    Container(color: Colors.blue),
+    ProfilePageWidget(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('My App'),
+      ),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: SalomonBottomBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        items: _navBarItems,
+      ),
+    );
+  }
+}
 
 class ProfilePageWidget extends StatelessWidget {
-  const ProfilePageWidget({Key? key});
+  const ProfilePageWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -89,3 +141,21 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
+
+final _navBarItems = [
+  SalomonBottomBarItem(
+    icon: const Icon(Icons.mail),
+    title: const Text("Mail"),
+    selectedColor: Colors.red, // Ubah warna sesuai preferensi Anda
+  ),
+  SalomonBottomBarItem(
+    icon: const Icon(Icons.history),
+    title: const Text("History"),
+    selectedColor: Colors.blue, // Ubah warna sesuai preferensi Anda
+  ),
+  SalomonBottomBarItem(
+    icon: const Icon(Icons.person),
+    title: const Text("Profile"),
+    selectedColor: Colors.teal, // Ubah warna sesuai preferensi Anda
+  ),
+];

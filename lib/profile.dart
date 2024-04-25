@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class ProfilePageWidget extends StatelessWidget {
-  const ProfilePageWidget({Key? key});
+  const ProfilePageWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,60 +33,91 @@ class ProfilePageWidget extends StatelessWidget {
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(25.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: CircleAvatar(
-              radius: 75,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(25.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: CircleAvatar(
+                  radius: 75,
+                ),
+              ),
+              SizedBox(height: 25),
+              Center(
+                child: Text(
+                  'Nama : Christian Tiovano',
+                  style: TextStyle(fontSize: 22, color: Colors.black),
+                ),
+              ),
+              SizedBox(height: 10),
+              Center(
+                child: Text(
+                  'Role : Direktur',
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                ),
+              ),
+              SizedBox(height: 10),
+              Divider( // Tambahkan Divider di sini
+                color: Colors.grey,
+                thickness: 1,
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Email :',
+                style: TextStyle(fontSize: 22, color: Colors.black),
+              ),
+              Text(
+                'christiantiovano@com',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              SizedBox(height: 10),
+              Divider( // Tambahkan Divider di sini
+                color: Colors.grey,
+                thickness: 1,
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Nomor HP :',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              Text(
+                '012345678910',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+            ],
           ),
-          SizedBox(height: 25),
-          Center(
-            child: Text(
-              'Nama : Christian Tiovano',
-              style: TextStyle(fontSize: 22, color: Colors.black),
-            ),
-          ),
-          SizedBox(height: 10),
-          Center(
-            child: Text(
-              'Role : Direktur',
-              style: TextStyle(fontSize: 20, color: Colors.black),
-            ),
-          ),
-          SizedBox(height: 10),
-          Divider( // Tambahkan Divider di sini
-            color: Colors.grey,
-            thickness: 1,
-          ),
-          SizedBox(height: 10),
-          Text(
-            'Email :',
-            style: TextStyle(fontSize: 22, color: Colors.black),
-          ),
-          Text(
-            'christiantiovano@com',
-            style: TextStyle(fontSize: 20, color: Colors.black),
-          ),
-          SizedBox(height: 10),
-          Divider( // Tambahkan Divider di sini
-            color: Colors.grey,
-            thickness: 1,
-          ),
-          SizedBox(height: 10),
-          Text(
-            'Nomor HP :',
-            style: TextStyle(fontSize: 20, color: Colors.black),
-          ),
-          Text(
-            '012345678910',
-            style: TextStyle(fontSize: 20, color: Colors.black),
-          ),
-        ],
-      ),
+        ),
+        Spacer(), // Menambahkan Spacer agar SalomonBottomBar muncul di bagian bawah layar
+        SalomonBottomBar(
+          currentIndex: 2, // Indeks dari tab Profile
+          onTap: (index) {
+            // Handle ketika salah satu tab ditekan
+          },
+          items: _navBarItems,
+        ),
+      ],
     );
   }
 }
+
+final _navBarItems = [
+  SalomonBottomBarItem(
+    icon: const Icon(Icons.mail),
+    title: const Text("Mail"),
+    selectedColor: Colors.red, // Ubah warna sesuai preferensi Anda
+  ),
+  SalomonBottomBarItem(
+    icon: const Icon(Icons.history),
+    title: const Text("History"),
+    selectedColor: Colors.blue, // Ubah warna sesuai preferensi Anda
+  ),
+  SalomonBottomBarItem(
+    icon: const Icon(Icons.person),
+    title: const Text("Profile"),
+    selectedColor: Colors.teal, // Ubah warna sesuai preferensi Anda
+  ),
+];
