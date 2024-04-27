@@ -15,6 +15,22 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   int _selectedIndex = 1;
   List<String>? selectedFilters = ['Urgent', 'Regular'];
+  Future<void> _refresh() async {
+    await Future.delayed(Duration(seconds: 1));
+
+    setState(() {
+      _allusers.add(
+        {
+          "name": "Ayu ",
+          "Subject": "Surat Pengajuan Pembelian Unit",
+          "tgl": "Apr 25",
+          "status": "Urgent",
+          "progres": "Pending"
+        },
+      );
+    });
+  }
+
   List<Map<String, dynamic>> _allusers = [
     {
       "name": "andy",
@@ -183,137 +199,143 @@ class _HistoryPageState extends State<HistoryPage> {
                       ),
                     ),
                     Expanded(
-                      child: ListView.builder(
-                          itemCount: _allusers
-                              .where((user) =>
-                                  user['progres'] == 'Pending' &&
-                                  selectedFilters!.contains(user['status']))
-                              .length,
-                          itemBuilder: (context, index) {
-                            final filteredUsers = _allusers
+                      child: RefreshIndicator(
+                        onRefresh: _refresh,
+                        child: ListView.builder(
+                            itemCount: _allusers
                                 .where((user) =>
                                     user['progres'] == 'Pending' &&
                                     selectedFilters!.contains(user['status']))
-                                .toList();
-                            final user = filteredUsers[index];
-                            return InkWell(
-                              onTap: () {
-                                // Tambahkan logika yang ingin dilakukan saat card diklik di sini
-                                print(
-                                    'Card clicked: ${filteredUsers[index]['name']}');
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(vertical: 5),
-                                height: 94,
-                                child: Card(
-                                  color: Colors.white,
-                                  elevation: 0,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ListTile(
-                                        contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 16),
-                                        leading: Container(
-                                          padding: EdgeInsets.all(0),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                                color: Colors.black, width: 2),
-                                          ),
-                                          child: CircleAvatar(
-                                            radius: 24,
-                                            backgroundColor: Colors.blue,
-                                            child: Text(
-                                              filteredUsers[index]['name'][0]
-                                                  .toUpperCase(),
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20,
+                                .length,
+                            itemBuilder: (context, index) {
+                              final filteredUsers = _allusers
+                                  .where((user) =>
+                                      user['progres'] == 'Pending' &&
+                                      selectedFilters!.contains(user['status']))
+                                  .toList();
+                              final user = filteredUsers[index];
+                              return InkWell(
+                                onTap: () {
+                                  // Tambahkan logika yang ingin dilakukan saat card diklik di sini
+                                  print(
+                                      'Card clicked: ${filteredUsers[index]['name']}');
+                                },
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  height: 94,
+                                  child: Card(
+                                    color: Colors.white,
+                                    elevation: 0,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ListTile(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                          leading: Container(
+                                            padding: EdgeInsets.all(0),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 2),
+                                            ),
+                                            child: CircleAvatar(
+                                              radius: 24,
+                                              backgroundColor: Colors.blue,
+                                              child: Text(
+                                                filteredUsers[index]['name'][0]
+                                                    .toUpperCase(),
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20,
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              filteredUsers[index]['name'],
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 20),
-                                            ),
-                                            Text(
-                                              _allusers[index]
-                                                  ['tgl'], // Tanggal disini
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 13),
-                                            ),
-                                          ],
-                                        ),
-                                        subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  '${filteredUsers[index]["Subject"].toString()}',
-                                                  style: TextStyle(
+                                          title: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                filteredUsers[index]['name'],
+                                                style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${filteredUsers[index]["status"].toString()}', // Teks urgent disini
-                                                  style: TextStyle(
+                                                    fontSize: 20),
+                                              ),
+                                              Text(
+                                                _allusers[index]
+                                                    ['tgl'], // Tanggal disini
+                                                style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 13,
+                                                    fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
+                                          subtitle: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    '${filteredUsers[index]["Subject"].toString()}',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                                height:
-                                                    9), // Jarak antara baris pertama dan kedua
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Expanded(
-                                                  child: Container(
-                                                    color: Colors.green,
-                                                    height: 2.0,
+                                                  Text(
+                                                    '${filteredUsers[index]["status"].toString()}', // Teks urgent disini
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 13,
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  child: Container(
-                                                    color: Colors.red,
-                                                    height: 2.0,
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                  height:
+                                                      9), // Jarak antara baris pertama dan kedua
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Expanded(
+                                                    child: Container(
+                                                      color: Colors.green,
+                                                      height: 2.0,
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  child: Container(
-                                                    color: Colors.black,
-                                                    height: 2.0,
+                                                  Expanded(
+                                                    child: Container(
+                                                      color: Colors.red,
+                                                      height: 2.0,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                  Expanded(
+                                                    child: Container(
+                                                      color: Colors.black,
+                                                      height: 2.0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }),
+                              );
+                            }),
+                      ),
                     ),
                   ],
                 ),
@@ -398,162 +420,168 @@ class _HistoryPageState extends State<HistoryPage> {
                       ),
                     ),
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: _allusers
-                            .where((user) =>
-                                user['progres'] == 'Finished' &&
-                                selectedFilters!.contains(user['status']))
-                            .length,
-                        itemBuilder: (context, index) {
-                          final filteredUsers = _allusers
+                      child: RefreshIndicator(
+                        onRefresh: _refresh,
+                        child: ListView.builder(
+                          itemCount: _allusers
                               .where((user) =>
                                   user['progres'] == 'Finished' &&
                                   selectedFilters!.contains(user['status']))
-                              .toList();
-                          final user = filteredUsers[index];
-                          return Dismissible(
-                            key: Key(filteredUsers[index][
-                                'name']), // Gunakan nilai yang unik sebagai key
-                            direction: DismissDirection
-                                .startToEnd, // Slide dari kiri ke kanan
-                            background: Container(
-                              color: Colors.red,
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              alignment: Alignment.centerLeft,
-                              child: Icon(Icons.delete),
-                            ),
-                            secondaryBackground: Container(
-                              color: Colors.red,
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              alignment: Alignment.centerRight,
-                              child: Icon(Icons.delete),
-                            ),
-                            onDismissed: (direction) {
-                              // Aksi ketika item di-slide
-                              setState(() {
-                                // Hapus item dari daftar
-                                _allusers.remove(user);
-                              });
-                            },
-                            child: InkWell(
-                              onTap: () {
-                                // Tambahkan logika yang ingin dilakukan saat card diklik di sini
-                                print(
-                                    'Card clicked: ${filteredUsers[index]['name']}');
+                              .length,
+                          itemBuilder: (context, index) {
+                            final filteredUsers = _allusers
+                                .where((user) =>
+                                    user['progres'] == 'Finished' &&
+                                    selectedFilters!.contains(user['status']))
+                                .toList();
+                            final user = filteredUsers[index];
+                            return Dismissible(
+                              key: Key(filteredUsers[index][
+                                  'name']), // Gunakan nilai yang unik sebagai key
+                              direction: DismissDirection
+                                  .startToEnd, // Slide dari kiri ke kanan
+                              background: Container(
+                                color: Colors.red,
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                alignment: Alignment.centerLeft,
+                                child: Icon(Icons.delete),
+                              ),
+                              secondaryBackground: Container(
+                                color: Colors.red,
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                alignment: Alignment.centerRight,
+                                child: Icon(Icons.delete),
+                              ),
+                              onDismissed: (direction) {
+                                // Aksi ketika item di-slide
+                                setState(() {
+                                  // Hapus item dari daftar
+                                  _allusers.remove(user);
+                                });
                               },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(vertical: 5),
-                                height: 94,
-                                child: Card(
-                                  color: Colors.white,
-                                  elevation: 0,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ListTile(
-                                        contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 16),
-                                        leading: Container(
-                                          padding: EdgeInsets.all(0),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                                color: Colors.black, width: 2),
-                                          ),
-                                          child: CircleAvatar(
-                                            radius: 24,
-                                            backgroundColor: Colors.blue,
-                                            child: Text(
-                                              filteredUsers[index]['name'][0]
-                                                  .toUpperCase(),
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20,
+                              child: InkWell(
+                                onTap: () {
+                                  // Tambahkan logika yang ingin dilakukan saat card diklik di sini
+                                  print(
+                                      'Card clicked: ${filteredUsers[index]['name']}');
+                                },
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  height: 94,
+                                  child: Card(
+                                    color: Colors.white,
+                                    elevation: 0,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ListTile(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                          leading: Container(
+                                            padding: EdgeInsets.all(0),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 2),
+                                            ),
+                                            child: CircleAvatar(
+                                              radius: 24,
+                                              backgroundColor: Colors.blue,
+                                              child: Text(
+                                                filteredUsers[index]['name'][0]
+                                                    .toUpperCase(),
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20,
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              filteredUsers[index]['name'],
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 20),
-                                            ),
-                                            Text(
-                                              _allusers[index]
-                                                  ['tgl'], // Tanggal disini
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 13),
-                                            ),
-                                          ],
-                                        ),
-                                        subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  '${filteredUsers[index]["Subject"].toString()}',
-                                                  style: TextStyle(
+                                          title: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                filteredUsers[index]['name'],
+                                                style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${filteredUsers[index]["status"].toString()}', // Teks urgent disini
-                                                  style: TextStyle(
+                                                    fontSize: 20),
+                                              ),
+                                              Text(
+                                                _allusers[index]
+                                                    ['tgl'], // Tanggal disini
+                                                style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 13,
+                                                    fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
+                                          subtitle: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    '${filteredUsers[index]["Subject"].toString()}',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                                height:
-                                                    9), // Jarak antara baris pertama dan kedua
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Expanded(
-                                                  child: Container(
-                                                    color: Colors.green,
-                                                    height: 2.0,
+                                                  Text(
+                                                    '${filteredUsers[index]["status"].toString()}', // Teks urgent disini
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 13,
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  child: Container(
-                                                    color: Colors.red,
-                                                    height: 2.0,
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                  height:
+                                                      9), // Jarak antara baris pertama dan kedua
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Expanded(
+                                                    child: Container(
+                                                      color: Colors.green,
+                                                      height: 2.0,
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  child: Container(
-                                                    color: Colors.black,
-                                                    height: 2.0,
+                                                  Expanded(
+                                                    child: Container(
+                                                      color: Colors.red,
+                                                      height: 2.0,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                  Expanded(
+                                                    child: Container(
+                                                      color: Colors.black,
+                                                      height: 2.0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ],
@@ -639,162 +667,168 @@ class _HistoryPageState extends State<HistoryPage> {
                       ),
                     ),
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: _allusers
-                            .where((user) =>
-                                user['progres'] == 'Cancelled' &&
-                                selectedFilters!.contains(user['status']))
-                            .length,
-                        itemBuilder: (context, index) {
-                          final filteredUsers = _allusers
+                      child: RefreshIndicator(
+                        onRefresh: _refresh,
+                        child: ListView.builder(
+                          itemCount: _allusers
                               .where((user) =>
                                   user['progres'] == 'Cancelled' &&
                                   selectedFilters!.contains(user['status']))
-                              .toList();
-                          final user = filteredUsers[index];
-                          return Dismissible(
-                            key: Key(filteredUsers[index][
-                                'name']), // Gunakan nilai yang unik sebagai key
-                            direction: DismissDirection
-                                .startToEnd, // Slide dari kiri ke kanan
-                            background: Container(
-                              color: Colors.red,
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              alignment: Alignment.centerLeft,
-                              child: Icon(Icons.delete),
-                            ),
-                            secondaryBackground: Container(
-                              color: Colors.red,
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              alignment: Alignment.centerRight,
-                              child: Icon(Icons.delete),
-                            ),
-                            onDismissed: (direction) {
-                              // Aksi ketika item di-slide
-                              setState(() {
-                                // Hapus item dari daftar
-                                _allusers.remove(user);
-                              });
-                            },
-                            child: InkWell(
-                              onTap: () {
-                                // Tambahkan logika yang ingin dilakukan saat card diklik di sini
-                                print(
-                                    'Card clicked: ${filteredUsers[index]['name']}');
+                              .length,
+                          itemBuilder: (context, index) {
+                            final filteredUsers = _allusers
+                                .where((user) =>
+                                    user['progres'] == 'Cancelled' &&
+                                    selectedFilters!.contains(user['status']))
+                                .toList();
+                            final user = filteredUsers[index];
+                            return Dismissible(
+                              key: Key(filteredUsers[index][
+                                  'name']), // Gunakan nilai yang unik sebagai key
+                              direction: DismissDirection
+                                  .startToEnd, // Slide dari kiri ke kanan
+                              background: Container(
+                                color: Colors.red,
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                alignment: Alignment.centerLeft,
+                                child: Icon(Icons.delete),
+                              ),
+                              secondaryBackground: Container(
+                                color: Colors.red,
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                alignment: Alignment.centerRight,
+                                child: Icon(Icons.delete),
+                              ),
+                              onDismissed: (direction) {
+                                // Aksi ketika item di-slide
+                                setState(() {
+                                  // Hapus item dari daftar
+                                  _allusers.remove(user);
+                                });
                               },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(vertical: 5),
-                                height: 94,
-                                child: Card(
-                                  color: Colors.white,
-                                  elevation: 0,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ListTile(
-                                        contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 16),
-                                        leading: Container(
-                                          padding: EdgeInsets.all(0),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                                color: Colors.black, width: 2),
-                                          ),
-                                          child: CircleAvatar(
-                                            radius: 24,
-                                            backgroundColor: Colors.blue,
-                                            child: Text(
-                                              filteredUsers[index]['name'][0]
-                                                  .toUpperCase(),
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20,
+                              child: InkWell(
+                                onTap: () {
+                                  // Tambahkan logika yang ingin dilakukan saat card diklik di sini
+                                  print(
+                                      'Card clicked: ${filteredUsers[index]['name']}');
+                                },
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  height: 94,
+                                  child: Card(
+                                    color: Colors.white,
+                                    elevation: 0,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ListTile(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                          leading: Container(
+                                            padding: EdgeInsets.all(0),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 2),
+                                            ),
+                                            child: CircleAvatar(
+                                              radius: 24,
+                                              backgroundColor: Colors.blue,
+                                              child: Text(
+                                                filteredUsers[index]['name'][0]
+                                                    .toUpperCase(),
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20,
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              filteredUsers[index]['name'],
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 20),
-                                            ),
-                                            Text(
-                                              _allusers[index]
-                                                  ['tgl'], // Tanggal disini
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 13),
-                                            ),
-                                          ],
-                                        ),
-                                        subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  '${filteredUsers[index]["Subject"].toString()}',
-                                                  style: TextStyle(
+                                          title: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                filteredUsers[index]['name'],
+                                                style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${filteredUsers[index]["status"].toString()}', // Teks urgent disini
-                                                  style: TextStyle(
+                                                    fontSize: 20),
+                                              ),
+                                              Text(
+                                                _allusers[index]
+                                                    ['tgl'], // Tanggal disini
+                                                style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 13,
+                                                    fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
+                                          subtitle: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    '${filteredUsers[index]["Subject"].toString()}',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                                height:
-                                                    9), // Jarak antara baris pertama dan kedua
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Expanded(
-                                                  child: Container(
-                                                    color: Colors.green,
-                                                    height: 2.0,
+                                                  Text(
+                                                    '${filteredUsers[index]["status"].toString()}', // Teks urgent disini
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 13,
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  child: Container(
-                                                    color: Colors.red,
-                                                    height: 2.0,
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                  height:
+                                                      9), // Jarak antara baris pertama dan kedua
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Expanded(
+                                                    child: Container(
+                                                      color: Colors.green,
+                                                      height: 2.0,
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  child: Container(
-                                                    color: Colors.black,
-                                                    height: 2.0,
+                                                  Expanded(
+                                                    child: Container(
+                                                      color: Colors.red,
+                                                      height: 2.0,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                  Expanded(
+                                                    child: Container(
+                                                      color: Colors.black,
+                                                      height: 2.0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ],
