@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 void main() {
+<<<<<<< Updated upstream
   runApp(const MyApp());
 }
 
@@ -153,4 +154,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+=======
+  runApp(const PengajuanSurat());
+>>>>>>> Stashed changes
 }
