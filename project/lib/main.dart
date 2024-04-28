@@ -1,5 +1,7 @@
 // main.dart
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,6 +27,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _visible = false;
   final List<Map<String, dynamic>> _allUsers = [
     {"id": 1, "name": "Andy", "age": 29},
     {"id": 2, "name": "Aragon", "age": 40},
@@ -48,6 +51,19 @@ class _HomePageState extends State<HomePage> {
 
   // This function is called whenever the text field changes
   void _runFilter(String enteredKeyword) {
+    print(enteredKeyword);
+    final regexp = r'^' + '${enteredKeyword}.*';
+    RegExp exp = RegExp('${regexp}');
+    bool callback(String text) {
+      print('text');
+      print(text);
+      if (exp.firstMatch(text.toLowerCase()) is RegExpMatch) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
     List<Map<String, dynamic>> results = [];
     print(enteredKeyword);
     if (enteredKeyword.isEmpty) {
@@ -55,10 +71,7 @@ class _HomePageState extends State<HomePage> {
       results = _allUsers;
     } else {
       print("siniii");
-      results = _allUsers
-          .where((user) =>
-              user["name"].toLowerCase().contains(enteredKeyword.toLowerCase()))
-          .toList();
+      results = _allUsers.where((user) => callback(user["name"])).toList();
       _foundUsers = results;
       print(_foundUsers);
       // we use the toLowerCase() method to make it case-insensitive
@@ -73,47 +86,69 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            TextField(
-              onChanged: (value) => {_runFilter(value), setState(() {})},
-              decoration: const InputDecoration(),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: _foundUsers.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: _foundUsers.length,
-                      itemBuilder: (context, index) => Card(
-                        key: ValueKey(_foundUsers[index]["id"]),
-                        color: Colors.blue,
-                        elevation: 4,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: ListTile(
-                          leading: Text(
-                            _foundUsers[index]["id"].toString(),
-                            style: const TextStyle(
-                                fontSize: 24, color: Colors.white),
+        child: Container(
+          decoration:
+              BoxDecoration(border: Border.all(width: 1, color: Colors.black)),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                onChanged: (value) => {
+                  _runFilter(value),
+                  setState(() {
+                    if (value.isNotEmpty) {
+                      _visible = true;
+                    } else {
+                      _visible = false;
+                    }
+                  })
+                },
+                // initialValue: ' ',
+                decoration: InputDecoration(
+                    icon: Text("Kepada   "), border: InputBorder.none),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Visibility(
+                replacement: Container(
+                  height: 100,
+                  color: Colors.black,
+                ),
+                visible: _visible,
+                child: _foundUsers.isNotEmpty
+                    ? Expanded(
+                        child: ListView.builder(
+                          itemCount: _foundUsers.length,
+                          itemBuilder: (context, index) => Card(
+                            key: ValueKey(_foundUsers[index]["id"]),
+                            color: Colors.blue,
+                            elevation: 4,
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            child: ListTile(
+                              leading: Text(
+                                _foundUsers[index]["id"].toString(),
+                                style: const TextStyle(
+                                    fontSize: 24, color: Colors.white),
+                              ),
+                              title: Text(_foundUsers[index]['name'],
+                                  style: TextStyle(color: Colors.white)),
+                              subtitle: Text(
+                                  '${_foundUsers[index]["age"].toString()} years old',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
                           ),
-                          title: Text(_foundUsers[index]['name'],
-                              style: TextStyle(color: Colors.white)),
-                          subtitle: Text(
-                              '${_foundUsers[index]["age"].toString()} years old',
-                              style: TextStyle(color: Colors.white)),
                         ),
+                      )
+                    : const Text(
+                        'No results found',
+                        style: TextStyle(fontSize: 24),
                       ),
-                    )
-                  : const Text(
-                      'No results found',
-                      style: TextStyle(fontSize: 24),
-                    ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
