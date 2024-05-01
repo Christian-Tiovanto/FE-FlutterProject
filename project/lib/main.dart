@@ -2,10 +2,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:project/tian/PengajuanSurat.dart';
 
 void main() {
-<<<<<<< Updated upstream
-  runApp(const MyApp());
+  runApp(const PengajuanSurat());
 }
 
 class MyApp extends StatelessWidget {
@@ -154,7 +154,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-=======
-  runApp(const PengajuanSurat());
->>>>>>> Stashed changes
 }
