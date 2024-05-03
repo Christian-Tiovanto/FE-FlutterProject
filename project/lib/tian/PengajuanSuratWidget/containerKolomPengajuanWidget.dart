@@ -1,31 +1,44 @@
 import "package:flutter/material.dart";
 
+class PaddingLeftAndRight {
+  final double leftPadding;
+  final double rightPadding;
+
+  PaddingLeftAndRight({required this.leftPadding, required this.rightPadding});
+}
+
 class ContainerKolomPengajuanSuratWidget extends StatelessWidget {
   final Widget? firstPart;
   final Widget? secondPart;
   final Widget? thirdPart;
+  final PaddingLeftAndRight containerPadding;
   const ContainerKolomPengajuanSuratWidget(
-      {super.key, this.firstPart, this.secondPart, this.thirdPart});
+      {super.key,
+      this.firstPart,
+      this.secondPart,
+      this.thirdPart,
+      required this.containerPadding});
 
   @override
   Widget build(BuildContext context) {
-    return
-        // color: Colors.black,
-        Row(
+    return Row(
       children: [
         Container(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: firstPart ??
-              Container(
-                color: Colors.black,
-                width: 50,
-                height: 50,
-              ),
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: containerPadding.leftPadding,
+                right: containerPadding.rightPadding),
+            child: firstPart ??
+                Container(
+                  color: Colors.black,
+                  width: 50,
+                  height: 50,
+                ),
+          ),
         ),
         Expanded(
           flex: 3,
           child: Container(
-            color: Colors.black,
             child: secondPart ??
                 const SizedBox(
                   width: 0,

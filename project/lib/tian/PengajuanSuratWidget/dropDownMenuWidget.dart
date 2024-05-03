@@ -27,9 +27,13 @@ class _DropdownMenuExampleState extends State<DropdownMenuExample> {
 
     return Container(
       // height: 5,
-      color: Colors.black,
+      // color: Colors.black,
       child: DropdownMenu<String>(
         width: 200,
+        trailingIcon: Container(
+          color: Colors.amber,
+          child: Text("anjay"),
+        ),
         textStyle: const TextStyle(height: 1),
         inputDecorationTheme: InputDecorationTheme(
           fillColor: Colors.blue,

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project/tian/PengajuanSuratWidget/containerKolomPengajuanWidget.dart';
+import 'package:project/tian/PengajuanSuratWidget/dropDownMenuWidget.dart';
+import 'package:project/tian/PengajuanSuratWidget/textFieldWidget.dart';
 
 class SearchUserWidget extends StatefulWidget {
   const SearchUserWidget({super.key});
@@ -55,11 +58,9 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Container(
-        height: 20,
-        width: 380,
-        child: TextFormField(
+    return Column(
+      children: [
+        TextFormField(
           onChanged: (value) => {
             _runFilter(value),
             setState(() {
@@ -73,58 +74,54 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
           decoration: const InputDecoration(
               icon: Text("Kepada   "), border: InputBorder.none),
         ),
-      ),
-      SizedBox(
-        height: 400,
-        child: Visibility(
-          replacement: Container(
-            height: 40,
-            width: 40,
-            color: Colors.black,
-          )
-          // Column(
-          //   children: [
-          //     SizedBox(
-          //       width: double.infinity,
-          //       child: SizedBox(
-          //         width: double.infinity,
-          //         child: ContainerKolomPengajuanSuratWidget(
-          //           firstPart: Text("Jenis Surat"),
-          //           secondPart: DropdownMenuExample(
-          //             listData: ['1', '2', '3'],
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //     ContainerKolomPengajuanSuratWidget(
-          //       firstPart: Text("Jenis Surat"),
-          //       secondPart: DropdownMenuExample(
-          //         listData: ['1', '2', '3'],
-          //       ),
-          //     ),
-          //     TextFieldExample(
-          //       isBorder: true,
-          //     ),
-          //     TextFieldExample(
-          //       isBorder: false,
-          //     ),
-          //   ],
-          // ),
-          ,
-          visible: _visible,
-          child: _foundUsers.isNotEmpty
-              ? ListView.builder(
-                  itemCount: _foundUsers.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Text("anjay");
-                  })
-              : const Text(
-                  'No results found',
-                  style: TextStyle(fontSize: 24),
+        Container(
+          child: Visibility(
+            replacement: Column(
+              children: [
+                ContainerKolomPengajuanSuratWidget(
+                  firstPart: Text("Jenis Surat"),
+                  secondPart: DropdownMenuExample(
+                    listData: ['1', '2', '3'],
+                  ),
+                  containerPadding:
+                      PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
                 ),
+                ContainerKolomPengajuanSuratWidget(
+                  firstPart: Text("Jenis Surat"),
+                  thirdPart: DropdownMenuExample(
+                    listData: ['1', '2', '3'],
+                  ),
+                  containerPadding:
+                      PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: TextFieldExample(
+                    isBorder: true,
+                  ),
+                ),
+                TextFieldExample(
+                  isBorder: false,
+                ),
+              ],
+            ),
+            visible: _visible,
+            child: _foundUsers.isNotEmpty
+                ? Expanded(
+                    child: ListView.builder(
+                        itemCount: _foundUsers.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Text("anjay");
+                        }),
+                  )
+                : const Text(
+                    'No results found',
+                    style: TextStyle(fontSize: 24),
+                  ),
+          ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 }
