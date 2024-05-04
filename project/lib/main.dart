@@ -7,33 +7,6 @@ void main() => runApp(const MenuApp());
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
-/// An enhanced enum to define the available menus and their shortcuts.
-///
-/// Using an enum for menu definition is not required, but this illustrates how
-/// they could be used for simple menu systems.
-enum MenuEntry {
-  about('About'),
-  showMessage(
-    'Show Message',
-  ),
-  hideMessage(
-    'Hide Message',
-  ),
-  colorMenu('Color Menu'),
-  colorRed(
-    'Red Background',
-  ),
-  colorGreen(
-    'Green Background',
-  ),
-  colorBlue(
-    'Blue Background',
-  );
-
-  const MenuEntry(this.label);
-  final String label;
-}
-
 class MyCascadingMenu extends StatefulWidget {
   const MyCascadingMenu({super.key, required this.message});
 
@@ -46,26 +19,6 @@ class MyCascadingMenu extends StatefulWidget {
 class _MyCascadingMenuState extends State<MyCascadingMenu> {
   String _lastSelection = list[0];
   final FocusNode _buttonFocusNode = FocusNode(debugLabel: 'Menu Button');
-
-  Color get backgroundColor => _backgroundColor;
-  Color _backgroundColor = Colors.red;
-  set backgroundColor(Color value) {
-    if (_backgroundColor != value) {
-      setState(() {
-        _backgroundColor = value;
-      });
-    }
-  }
-
-  bool get showingMessage => _showingMessage;
-  bool _showingMessage = false;
-  set showingMessage(bool value) {
-    if (_showingMessage != value) {
-      setState(() {
-        _showingMessage = value;
-      });
-    }
-  }
 
   @override
   void dispose() {
