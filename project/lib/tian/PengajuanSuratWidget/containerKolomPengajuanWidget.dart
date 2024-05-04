@@ -24,17 +24,12 @@ class ContainerKolomPengajuanSuratWidget extends StatelessWidget {
     return Row(
       children: [
         Container(
-          child: Padding(
-            padding: EdgeInsets.only(
-                left: containerPadding.leftPadding,
-                right: containerPadding.rightPadding),
-            child: firstPart ??
-                Container(
-                  color: Colors.black,
-                  width: 50,
-                  height: 50,
-                ),
-          ),
+          child: firstPart ??
+              Container(
+                color: Colors.black,
+                width: 50,
+                height: 50,
+              ),
         ),
         Expanded(
           flex: 3,

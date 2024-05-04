@@ -67,33 +67,32 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
     return MaterialApp(
       home: Scaffold(
         appBar: const PengajuanSuratAppBarWidget(),
-        body: ListView(
-          shrinkWrap: true,
+        body: Column(
           children: [
-            ContainerKolomPengajuanSuratWidget(
-              firstPart: Text("Jenis Surat"),
-              secondPart: Text('One-linea with trailing widget',
-                  style: TextStyle(height: 1, fontSize: 15)),
-              thirdPart: Icon(Icons.keyboard_arrow_down_outlined),
-              containerPadding:
-                  PaddingLeftAndRight(leftPadding: 20, rightPadding: 20),
-            ),
-            Container(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
-                            width: double.infinity, child: SearchUserWidget()),
-                      ),
+            ListView(
+              shrinkWrap: true,
+              children: [
+                ContainerKolomPengajuanSuratWidget(
+                  firstPart: Text("Jenis Surat"),
+                  secondPart: Text('One-linea with trailing widget',
+                      style: TextStyle(height: 1, fontSize: 15)),
+                  thirdPart: Icon(Icons.keyboard_arrow_down_outlined),
+                  containerPadding:
+                      PaddingLeftAndRight(leftPadding: 20, rightPadding: 20),
+                ),
+                Row(
+                  children: [
+                    Container(
+                      child: Expanded(child: SearchUserWidget()),
                     ),
-                  )
-                ],
-              ),
+                  ],
+                )
+                // ContainerKolomPengajuanSuratWidget(
+                //   firstPart: Container(child: Expanded(child: SearchUserWidget())),
+                //   containerPadding:
+                //       PaddingLeftAndRight(leftPadding: 0, rightPadding: 0),
+                // ),
+              ],
             ),
           ],
         ),

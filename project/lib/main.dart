@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:project/tian/PengajuanSurat.dart';
 
 /// Flutter code sample for [MenuAnchor].
 
-void main() => runApp(const MenuApp());
+void main() => runApp(const PengajuanSurat());
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 

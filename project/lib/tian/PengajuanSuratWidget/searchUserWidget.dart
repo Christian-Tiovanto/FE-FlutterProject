@@ -60,50 +60,52 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextFormField(
-          onChanged: (value) => {
-            _runFilter(value),
-            setState(() {
-              if (value.isNotEmpty) {
-                _visible = true;
-              } else {
-                _visible = false;
-              }
-            })
-          },
-          decoration: const InputDecoration(
-              icon: Text("Kepada   "), border: InputBorder.none),
+        Container(
+          width: 200,
+          child: TextFormField(
+            onChanged: (value) => {
+              _runFilter(value),
+              setState(() {
+                if (value.isNotEmpty) {
+                  _visible = true;
+                } else {
+                  _visible = false;
+                }
+              })
+            },
+            decoration: const InputDecoration(
+                icon: Text("Kepada   "), border: InputBorder.none),
+          ),
         ),
         Container(
           child: Visibility(
-            replacement: Column(
-              children: [
-                ContainerKolomPengajuanSuratWidget(
-                  firstPart: Text("Jenis Surat"),
-                  secondPart: DropdownMenuExample(
-                    listData: ['1', '2', '3'],
-                  ),
-                  containerPadding:
-                      PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
-                ),
-                ContainerKolomPengajuanSuratWidget(
-                  firstPart: Text("Jenis Surat"),
-                  thirdPart: DropdownMenuExample(
-                    listData: ['1', '2', '3'],
-                  ),
-                  containerPadding:
-                      PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: TextFieldExample(
-                    isBorder: true,
-                  ),
-                ),
-                TextFieldExample(
-                  isBorder: false,
-                ),
-              ],
+            replacement: Expanded(
+              child: Column(
+                children: [
+                  // ContainerKolomPengajuanSuratWidget(
+                  //   firstPart: Text("Jenis Surat"),
+                  //   secondPart: DropdownMenuExample(
+                  //     listData: ['1', '2', '3'],
+                  //   ),
+                  //   containerPadding:
+                  //       PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
+                  // ),
+                  // ContainerKolomPengajuanSuratWidget(
+                  //   firstPart: Text("Jenis Surat"),
+                  //   thirdPart: DropdownMenuExample(
+                  //     listData: ['1', '2', '3'],
+                  //   ),
+                  //   containerPadding:
+                  //       PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
+                  // ),
+                  // TextFieldExample(
+                  //   isBorder: true,
+                  // ),
+                  // TextFieldExample(
+                  //   isBorder: false,
+                  // ),
+                ],
+              ),
             ),
             visible: _visible,
             child: _foundUsers.isNotEmpty
