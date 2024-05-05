@@ -82,13 +82,20 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
                 ),
                 Row(
                   children: [
+                    SizedBox(width: 20),
                     Container(
                       child: Expanded(child: SearchUserWidget()),
                     ),
                   ],
-                )
+                ),
                 // ContainerKolomPengajuanSuratWidget(
-                //   firstPart: Container(child: Expanded(child: SearchUserWidget())),
+                //   firstPart: Expanded(
+                //     child: Row(
+                //       children: [
+                //         SearchUserWidget(),
+                //       ],
+                //     ),
+                //   ),
                 //   containerPadding:
                 //       PaddingLeftAndRight(leftPadding: 0, rightPadding: 0),
                 // ),

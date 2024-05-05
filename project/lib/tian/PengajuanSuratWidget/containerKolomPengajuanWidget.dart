@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 
 class PaddingLeftAndRight {
   final double leftPadding;
@@ -23,6 +24,9 @@ class ContainerKolomPengajuanSuratWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        SizedBox(
+          width: containerPadding.leftPadding,
+        ),
         Container(
           child: firstPart ??
               Container(
@@ -30,6 +34,9 @@ class ContainerKolomPengajuanSuratWidget extends StatelessWidget {
                 width: 50,
                 height: 50,
               ),
+        ),
+        SizedBox(
+          width: containerPadding.rightPadding,
         ),
         Expanded(
           flex: 3,

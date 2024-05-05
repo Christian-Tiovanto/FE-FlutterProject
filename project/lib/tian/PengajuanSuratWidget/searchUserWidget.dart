@@ -60,63 +60,56 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          width: 200,
-          child: TextFormField(
-            onChanged: (value) => {
-              _runFilter(value),
-              setState(() {
-                if (value.isNotEmpty) {
-                  _visible = true;
-                } else {
-                  _visible = false;
-                }
-              })
-            },
-            decoration: const InputDecoration(
-                icon: Text("Kepada   "), border: InputBorder.none),
-          ),
+        TextFormField(
+          onChanged: (value) => {
+            _runFilter(value),
+            setState(() {
+              if (value.isNotEmpty) {
+                _visible = true;
+              } else {
+                _visible = false;
+              }
+            })
+          },
+          decoration: const InputDecoration(
+              icon: Text("Kepada   "), border: InputBorder.none),
         ),
         Container(
           child: Visibility(
-            replacement: Expanded(
-              child: Column(
-                children: [
-                  // ContainerKolomPengajuanSuratWidget(
-                  //   firstPart: Text("Jenis Surat"),
-                  //   secondPart: DropdownMenuExample(
-                  //     listData: ['1', '2', '3'],
-                  //   ),
-                  //   containerPadding:
-                  //       PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
-                  // ),
-                  // ContainerKolomPengajuanSuratWidget(
-                  //   firstPart: Text("Jenis Surat"),
-                  //   thirdPart: DropdownMenuExample(
-                  //     listData: ['1', '2', '3'],
-                  //   ),
-                  //   containerPadding:
-                  //       PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
-                  // ),
-                  // TextFieldExample(
-                  //   isBorder: true,
-                  // ),
-                  // TextFieldExample(
-                  //   isBorder: false,
-                  // ),
-                ],
-              ),
+            replacement: Column(
+              children: [
+                ContainerKolomPengajuanSuratWidget(
+                  firstPart: Text("Jenis Surat a"),
+                  thirdPart: DropdownMenuExample(
+                    listData: ['1', '2', '3'],
+                  ),
+                  containerPadding:
+                      PaddingLeftAndRight(leftPadding: 0, rightPadding: 0),
+                ),
+                ContainerKolomPengajuanSuratWidget(
+                  firstPart: Text("Jenis Surat"),
+                  thirdPart: DropdownMenuExample(
+                    listData: ['1', '2', '3'],
+                  ),
+                  containerPadding:
+                      PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
+                ),
+                TextFieldExample(
+                  isBorder: true,
+                ),
+                TextFieldExample(
+                  isBorder: false,
+                ),
+              ],
             ),
             visible: _visible,
             child: _foundUsers.isNotEmpty
-                ? Expanded(
-                    child: ListView.builder(
-                        itemCount: _foundUsers.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Text("anjay");
-                        }),
-                  )
+                ? ListView.builder(
+                    itemCount: _foundUsers.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return Text("anjay");
+                    })
                 : const Text(
                     'No results found',
                     style: TextStyle(fontSize: 24),
