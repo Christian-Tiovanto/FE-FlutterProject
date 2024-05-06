@@ -89,7 +89,6 @@ class _HistoryPageState extends State<HistoryPage> {
     return DefaultTabController(
         length: 3,
         child: Scaffold(
-          backgroundColor: Colors.white,
           appBar: AppBar(
             title: const Text(
               'History',
@@ -111,7 +110,6 @@ class _HistoryPageState extends State<HistoryPage> {
               indicatorSize: TabBarIndicatorSize.tab,
               labelColor: Colors.green,
             ),
-            backgroundColor: Colors.white, // Warna latar belakang AppBar
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:project/hadron/loginpage.dart';
 import 'package:project/homeandhistory/history_page.dart';
 import 'package:project/homeandhistory/home_page.dart';
+import 'package:project/homeandhistory/pertemuan_06provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:provider/provider.dart';
 
 class SettingWidget extends StatefulWidget {
   const SettingWidget({Key? key}) : super(key: key);
@@ -15,6 +17,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   int _selectedIndex = 2;
   @override
   Widget build(BuildContext context) {
+    final prov = Provider.of<Pertemuan06Provider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -43,20 +46,15 @@ class _SettingWidgetState extends State<SettingWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Switch',
+                      'Dark Theme',
                       style: TextStyle(fontSize: 20, color: Colors.black),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.logout),
-                      onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                          (route) =>
-                              false, // fungsi ini mengembalikan false untuk menghapus semua route lainnya dari stack
-                        );
-                      },
-                    ),
+                    Switch(
+                        value: prov.enableDarkMode,
+                        activeColor: Colors.green,
+                        onChanged: (val) {
+                          prov.setBrightness = val;
+                        })
                   ],
                 ),
                 SizedBox(height: 10),
