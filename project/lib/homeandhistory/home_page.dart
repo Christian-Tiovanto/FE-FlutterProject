@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/homeandhistory/history_page.dart';
+import 'package:project/jerrywijaya/profile.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:project/homeandhistory/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
 
@@ -206,7 +207,6 @@ class _HomePageState extends State<HomePage> {
                                                   .contains(controller.text
                                                       .toLowerCase())))
                                       .toList();
-                                  final user = filteredUsers[index];
                                   return InkWell(
                                     onTap: () {
                                       // Tambahkan logika yang ingin dilakukan saat card diklik di sini
@@ -442,7 +442,6 @@ class _HomePageState extends State<HomePage> {
                                 .toLowerCase()
                                 .contains(controller.text.toLowerCase())))
                     .toList();
-                final user = filteredUsers[index];
                 return InkWell(
                   onTap: () {
                     // Tambahkan logika yang ingin dilakukan saat card diklik di sini
@@ -576,7 +575,10 @@ class _HomePageState extends State<HomePage> {
               MaterialPageRoute(builder: (context) => HistoryPage()),
             );
           } else if (index == 2) {
-// profile page
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage()),
+            );
           }
         },
         items: [
