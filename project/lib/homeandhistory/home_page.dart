@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/homeandhistory/history_page.dart';
 import 'package:project/jerrywijaya/profile.dart';
+import 'package:project/tian/PengajuanSurat.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:project/homeandhistory/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
 
@@ -558,7 +559,10 @@ class _HomePageState extends State<HomePage> {
         label: Text("Pengajuan"),
         icon: Icon(Icons.edit),
         onPressed: () {
-          print("$selectedFilters,pengajuan");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PengajuanSurat()),
+          );
         },
       ),
       bottomNavigationBar: SalomonBottomBar(
@@ -577,7 +581,7 @@ class _HomePageState extends State<HomePage> {
           } else if (index == 2) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
+              MaterialPageRoute(builder: (context) => ProfilePageWidget()),
             );
           }
         },

@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:project/homeandhistory/history_page.dart';
+import 'package:project/homeandhistory/home_page.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-class ProfilePageWidget extends StatelessWidget {
+class ProfilePageWidget extends StatefulWidget {
   const ProfilePageWidget({Key? key}) : super(key: key);
 
+  @override
+  State<ProfilePageWidget> createState() => _ProfilePageWidgetState();
+}
+
+class _ProfilePageWidgetState extends State<ProfilePageWidget> {
+  int _selectedIndex = 2;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,12 +27,38 @@ class ProfilePageWidget extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
-            onPressed: () {
-            },
+            onPressed: () {},
           ),
         ],
       ),
       body: ProfilePage(),
+      bottomNavigationBar: SalomonBottomBar(
+        currentIndex: _selectedIndex,
+        selectedItemColor: const Color(0xff6200ee),
+        unselectedItemColor: const Color(0xff757575),
+        onTap: (index) {
+          if (index == 0) {
+// mai page
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          } else if (index == 1) {
+            //historypage
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HistoryPage()),
+            );
+          } else if (index == 2) {
+// profile page
+          }
+        },
+        items: [
+          _navBarItems[0], // History
+          _navBarItems[1], // Mail
+          _navBarItems[2], // Profile
+        ],
+      ),
     );
   }
 }
@@ -91,12 +125,6 @@ class ProfilePage extends StatelessWidget {
           ),
         ),
         Spacer(),
-        SalomonBottomBar(
-          currentIndex: 2,
-          onTap: (index) {
-          },
-          items: _navBarItems,
-        ),
       ],
     );
   }
@@ -106,16 +134,16 @@ final _navBarItems = [
   SalomonBottomBarItem(
     icon: const Icon(Icons.mail),
     title: const Text("Mail"),
-    selectedColor: Colors.red, 
+    selectedColor: Colors.red,
   ),
   SalomonBottomBarItem(
     icon: const Icon(Icons.history),
     title: const Text("History"),
-    selectedColor: Colors.blue, 
+    selectedColor: Colors.blue,
   ),
   SalomonBottomBarItem(
     icon: const Icon(Icons.person),
     title: const Text("Profile"),
-    selectedColor: Colors.teal, 
+    selectedColor: Colors.teal,
   ),
 ];
