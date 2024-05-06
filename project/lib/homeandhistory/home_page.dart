@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:project/history_page.dart';
+import 'package:project/homeandhistory/history_page.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
-import 'package:project/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
+import 'package:project/homeandhistory/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
