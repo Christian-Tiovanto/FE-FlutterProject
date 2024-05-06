@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/hadron/loginpage.dart';
 import 'package:project/homeandhistory/history_page.dart';
 import 'package:project/homeandhistory/home_page.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -27,7 +28,14 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget> {
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                (route) =>
+                    false, // fungsi ini mengembalikan false untuk menghapus semua route lainnya dari stack
+              );
+            },
           ),
         ],
       ),
