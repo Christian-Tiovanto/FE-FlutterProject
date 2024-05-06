@@ -20,7 +20,6 @@ class ProfilePageWidget extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
-              // Tambahkan fungsi logout di sini
             },
           ),
         ],
@@ -61,7 +60,7 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              Divider( // Tambahkan Divider di sini
+              Divider(
                 color: Colors.grey,
                 thickness: 1,
               ),
@@ -75,7 +74,7 @@ class ProfilePage extends StatelessWidget {
                 style: TextStyle(fontSize: 20, color: Colors.black),
               ),
               SizedBox(height: 10),
-              Divider( // Tambahkan Divider di sini
+              Divider(
                 color: Colors.grey,
                 thickness: 1,
               ),
@@ -91,11 +90,10 @@ class ProfilePage extends StatelessWidget {
             ],
           ),
         ),
-        Spacer(), // Menambahkan Spacer agar SalomonBottomBar muncul di bagian bawah layar
+        Spacer(),
         SalomonBottomBar(
-          currentIndex: 2, // Indeks dari tab Profile
+          currentIndex: 2,
           onTap: (index) {
-            // Handle ketika salah satu tab ditekan
           },
           items: _navBarItems,
         ),
@@ -108,16 +106,16 @@ final _navBarItems = [
   SalomonBottomBarItem(
     icon: const Icon(Icons.mail),
     title: const Text("Mail"),
-    selectedColor: Colors.red, // Ubah warna sesuai preferensi Anda
+    selectedColor: Colors.red, 
   ),
   SalomonBottomBarItem(
     icon: const Icon(Icons.history),
     title: const Text("History"),
-    selectedColor: Colors.blue, // Ubah warna sesuai preferensi Anda
+    selectedColor: Colors.blue, 
   ),
   SalomonBottomBarItem(
     icon: const Icon(Icons.person),
     title: const Text("Profile"),
-    selectedColor: Colors.teal, // Ubah warna sesuai preferensi Anda
+    selectedColor: Colors.teal, 
   ),
 ];

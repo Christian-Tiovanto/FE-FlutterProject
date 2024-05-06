@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_project/profile.dart';
+import 'package:tugas_project/jerrywijaya/profile.dart';
 
 void main() {
   runApp(MyApp());
