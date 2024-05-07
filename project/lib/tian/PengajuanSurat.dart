@@ -73,10 +73,9 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
               shrinkWrap: true,
               children: [
                 ContainerKolomPengajuanSuratWidget(
-                  firstPart: Text("Jenis Surat"),
-                  secondPart: Text('One-linea with trailing widget',
+                  firstPart: Text("Dari : "),
+                  secondPart: Text('Hadron@gmail.com',
                       style: TextStyle(height: 1, fontSize: 15)),
-                  thirdPart: Icon(Icons.keyboard_arrow_down_outlined),
                   containerPadding:
                       PaddingLeftAndRight(leftPadding: 20, rightPadding: 20),
                 ),

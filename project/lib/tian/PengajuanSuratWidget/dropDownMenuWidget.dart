@@ -20,9 +20,9 @@ class _DropdownMenuExampleState extends State<DropdownMenuExample> {
         MaterialState.focused,
       };
       if (states.any(interactiveStates.contains)) {
-        return Colors.blue;
+        return Color.fromARGB(255, 160, 159, 159);
       }
-      return Colors.red;
+      return Color.fromARGB(255, 160, 159, 159);
     }
 
     return Container(
@@ -31,12 +31,11 @@ class _DropdownMenuExampleState extends State<DropdownMenuExample> {
       child: DropdownMenu<String>(
         width: 200,
         trailingIcon: Container(
-          color: Colors.amber,
           child: Text("anjay"),
         ),
         textStyle: const TextStyle(height: 1),
         inputDecorationTheme: InputDecorationTheme(
-          fillColor: Colors.blue,
+          fillColor: Color.fromARGB(255, 160, 159, 159),
           filled: true,
           isDense: true,
           constraints: BoxConstraints.tight(const Size.fromHeight(30)),

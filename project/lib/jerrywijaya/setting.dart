@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project/hadron/loginpage.dart';
 import 'package:project/homeandhistory/history_page.dart';
 import 'package:project/homeandhistory/home_page.dart';
-import 'package:project/homeandhistory/pertemuan_06provider.dart';
+import 'package:project/homeandhistory/switch_provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:provider/provider.dart';
 

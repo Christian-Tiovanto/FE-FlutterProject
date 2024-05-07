@@ -10,7 +10,7 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.pink,
-      actions: const [
+      actions: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 6),
           child: Icon(IconData(0xe0b3, fontFamily: 'MaterialIcons')),
@@ -19,8 +19,11 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: RotatedBox(
             quarterTurns: 3,
-            child: Icon(IconData(0xe571,
-                fontFamily: 'MaterialIcons', matchTextDirection: true)),
+            child: TextButton(
+              onPressed: () {},
+              child: Icon(IconData(0xe571,
+                  fontFamily: 'MaterialIcons', matchTextDirection: true)),
+            ),
           ),
         )
       ],

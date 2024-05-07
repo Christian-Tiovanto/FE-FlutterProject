@@ -11,7 +11,11 @@ class SearchUserWidget extends StatefulWidget {
 }
 
 class _SearchUserWidgetState extends State<SearchUserWidget> {
+  GlobalKey<FormState> _homeKey =
+      GlobalKey<FormState>(debugLabel: '_homeScreenkey');
   bool _visible = false;
+
+  List _selectedUsers = [];
   final List<Map<String, dynamic>> _allUsers = [
     {"id": 1, "name": "Andy", "age": 29},
     {"id": 2, "name": "Aragon", "age": 40},
@@ -60,34 +64,90 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextFormField(
-          onChanged: (value) => {
-            _runFilter(value),
-            setState(() {
-              if (value.isNotEmpty) {
-                _visible = true;
-              } else {
-                _visible = false;
-              }
-            })
-          },
-          decoration: const InputDecoration(
-              icon: Text("Kepada   "), border: InputBorder.none),
+        Container(
+          child: Row(
+            children: [
+              Container(
+                height: 20,
+                child: Align(
+                  child: Text("Kepada   "),
+                  alignment: Alignment.topCenter,
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  children: [
+                    _selectedUsers.isEmpty
+                        ? SizedBox(
+                            width: 0,
+                          )
+                        : Expanded(
+                            child: ListView.builder(
+                                itemCount: _selectedUsers.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return TextButton(
+                                    onPressed: () {},
+                                    child: ListTile(
+                                      dense: true,
+                                      key: Key('selectedUsers${index}'),
+                                      visualDensity:
+                                          VisualDensity(vertical: -4),
+                                      leading: CircleAvatar(
+                                        radius: 24,
+                                        child: Text(
+                                          "User",
+                                          style: TextStyle(fontSize: 10),
+                                        ),
+                                      ),
+                                      title: Text('User@gmail.com'),
+                                    ),
+                                  );
+                                }),
+                          ),
+                    Expanded(
+                      child: Container(
+                        child: Container(
+                          child: TextFormField(
+                            onChanged: (value) => {
+                              _runFilter(value),
+                              setState(() {
+                                if (value.isNotEmpty) {
+                                  _visible = true;
+                                } else {
+                                  _visible = false;
+                                }
+                              })
+                            },
+                            decoration:
+                                const InputDecoration(border: InputBorder.none),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
         Container(
           child: Visibility(
             replacement: Column(
               children: [
                 ContainerKolomPengajuanSuratWidget(
-                  firstPart: Text("Jenis Surat a"),
+                  firstPart: Text("Jenis Surat"),
                   thirdPart: DropdownMenuExample(
                     listData: ['1', '2', '3'],
                   ),
                   containerPadding:
                       PaddingLeftAndRight(leftPadding: 0, rightPadding: 0),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 ContainerKolomPengajuanSuratWidget(
-                  firstPart: Text("Jenis Surat"),
+                  firstPart: Text("Prioritas Surat"),
                   thirdPart: DropdownMenuExample(
                     listData: ['1', '2', '3'],
                   ),
@@ -108,7 +168,25 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                     itemCount: _foundUsers.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return Text("anjay");
+                      return TextButton(
+                        onPressed: () {
+                          _selectedUsers.add(_foundUsers[index]);
+                          setState(() {});
+                        },
+                        child: ListTile(
+                          key: Key('Found-User${index}'),
+                          visualDensity: VisualDensity(vertical: -4),
+                          leading: CircleAvatar(
+                            radius: 24,
+                            child: Text(
+                              "User",
+                              style: TextStyle(fontSize: 10),
+                            ),
+                          ),
+                          title: Text('User@gmail.com'),
+                          subtitle: Text('User@gmail.com'),
+                        ),
+                      );
                     })
                 : const Text(
                     'No results found',
