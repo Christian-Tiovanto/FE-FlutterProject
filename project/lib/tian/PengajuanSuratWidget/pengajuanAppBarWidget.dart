@@ -9,7 +9,14 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: true,
       backgroundColor: Colors.pink,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
       actions: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 6),
