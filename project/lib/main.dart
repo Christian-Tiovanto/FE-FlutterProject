@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => Pertemuan06Provider()),
-  ], child: const PengajuanSurat()));
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
