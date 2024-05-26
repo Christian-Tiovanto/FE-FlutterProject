@@ -88,17 +88,6 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
                     ),
                   ],
                 ),
-                // ContainerKolomPengajuanSuratWidget(
-                //   firstPart: Expanded(
-                //     child: Row(
-                //       children: [
-                //         SearchUserWidget(),
-                //       ],
-                //     ),
-                //   ),
-                //   containerPadding:
-                //       PaddingLeftAndRight(leftPadding: 0, rightPadding: 0),
-                // ),
               ],
             ),
           ],

@@ -79,12 +79,15 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
             replacement: Column(
               children: [
                 ContainerKolomPengajuanSuratWidget(
-                  firstPart: Text("Jenis Surat a"),
+                  firstPart: Text("Jenis Surat"),
                   thirdPart: DropdownMenuExample(
                     listData: ['1', '2', '3'],
                   ),
                   containerPadding:
                       PaddingLeftAndRight(leftPadding: 0, rightPadding: 0),
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 ContainerKolomPengajuanSuratWidget(
                   firstPart: Text("Jenis Surat"),
