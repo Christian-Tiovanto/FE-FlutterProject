@@ -64,72 +64,64 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Row(
-            children: [
-              Container(
-                height: 20,
-                child: Align(
-                  child: Text("Kepada   "),
-                  alignment: Alignment.topCenter,
-                ),
+        Row(
+          children: [
+            Container(
+              child: Align(
+                child: Text("Kepada   "),
+                alignment: Alignment.topCenter,
               ),
-              Expanded(
-                child: Row(
-                  children: [
-                    _selectedUsers.isEmpty
-                        ? SizedBox(
-                            width: 0,
-                          )
-                        : Expanded(
-                            child: ListView.builder(
-                                itemCount: _selectedUsers.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return TextButton(
-                                    onPressed: () {},
-                                    child: ListTile(
-                                      dense: true,
-                                      key: Key('selectedUsers${index}'),
-                                      visualDensity:
-                                          VisualDensity(vertical: -4),
-                                      leading: CircleAvatar(
-                                        radius: 24,
-                                        child: Text(
-                                          "User",
-                                          style: TextStyle(fontSize: 10),
-                                        ),
-                                      ),
-                                      title: Text('User@gmail.com'),
-                                    ),
-                                  );
-                                }),
-                          ),
-                    Expanded(
-                      child: Container(
-                        child: Container(
-                          child: TextFormField(
-                            onChanged: (value) => {
-                              _runFilter(value),
-                              setState(() {
-                                if (value.isNotEmpty) {
-                                  _visible = true;
-                                } else {
-                                  _visible = false;
-                                }
-                              })
-                            },
-                            decoration:
-                                const InputDecoration(border: InputBorder.none),
-                          ),
-                        ),
+            ),
+            Expanded(
+              child: Wrap(
+                children: [
+                  _selectedUsers.isEmpty
+                      ? SizedBox(
+                          width: 0,
+                        )
+                      : ListView.builder(
+                          itemCount: _selectedUsers.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return TextButton(
+                              onPressed: () {},
+                              child: ListTile(
+                                dense: true,
+                                key: Key('selectedUsers${index}'),
+                                visualDensity: VisualDensity(vertical: -4),
+                                leading: CircleAvatar(
+                                  radius: 24,
+                                  child: Text(
+                                    "User",
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                ),
+                                title: Text('User@gmail.com'),
+                              ),
+                            );
+                          }),
+                  Container(
+                    child: Container(
+                      child: TextFormField(
+                        onChanged: (value) => {
+                          _runFilter(value),
+                          setState(() {
+                            if (value.isNotEmpty) {
+                              _visible = true;
+                            } else {
+                              _visible = false;
+                            }
+                          })
+                        },
+                        decoration:
+                            const InputDecoration(border: InputBorder.none),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         Container(
           child: Visibility(
