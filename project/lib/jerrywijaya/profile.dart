@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project/homeandhistory/history_page.dart';
-import 'package:project/homeandhistory/home_page.dart';
+import 'package:project/Devon/history_page.dart';
+import 'package:project/Devon/home_page.dart';
 import 'package:project/jerrywijaya/setting.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 

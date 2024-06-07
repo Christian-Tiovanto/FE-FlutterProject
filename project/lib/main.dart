@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:project/Devon/error_page.dart';
+import 'package:project/Devon/loading_page.dart';
+import 'package:project/Devon/maintenance_page.dart';
+import 'package:project/Devon/updating_page.dart';
 import 'package:project/hadron/loginpage.dart';
-import 'package:project/homeandhistory/switch_provider.dart';
+import 'package:project/Devon/switch_provider.dart';
 import 'package:project/tian/PengajuanSurat.dart';
 import 'package:provider/provider.dart';
 
