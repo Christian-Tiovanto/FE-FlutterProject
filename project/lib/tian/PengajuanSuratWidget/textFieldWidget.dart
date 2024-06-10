@@ -35,26 +35,6 @@ class _TextFieldExampleState extends State<TextFieldExample> {
               const EdgeInsets.symmetric(horizontal: 18, vertical: 8)),
       maxLines: null,
       controller: _controller,
-      onSubmitted: (String value) async {
-        await showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Thanks!'),
-              content: Text(
-                  'You typed "$value", which has length ${value.characters.length}.'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      },
     );
   }
 }

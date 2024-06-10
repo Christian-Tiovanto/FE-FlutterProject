@@ -1,17 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:project/Devon/home_page.dart';
+import 'package:project/Devon/switch_provider.dart';
 import 'package:project/hadron/loginpage.dart';
-import 'package:project/homeandhistory/switch_provider.dart';
 import 'package:project/tian/LetterContentWidget.dart';
 import 'package:project/tian/PengajuanSurat.dart';
-import 'package:project/tian/ResponseLetterWidget.dart';
+import 'package:project/tian/PengajuanSuratWidget/searchUserWidget.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => Pertemuan06Provider()),
-  ], child: const ResponseLetterWidget()));
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Pertemuan06Provider()),
+        ChangeNotifierProvider(create: (_) => userDataProvider()),
+      ],
+      child: MaterialApp(
+        home: HomePage(),
+      )));
 }
 
 class MyApp extends StatelessWidget {

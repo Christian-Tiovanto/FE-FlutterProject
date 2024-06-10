@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/Devon/history_page.dart';
+import 'package:project/Devon/switch_provider.dart';
 import 'package:project/jerrywijaya/profile.dart';
+import 'package:project/tian/LetterContentWidget.dart';
 import 'package:project/tian/PengajuanSurat.dart';
+import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:project/Devon/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
 
@@ -76,7 +79,7 @@ class _HomePageState extends State<HomePage> {
     await Future.delayed(Duration(seconds: 1));
 
     setState(() {
-      _allusers.add(
+      Provider.of<userDataProvider>(context, listen: false).addUser(
         {
           "name": "Ayu ",
           "Subject": "Surat Pengajuan Pembelian Unit",
@@ -91,7 +94,7 @@ class _HomePageState extends State<HomePage> {
   List<String> searchhistory = [];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contextHome) {
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, innerBoxIsScrolled) => [
@@ -210,7 +213,14 @@ class _HomePageState extends State<HomePage> {
                                       .toList();
                                   return InkWell(
                                     onTap: () {
-                                      // Tambahkan logika yang ingin dilakukan saat card diklik di sini
+                                      Navigator.push(
+                                        contextHome,
+                                        MaterialPageRoute(
+                                            builder: (contextHome) =>
+                                                PengajuanSurat(
+                                                  userData: _allusers,
+                                                )),
+                                      );
                                       print(
                                           'Card clicked: ${filteredUsers[index]['name']}');
                                     },
@@ -419,21 +429,11 @@ class _HomePageState extends State<HomePage> {
             ],
           )),
         ],
-        body: RefreshIndicator(
-          onRefresh: _refresh,
-          child: ListView.builder(
-              itemCount: _allusers
-                  .where((user) =>
-                      user['progres'] == 'Pending' &&
-                      selectedFilters!.contains(user['status']) &&
-                      (controller.text.isEmpty ||
-                          user['name']
-                              .toString()
-                              .toLowerCase()
-                              .contains(controller.text.toLowerCase())))
-                  .length,
-              itemBuilder: (context, index) {
-                final filteredUsers = _allusers
+        body: Consumer<userDataProvider>(
+          builder: (context, user, child) => RefreshIndicator(
+            onRefresh: _refresh,
+            child: ListView.builder(
+                itemCount: user.getDataUser
                     .where((user) =>
                         user['progres'] == 'Pending' &&
                         selectedFilters!.contains(user['status']) &&
@@ -442,116 +442,139 @@ class _HomePageState extends State<HomePage> {
                                 .toString()
                                 .toLowerCase()
                                 .contains(controller.text.toLowerCase())))
-                    .toList();
-                return InkWell(
-                  onTap: () {
-                    // Tambahkan logika yang ingin dilakukan saat card diklik di sini
-                    print('Card clicked: ${filteredUsers[index]['name']}');
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    height: 94,
-                    child: Card(
-                      color: Colors.white,
-                      elevation: 0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ListTile(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 16),
-                            leading: Container(
-                              padding: EdgeInsets.all(0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.black, width: 2),
-                              ),
-                              child: CircleAvatar(
-                                radius: 24,
-                                backgroundColor: Colors.blue,
-                                child: Text(
-                                  filteredUsers[index]['name'][0].toUpperCase(),
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
+                    .length,
+                itemBuilder: (context, index) {
+                  final filteredUsers = user.getDataUser
+                      .where((user) =>
+                          user['progres'] == 'Pending' &&
+                          selectedFilters!.contains(user['status']) &&
+                          (controller.text.isEmpty ||
+                              user['name']
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(controller.text.toLowerCase())))
+                      .toList();
+                  return InkWell(
+                    onTap: () {
+                      print(filteredUsers[index]);
+                      Navigator.push(
+                        contextHome,
+                        MaterialPageRoute(
+                            builder: (contextHome) => LetterContentWidget(
+                                  dataSurat: filteredUsers[index],
+                                )),
+                      );
+
+                      // Tambahkan logika yang ingin dilakukan saat card diklik di sini
+                      print('Card clicked: ${filteredUsers[index]['name']}');
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      height: 94,
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ListTile(
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 16),
+                              leading: Container(
+                                padding: EdgeInsets.all(0),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.black, width: 2),
+                                ),
+                                child: CircleAvatar(
+                                  radius: 24,
+                                  backgroundColor: Colors.blue,
+                                  child: Text(
+                                    filteredUsers[index]['name'][0]
+                                        .toUpperCase(),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                    ),
                                   ),
                                 ),
                               ),
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    filteredUsers[index]['name'],
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
+                                  Text(
+                                    _allusers[index]['tgl'], // Tanggal disini
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 13),
+                                  ),
+                                ],
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '${filteredUsers[index]["Subject"].toString()}',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${filteredUsers[index]["status"].toString()}', // Teks urgent disini
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          9), // Jarak antara baris pertama dan kedua
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          color: Colors.green,
+                                          height: 2.0,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          color: Colors.red,
+                                          height: 2.0,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          color: Colors.black,
+                                          height: 2.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  filteredUsers[index]['name'],
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 20),
-                                ),
-                                Text(
-                                  _allusers[index]['tgl'], // Tanggal disini
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 13),
-                                ),
-                              ],
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '${filteredUsers[index]["Subject"].toString()}',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      '${filteredUsers[index]["status"].toString()}', // Teks urgent disini
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                    height:
-                                        9), // Jarak antara baris pertama dan kedua
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        color: Colors.green,
-                                        height: 2.0,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        color: Colors.red,
-                                        height: 2.0,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        color: Colors.black,
-                                        height: 2.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -561,7 +584,10 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PengajuanSurat()),
+            MaterialPageRoute(
+                builder: (context) => PengajuanSurat(
+                      userData: _allusers,
+                    )),
           );
         },
       ),

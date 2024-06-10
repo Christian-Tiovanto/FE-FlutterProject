@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project/Devon/home_page.dart';
 import 'package:project/jerry/user.dart';
-import 'package:project/homeandhistory/home_page.dart';
 import 'dart:async';
 
 class WelcomePage extends StatefulWidget {

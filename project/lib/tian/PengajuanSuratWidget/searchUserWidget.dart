@@ -129,19 +129,45 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
               children: [
                 ContainerKolomPengajuanSuratWidget(
                   firstPart: Text("Jenis Surat"),
-                  thirdPart: DropdownMenuExample(
-                    listData: ['1', '2', '3'],
+                  thirdPart: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 200, maxHeight: 500),
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        contentPadding: EdgeInsets.all(10),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                              50.0), // Set the radius as per your need
+                        ),
+                      ),
+                      child: DropdownMenuExample(
+                        listData: ['1', '2', '3'],
+                      ),
+                    ),
                   ),
                   containerPadding:
-                      PaddingLeftAndRight(leftPadding: 0, rightPadding: 0),
+                      PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 ContainerKolomPengajuanSuratWidget(
                   firstPart: Text("Prioritas Surat"),
-                  thirdPart: DropdownMenuExample(
-                    listData: ['1', '2', '3'],
+                  thirdPart: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 200, maxHeight: 500),
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        contentPadding: EdgeInsets.all(10),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                              50.0), // Set the radius as per your need
+                        ),
+                      ),
+                      child: DropdownMenuExample(
+                        listData: ['1', '2', '3'],
+                      ),
+                    ),
                   ),
                   containerPadding:
                       PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
