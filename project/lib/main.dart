@@ -1,83 +1,35 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:project/Devon/home_page.dart';
+import 'package:project/Devon/switch_provider.dart';
+import 'package:project/hadron/loginpage.dart';
+import 'package:project/tian/LetterContentWidget.dart';
 import 'package:project/tian/PengajuanSurat.dart';
+import 'package:project/tian/PengajuanSuratWidget/searchUserWidget.dart';
+import 'package:provider/provider.dart';
 
-/// Flutter code sample for [MenuAnchor].
-
-void main() => runApp(const PengajuanSurat());
-
-const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
-
-class MyCascadingMenu extends StatefulWidget {
-  const MyCascadingMenu({super.key, required this.message});
-
-  final String message;
-
-  @override
-  State<MyCascadingMenu> createState() => _MyCascadingMenuState();
-}
-
-class _MyCascadingMenuState extends State<MyCascadingMenu> {
-  String _lastSelection = list[0];
-  final FocusNode _buttonFocusNode = FocusNode(debugLabel: 'Menu Button');
-
-  @override
-  void dispose() {
-    _buttonFocusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        MenuAnchor(
-          childFocusNode: _buttonFocusNode,
-          menuChildren: List<Widget>.generate(
-              list.length,
-              (index) => SizedBox(
-                    width: 200,
-                    child: MenuItemButton(
-                        onPressed: () => setState(() {
-                              _lastSelection = list[index];
-                            }),
-                        child: Text(list[index])),
-                  )),
-          builder:
-              (BuildContext context, MenuController controller, Widget? child) {
-            return TextButton(
-              style: ButtonStyle(
-                  padding: MaterialStatePropertyAll(EdgeInsets.all(0))),
-              focusNode: _buttonFocusNode,
-              onPressed: () {
-                if (controller.isOpen) {
-                  controller.close();
-                } else {
-                  controller.open();
-                }
-              },
-              child: SizedBox(
-                  width: 200, child: Center(child: Text(_lastSelection))),
-            );
-          },
-        ),
+void main() {
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Pertemuan06Provider()),
+        ChangeNotifierProvider(create: (_) => userDataProvider()),
       ],
-    );
-  }
+      child: MaterialApp(
+        home: HomePage(),
+      )));
 }
 
-class MenuApp extends StatelessWidget {
-  const MenuApp({super.key});
-
-  static const String kMessage = '"Talk less. Smile more." - A. Burr';
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final prov = Provider.of<Pertemuan06Provider>(context);
     return MaterialApp(
-      theme: ThemeData(useMaterial3: true),
-      home: const Scaffold(
-          body: SafeArea(child: MyCascadingMenu(message: kMessage))),
+      debugShowCheckedModeBanner: false,
+      theme: prov.enableDarkMode == true ? prov.dark : prov.light,
+      home: WelcomePage(),
     );
   }
 }

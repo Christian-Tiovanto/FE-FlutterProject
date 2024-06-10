@@ -1,4 +1,6 @@
 // ignore: file_names
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/tian/PengajuanSuratWidget/containerKolomPengajuanWidget.dart';
@@ -10,7 +12,8 @@ import 'package:project/tian/PengajuanSuratWidget/textFieldWidget.dart';
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
 class PengajuanSurat extends StatefulWidget {
-  const PengajuanSurat({super.key});
+  const PengajuanSurat({super.key, required this.userData});
+  final List userData;
 
   @override
   State<PengajuanSurat> createState() => _PengajuanSuratState();
@@ -58,7 +61,6 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
     } else {
       results = _allUsers.where((user) => callback(user["name"])).toList();
       _foundUsers = results;
-      print(_foundUsers);
     }
   }
 
@@ -66,17 +68,20 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: const PengajuanSuratAppBarWidget(),
+        appBar: PengajuanSuratAppBarWidget(
+          contextPage: context,
+          sendIcon: true,
+          userData: widget.userData,
+        ),
         body: Column(
           children: [
             ListView(
               shrinkWrap: true,
               children: [
                 ContainerKolomPengajuanSuratWidget(
-                  firstPart: Text("Jenis Surat"),
-                  secondPart: Text('One-linea with trailing widget',
+                  firstPart: Text("Dari : "),
+                  secondPart: Text('Hadron@gmail.com',
                       style: TextStyle(height: 1, fontSize: 15)),
-                  thirdPart: Icon(Icons.keyboard_arrow_down_outlined),
                   containerPadding:
                       PaddingLeftAndRight(leftPadding: 20, rightPadding: 20),
                 ),
@@ -97,35 +102,3 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
     );
   }
 }
-
-// class ContainerKolomPengajuanSuratWidget extends StatelessWidget {
-//   final String? leadingText;
-//   final Widget? titleContent;
-//   final Widget? trailingContent;
-//   const ContainerKolomPengajuanSuratWidget(
-//       {super.key,
-//       this.leadingText,
-//       this.titleContent,
-//       this.trailingContent});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: EdgeInsets.only(bottom: 10),
-//       height: 40,
-//       decoration:
-//           const BoxDecoration(border: Border(bottom: BorderSide(width: 1))),
-//       child: ListTile(
-//         horizontalTitleGap: 30,
-//         titleAlignment: ListTileTitleAlignment.center,
-//         leading: Text(
-//           this.leadingText,
-//           style: TextStyle(fontSize: 15, height: 1),
-//         ),
-//         title: this.titleContent,
-//         trailing: this.trailingContent,
-//       ),
-//     );
-//   }
-// }
-
