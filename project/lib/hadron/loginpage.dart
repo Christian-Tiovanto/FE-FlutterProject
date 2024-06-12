@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project/Devon/maintenance_page.dart';
+// import 'package:project/Devon/maintenance_page.dart';
 import 'package:project/jerry/user.dart';
 import 'package:project/Devon/home_page.dart';
 import 'dart:async';
@@ -16,7 +16,7 @@ class _WelcomePageState extends State<WelcomePage> {
     Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Maintenance_page()),
+        MaterialPageRoute(builder: (context) => LoginPage()),
       );
     });
   }
