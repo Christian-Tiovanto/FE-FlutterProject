@@ -53,7 +53,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                   children: [
                     Text(
                       'Dark Theme',
-                      style: TextStyle(fontSize: 20, color: Colors.black),
+                      style: TextStyle(fontSize: 20, color: Theme.of(context).textTheme.bodyText1?.color),
                     ),
                     Switch(
                         value: prov.enableDarkMode,
@@ -74,7 +74,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                   children: [
                     Text(
                       'Logout',
-                      style: TextStyle(fontSize: 20, color: Colors.black),
+                      style: TextStyle(fontSize: 20, color: Theme.of(context).textTheme.bodyText1?.color),
                     ),
                     IconButton(
                       icon: Icon(Icons.logout),

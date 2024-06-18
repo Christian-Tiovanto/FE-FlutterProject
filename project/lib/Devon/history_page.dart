@@ -207,7 +207,7 @@ class _HistoryPageState extends State<HistoryPage>
                         'Pending',
                         style: TextStyle(
                           fontSize: 15,
-                          color: Colors.black,
+                          color: Theme.of(context).textTheme.bodyText1?.color,
                         ),
                       ),
                     ),
@@ -309,7 +309,7 @@ class _HistoryPageState extends State<HistoryPage>
                         'Finished',
                         style: TextStyle(
                           fontSize: 15,
-                          color: Colors.black,
+                          color: Theme.of(context).textTheme.bodyText1?.color,
                         ),
                       ),
                     ),
@@ -436,7 +436,7 @@ class _HistoryPageState extends State<HistoryPage>
                         'Cancelled',
                         style: TextStyle(
                           fontSize: 15,
-                          color: Colors.black,
+                          color: Theme.of(context).textTheme.bodyText1?.color,
                         ),
                       ),
                     ),
