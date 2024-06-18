@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project/Devon/home_page.dart';
 import 'package:project/Devon/switch_provider.dart';
 import 'package:project/hadron/loginpage.dart';
@@ -16,7 +17,10 @@ void main() {
         ChangeNotifierProvider(create: (_) => userDataProvider()),
       ],
       child: MaterialApp(
-        home: HomePage(),
+        builder: FToastBuilder(),
+        home: PengajuanSurat(
+          userData: [],
+        ),
       )));
 }
 

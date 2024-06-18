@@ -3,6 +3,7 @@ import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project/tian/PengajuanSuratWidget/containerKolomPengajuanWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/dropDownMenuWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/pengajuanAppBarWidget.dart';
@@ -21,6 +22,7 @@ class PengajuanSurat extends StatefulWidget {
 
 class _PengajuanSuratState extends State<PengajuanSurat> {
   bool _visible = false;
+
   final List<Map<String, dynamic>> _allUsers = [
     {"id": 1, "name": "Andy", "age": 29},
     {"id": 2, "name": "Aragon", "age": 40},
@@ -87,10 +89,7 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
                 ),
                 Row(
                   children: [
-                    SizedBox(width: 20),
-                    Container(
-                      child: Expanded(child: SearchUserWidget()),
-                    ),
+                    Expanded(child: SearchUserWidget()),
                   ],
                 ),
               ],

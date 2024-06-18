@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project/tian/PengajuanSuratWidget/containerKolomPengajuanWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/dropDownMenuWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/textFieldWidget.dart';
@@ -11,11 +12,14 @@ class SearchUserWidget extends StatefulWidget {
 }
 
 class _SearchUserWidgetState extends State<SearchUserWidget> {
-  GlobalKey<FormState> _homeKey =
-      GlobalKey<FormState>(debugLabel: '_homeScreenkey');
   bool _visible = false;
 
   List _selectedUsers = [];
+
+  final snackBar = SnackBar(
+    content: Text('Yay! A SnackBar!'),
+  );
+
   final List<Map<String, dynamic>> _allUsers = [
     {"id": 1, "name": "Andy", "age": 29},
     {"id": 2, "name": "Aragon", "age": 40},
@@ -31,6 +35,7 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
 
   // This list holds the data for the list view
   List<Map<String, dynamic>> _foundUsers = [];
+
   @override
   initState() {
     _foundUsers = _allUsers;
@@ -50,6 +55,7 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
     }
 
     List<Map<String, dynamic>> results = [];
+
     if (enteredKeyword.isEmpty) {
       // if the search field is empty or only contains white-space, we'll display all users
       results = _allUsers;
@@ -67,6 +73,7 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
         Row(
           children: [
             Container(
+              padding: EdgeInsets.only(left: 20),
               child: Align(
                 child: Text("Kepada   "),
                 alignment: Alignment.topCenter,
@@ -83,20 +90,29 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                           itemCount: _selectedUsers.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            return TextButton(
-                              onPressed: () {},
-                              child: ListTile(
-                                dense: true,
-                                key: Key('selectedUsers${index}'),
-                                visualDensity: VisualDensity(vertical: -4),
-                                leading: CircleAvatar(
-                                  radius: 24,
-                                  child: Text(
-                                    "User",
-                                    style: TextStyle(fontSize: 10),
-                                  ),
+                            return ListTile(
+                              dense: true,
+                              key: Key('selectedUsers${index}'),
+                              visualDensity: VisualDensity(vertical: -4),
+                              leading: CircleAvatar(
+                                radius: 24,
+                                child: Text(
+                                  index.toString(),
+                                  style: TextStyle(fontSize: 10),
                                 ),
-                                title: Text('User@gmail.com'),
+                              ),
+                              title: Text(
+                                  '${_selectedUsers[index]['name']}@gmail.com'),
+                              trailing: TextButton(
+                                onPressed: () {
+                                  print("ea");
+                                  setState(() {
+                                    _selectedUsers.removeAt(index);
+                                    print("asem");
+                                  });
+                                },
+                                child: const Icon(IconData(0xef28,
+                                    fontFamily: 'MaterialIcons')),
                               ),
                             );
                           }),
@@ -146,7 +162,7 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                     ),
                   ),
                   containerPadding:
-                      PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
+                      PaddingLeftAndRight(leftPadding: 20, rightPadding: 20),
                 ),
                 SizedBox(
                   height: 10,
@@ -170,7 +186,7 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                     ),
                   ),
                   containerPadding:
-                      PaddingLeftAndRight(leftPadding: 0, rightPadding: 20),
+                      PaddingLeftAndRight(leftPadding: 20, rightPadding: 20),
                 ),
                 TextFieldExample(
                   isBorder: true,
@@ -188,22 +204,44 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                     itemBuilder: (context, index) {
                       return TextButton(
                         onPressed: () {
+                          // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           _selectedUsers.add(_foundUsers[index]);
                           setState(() {});
                         },
-                        child: ListTile(
-                          key: Key('Found-User${index}'),
-                          visualDensity: VisualDensity(vertical: -4),
-                          leading: CircleAvatar(
-                            radius: 24,
-                            child: Text(
-                              "User",
-                              style: TextStyle(fontSize: 10),
-                            ),
-                          ),
-                          title: Text('User@gmail.com'),
-                          subtitle: Text('User@gmail.com'),
-                        ),
+                        child: _selectedUsers.contains(_foundUsers[index])
+                            ? Opacity(
+                                opacity: 0.5,
+                                child: ListTile(
+                                  key: Key('Found-User${index}'),
+                                  visualDensity: VisualDensity(vertical: -4),
+                                  leading: CircleAvatar(
+                                    radius: 24,
+                                    child: Text(
+                                      "User",
+                                      style: TextStyle(fontSize: 10),
+                                    ),
+                                  ),
+                                  title: Text(
+                                      '${_foundUsers[index]['name']}@gmail.com'),
+                                  subtitle: Text(
+                                      '${_foundUsers[index]['name']}@gmail.com'),
+                                ),
+                              )
+                            : ListTile(
+                                key: Key('Found-User${index}'),
+                                visualDensity: VisualDensity(vertical: -4),
+                                leading: CircleAvatar(
+                                  radius: 24,
+                                  child: Text(
+                                    "User",
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                ),
+                                title: Text(
+                                    '${_foundUsers[index]['name']}@gmail.com'),
+                                subtitle: Text(
+                                    '${_foundUsers[index]['name']}@gmail.com'),
+                              ),
                       );
                     })
                 : const Text(

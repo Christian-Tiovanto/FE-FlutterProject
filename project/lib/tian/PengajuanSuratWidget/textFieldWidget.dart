@@ -32,7 +32,7 @@ class _TextFieldExampleState extends State<TextFieldExample> {
           border:
               widget.isBorder ? const UnderlineInputBorder() : InputBorder.none,
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 18, vertical: 8)),
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 8)),
       maxLines: null,
       controller: _controller,
     );
