@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 // import 'package:scrappingwebsite/user_provider.dart';
 import 'package:project/Devon/providers.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class Login_screen extends StatefulWidget {
   const Login_screen({super.key});
@@ -19,6 +20,7 @@ class Login_screen extends StatefulWidget {
 }
 
 class _Login_screenState extends State<Login_screen> {
+  bool _obscureText = true;
   final _passwordController = TextEditingController();
   final _nikController = TextEditingController();
   String nik = '';
@@ -137,11 +139,18 @@ class _Login_screenState extends State<Login_screen> {
             width: 300,
             child: TextField(
               controller: _passwordController,
-              obscureText: true, // Hide password input
+              obscureText: _obscureText, // Hide password input
               decoration: InputDecoration(
                 // labelText: 'Password',
                 hintText: 'Password',
                 prefixIcon: Icon(Icons.lock), // Ikon di depan TextField
+                suffixIcon: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _obscureText = _obscureText ? false : true;
+                      });
+                    },
+                    child: Icon(Icons.remove_red_eye)),
                 // suffixIcon: Icon(Icons.check),
               ),
             ),
@@ -209,10 +218,23 @@ class _Login_screenState extends State<Login_screen> {
             onPressed: () {
               if (_nikController.text == "0000" &&
                   _passwordController.text == "admin") {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserPage()),
-                );
+                AwesomeDialog(
+                  context: context,
+                  animType: AnimType.scale,
+                  dialogType: DialogType.success,
+                  body: Center(
+                    child: Text(
+                      'Welcome Admin',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                  title: 'This is Ignored',
+                  desc: 'This is also Ignored',
+                  btnOkOnPress: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserPage()),
+                  ),
+                ).show();
               } else {
                 List<User> loginUser = isUserAuthenticated(userList);
                 if (loginUser.isNotEmpty) {
@@ -221,37 +243,40 @@ class _Login_screenState extends State<Login_screen> {
                       : null;
                   userListProvider.addOnlineUser(loginUser[0]);
                   // print(userListProvider.onlineusers);
-                  showDialog(
+                  AwesomeDialog(
                     context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Succeed'),
-                      content: Text('Your Login is Succeed'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Dashboard_screen()),
-                          ),
-                          child: Text('OK'),
-                        ),
-                      ],
+                    animType: AnimType.scale,
+                    dialogType: DialogType.success,
+                    body: Center(
+                      child: Text(
+                        'Your Login Is Succeed',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
                     ),
-                  );
+                    title: 'This is Ignored',
+                    desc: 'This is also Ignored',
+                    btnOkOnPress: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Dashboard_screen()),
+                    ),
+                  ).show();
                 } else {
-                  showDialog(
+                  AwesomeDialog(
                     context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Failed'),
-                      content: Text('Your Login is Failed'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text('OK'),
-                        ),
-                      ],
+                    animType: AnimType.scale,
+                    dialogType: DialogType.error,
+                    body: Center(
+                      child: Text(
+                        'Your Login Is Failed',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
                     ),
-                  );
+                    title: 'This is Ignored',
+                    desc: 'This is also Ignored',
+                    btnOkColor: Colors.red,
+                    btnOkOnPress: () {},
+                  ).show();
                 }
               }
             },

@@ -9,37 +9,44 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 // import 'package:scrappingwebsite/login_screen.dart';
 // import 'package:scrappingwebsite/user_provider.dart';
 
-class Signup_screen extends StatefulWidget {
-  const Signup_screen({super.key});
+class UserDetail_screen extends StatefulWidget {
+  final int index;
+  UserDetail_screen({super.key, required this.index});
+  // UserDetail_screen({Key? key, required this.index}) : super(key: key);
 
   @override
-  State<Signup_screen> createState() => _Signup_screenState();
+  State<UserDetail_screen> createState() => _UserDetail_screenState();
 }
 
-class _Signup_screenState extends State<Signup_screen> {
-  bool _obscureTextpwd = true;
-  bool _obscureTextcnfrmpwd = true;
-
-  final _passwordController = TextEditingController();
-  final _confirmpasswordController = TextEditingController();
-
-  final _usernameController = TextEditingController();
-  final _nikController = TextEditingController();
-  final _numberController = TextEditingController();
-  final _roleController = TextEditingController();
+class _UserDetail_screenState extends State<UserDetail_screen> {
   String dropdown = "";
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
     final userListProvider = Provider.of<UserListProvider>(context);
 
     final userList = userListProvider.users;
+    final _passwordController =
+        TextEditingController(text: userList[widget.index].password);
+    // final _confirmpasswordController = TextEditingController();
+
+    final _usernameController =
+        TextEditingController(text: userList[widget.index].name);
+    final _nikController =
+        TextEditingController(text: userList[widget.index].nik);
+    final _numberController =
+        TextEditingController(text: userList[widget.index].number);
     String? dropdownValue;
+
+    if (dropdown.isEmpty) {
+      dropdown = userList[widget.index].role;
+    }
 
     // Variabel untuk menyimpan nilai dropdown
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: Text('User Detail'),
         backgroundColor: Color(0xFFFF9900),
       ),
       body: Column(
@@ -64,19 +71,21 @@ class _Signup_screenState extends State<Signup_screen> {
               ],
             ),
             width: double.infinity,
-            height: 40,
+            height: 20,
             child: Text(''),
           ),
           SizedBox(
             height: 25,
           ),
-          Text(
-            'Sign Up',
-            style: TextStyle(
-              fontSize: 35, // Ukuran font
-              // fontStyle: FontStyle.italic, // Gaya font (miring)
-              fontWeight: FontWeight.bold, // Berat font (tebal)
-              color: Colors.black,
+          CircleAvatar(
+            radius: 65,
+            backgroundColor: Colors.grey,
+            child: Center(
+              child: Text(
+                userList[widget.index].name[0].toUpperCase(),
+                style: TextStyle(color: Colors.black, fontSize: 80),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
           SizedBox(
@@ -210,7 +219,7 @@ class _Signup_screenState extends State<Signup_screen> {
             width: 300,
             child: TextField(
               controller: _passwordController,
-              obscureText: _obscureTextpwd, // Hide password input
+              obscureText: _obscureText, // Hide password input
               decoration: InputDecoration(
                 // labelText: 'Password',
                 hintText: 'Password',
@@ -218,32 +227,7 @@ class _Signup_screenState extends State<Signup_screen> {
                 suffixIcon: InkWell(
                     onTap: () {
                       setState(() {
-                        _obscureTextpwd = _obscureTextpwd ? false : true;
-                      });
-                    },
-                    child: Icon(Icons.remove_red_eye)),
-                // suffixIcon: Icon(Icons.check),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Container(
-            width: 300,
-            child: TextField(
-              controller: _confirmpasswordController,
-              obscureText: _obscureTextcnfrmpwd, // Hide password input
-              decoration: InputDecoration(
-                // labelText: 'Password',
-                hintText: 'Confirm Password',
-                prefixIcon: Icon(Icons.lock), // Ikon di depan TextField
-                // suffixIcon: Icon(Icons.check),
-                suffixIcon: InkWell(
-                    onTap: () {
-                      setState(() {
-                        _obscureTextcnfrmpwd =
-                            _obscureTextcnfrmpwd ? false : true;
+                        _obscureText = _obscureText ? false : true;
                       });
                     },
                     child: Icon(Icons.remove_red_eye)),
@@ -301,36 +285,36 @@ class _Signup_screenState extends State<Signup_screen> {
                 return;
               }
 
-              if (_passwordController.text != _confirmpasswordController.text) {
-                AwesomeDialog(
-                  context: context,
-                  animType: AnimType.scale,
-                  dialogType: DialogType.error,
-                  body: Center(
-                    child: Text(
-                      'Confirm Password Is Incorrect',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  title: 'This is Ignored',
-                  desc: 'This is also Ignored',
-                  btnOkColor: Colors.red,
-                  btnOkOnPress: () {},
-                ).show();
-                return;
-              }
-              print('ok');
-              User newUser = User(
+              // AwesomeDialog(
+              //   context: context,
+              //   animType: AnimType.scale,
+              //   dialogType: DialogType.error,
+              //   body: Center(
+              //     child: Text(
+              //       'Confirm Password Is Incorrect',
+              //       style: TextStyle(fontStyle: FontStyle.italic),
+              //     ),
+              //   ),
+              //   title: 'This is Ignored',
+              //   desc: 'This is also Ignored',
+              //   btnOkColor: Colors.red,
+              //   btnOkOnPress: () {},
+              // ).show();
+              // return;
+
+              // print('ok');
+              User updateUser = User(
                   name: _usernameController.text,
                   nik: _nikController.text,
                   password: _passwordController.text,
                   role: dropdown,
                   number: _numberController.text);
               // userListProvider.addUser(newUser);
+              userListProvider.updateUser(widget.index, updateUser);
 
-              Navigator.pop(context, newUser);
+              Navigator.pop(context, true);
             },
-            child: Text('Sign Up'),
+            child: Text('Update'),
           ),
           // SizedBox(
           //   height: 100,
