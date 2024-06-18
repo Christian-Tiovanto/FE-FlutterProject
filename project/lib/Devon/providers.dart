@@ -9,12 +9,17 @@ class Settings_provider extends ChangeNotifier {
   var dark = ThemeData(
     brightness: Brightness.dark,
     primarySwatch: Colors.purple,
+    scaffoldBackgroundColor: Colors.grey[900], // Ubah latar belakang gelap di sini
+    textTheme: TextTheme(
+      bodyText1: TextStyle(color: Colors.white), // Teks tubuh putih di latar belakang gelap
+      bodyText2: TextStyle(color: Colors.black), // Teks tubuh putih di latar belakang gelap
+    ),
   );
 
   bool _enableDarkMode = false;
   bool get enableDarkMode => _enableDarkMode;
 
-  set setBrightness(val) {
+  set setBrightness(bool val) {
     _enableDarkMode = val;
     notifyListeners();
   }
@@ -56,8 +61,8 @@ class UserListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeUser(int index) {
-    _users.removeAt(index);
+  void removeUser(User user) {
+    _users.remove(user);
     notifyListeners();
   }
 

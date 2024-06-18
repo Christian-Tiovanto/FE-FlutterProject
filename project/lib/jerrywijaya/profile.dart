@@ -147,14 +147,14 @@ body(BuildContext context, User user) {
             Center(
               child: Text(
                 'Nama : ${user.name}',
-                style: TextStyle(fontSize: 22, color: Colors.black),
+                style: TextStyle(fontSize: 22, color: Theme.of(context).textTheme.bodyText1?.color),
               ),
             ),
             SizedBox(height: 10),
             Center(
               child: Text(
                 'Role : ${user.role}',
-                style: TextStyle(fontSize: 20, color: Colors.black),
+                style: TextStyle(fontSize: 20, color: Theme.of(context).textTheme.bodyText1?.color),
               ),
             ),
             SizedBox(height: 10),
@@ -165,11 +165,11 @@ body(BuildContext context, User user) {
             SizedBox(height: 10),
             Text(
               'NIK :',
-              style: TextStyle(fontSize: 22, color: Colors.black),
+              style: TextStyle(fontSize: 22, color: Theme.of(context).textTheme.bodyText1?.color),
             ),
             Text(
               user.nik,
-              style: TextStyle(fontSize: 20, color: Colors.black),
+              style: TextStyle(fontSize: 20, color: Theme.of(context).textTheme.bodyText1?.color),
             ),
             SizedBox(height: 10),
             Divider(
@@ -179,11 +179,11 @@ body(BuildContext context, User user) {
             SizedBox(height: 10),
             Text(
               'Nomor HP :',
-              style: TextStyle(fontSize: 20, color: Colors.black),
+              style: TextStyle(fontSize: 20, color: Theme.of(context).textTheme.bodyText1?.color),
             ),
             Text(
               user.number,
-              style: TextStyle(fontSize: 20, color: Colors.black),
+              style: TextStyle(fontSize: 20, color: Theme.of(context).textTheme.bodyText1?.color),
             ),
           ],
         ),

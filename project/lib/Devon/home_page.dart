@@ -290,7 +290,7 @@ class _HomePageState extends State<HomePage> {
                   'Mailbox',
                   style: TextStyle(
                     fontSize: 15,
-                    color: Colors.black,
+                    color: Theme.of(context).textTheme.bodyText1?.color,
                   ),
                 ),
               ),
@@ -328,7 +328,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.grey[300],
         // elevation: 10.0,
-        label: Icon(Icons.edit),
+        label: Icon(Icons.edit, color: Theme.of(context).textTheme.bodyText2?.color),
         // icon: Icon(Icons.edit),
         onPressed: () {
           Navigator.push(

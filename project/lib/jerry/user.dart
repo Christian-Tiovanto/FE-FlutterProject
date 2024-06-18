@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:project/jerry/create-user.dart';
 import 'package:project/jerry/create-user2.dart';
 import 'package:provider/provider.dart';
@@ -84,7 +85,7 @@ class _UserPageState extends State<UserPage> {
           final user = userList[index];
           final lowerCaseName = user.name.toLowerCase();
           if (searchTerm.isEmpty || lowerCaseName.contains(searchTerm)) {
-            return card(context, user);
+            return card(context, user, userListProvider);
           } else {
             return SizedBox(); // Hide unmatched items
           }
@@ -112,7 +113,7 @@ class _UserPageState extends State<UserPage> {
   }
 }
 
-card(BuildContext context, User user) {
+card(BuildContext context, User user, UserListProvider userListProvider) {
   return GestureDetector(
     onTap: () {
       print("user ditekan");
@@ -142,7 +143,13 @@ card(BuildContext context, User user) {
                 ),
               ),
               SizedBox(width: 10.0),
-              Text(user.name),
+              Expanded(child: Text(user.name)),
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: (){
+                  userListProvider.removeUser(user);
+                },
+              )
             ],
           ),
         ),
