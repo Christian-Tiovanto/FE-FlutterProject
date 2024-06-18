@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:project/Devon/switch_provider.dart';
+import 'package:project/hadron/login_screen.dart';
 import 'package:project/hadron/loginpage.dart';
 import 'package:project/Devon/history_page.dart';
 import 'package:project/Devon/home_page.dart';
+import 'package:project/Devon/providers.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -14,13 +15,18 @@ class SettingWidget extends StatefulWidget {
 }
 
 class _SettingWidgetState extends State<SettingWidget> {
-  int _selectedIndex = 2;
+  // int _selectedIndex = 2;
   @override
   Widget build(BuildContext context) {
-    final prov = Provider.of<Pertemuan06Provider>(context);
+    final userListProvider = Provider.of<UserListProvider>(context);
+
+    final prov = Provider.of<Settings_provider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text(
+          'Settings',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -47,7 +53,9 @@ class _SettingWidgetState extends State<SettingWidget> {
                   children: [
                     Text(
                       'Dark Theme',
-                      style: TextStyle(fontSize: 20, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).textTheme.bodyText1?.color),
                     ),
                     Switch(
                         value: prov.enableDarkMode,
@@ -68,14 +76,18 @@ class _SettingWidgetState extends State<SettingWidget> {
                   children: [
                     Text(
                       'Logout',
-                      style: TextStyle(fontSize: 20, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).textTheme.bodyText1?.color),
                     ),
                     IconButton(
                       icon: Icon(Icons.logout),
                       onPressed: () {
+                        userListProvider.removeOnlineUser();
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          MaterialPageRoute(
+                              builder: (context) => Login_screen()),
                           (route) =>
                               false, // fungsi ini mengembalikan false untuk menghapus semua route lainnya dari stack
                         );
@@ -89,51 +101,6 @@ class _SettingWidgetState extends State<SettingWidget> {
           Spacer(),
         ],
       ),
-      bottomNavigationBar: SalomonBottomBar(
-        currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xff6200ee),
-        unselectedItemColor: const Color(0xff757575),
-        onTap: (index) {
-          if (index == 0) {
-// mai page
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          } else if (index == 1) {
-            //historypage
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HistoryPage()),
-            );
-          } else if (index == 2) {
-// profile page
-          }
-        },
-        items: [
-          _navBarItems[0], // History
-          _navBarItems[1], // Mail
-          _navBarItems[2], // Profile
-        ],
-      ),
     );
   }
 }
-
-final _navBarItems = [
-  SalomonBottomBarItem(
-    icon: const Icon(Icons.mail),
-    title: const Text("Mail"),
-    selectedColor: Colors.red,
-  ),
-  SalomonBottomBarItem(
-    icon: const Icon(Icons.history),
-    title: const Text("History"),
-    selectedColor: Colors.blue,
-  ),
-  SalomonBottomBarItem(
-    icon: const Icon(Icons.person),
-    title: const Text("Profile"),
-    selectedColor: Colors.teal,
-  ),
-];

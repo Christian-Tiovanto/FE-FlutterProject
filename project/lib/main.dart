@@ -1,27 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter/widgets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project/Devon/home_page.dart';
+import 'package:project/Devon/providers.dart';
 import 'package:project/Devon/switch_provider.dart';
 import 'package:project/hadron/loginpage.dart';
+import 'package:project/hadron/welcome_screen.dart';
 import 'package:project/tian/LetterContentWidget.dart';
 import 'package:project/tian/PengajuanSurat.dart';
 import 'package:project/tian/PengajuanSuratWidget/searchUserWidget.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => Pertemuan06Provider()),
-        ChangeNotifierProvider(create: (_) => userDataProvider()),
-      ],
-      child: MaterialApp(
-        builder: FToastBuilder(),
-        home: PengajuanSurat(
-          userData: [],
-        ),
-      )));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (_) => Settings_provider(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => UserListProvider(),
+    ),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -29,11 +28,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final prov = Provider.of<Pertemuan06Provider>(context);
+    final prov = Provider.of<Settings_provider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: prov.enableDarkMode == true ? prov.dark : prov.light,
-      home: WelcomePage(),
+      home: Welcome_screen(),
     );
   }
 }

@@ -1,38 +1,80 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:project/Devon/providers.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:project/Devon/dashboard.dart';
 
-// import 'package:scrappingwebsite/login_screen.dart';
+import 'package:project/Devon/home_page.dart';
+import 'package:project/jerry/user.dart';
+// import 'package:scrappingwebsite/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 // import 'package:scrappingwebsite/user_provider.dart';
+import 'package:project/Devon/providers.dart';
 
-class Signup_screen extends StatefulWidget {
-  const Signup_screen({super.key});
+class Login_screen extends StatefulWidget {
+  const Login_screen({super.key});
 
   @override
-  State<Signup_screen> createState() => _Signup_screenState();
+  State<Login_screen> createState() => _Login_screenState();
 }
 
-class _Signup_screenState extends State<Signup_screen> {
+class _Login_screenState extends State<Login_screen> {
   final _passwordController = TextEditingController();
-  final _confirmpasswordController = TextEditingController();
-
-  final _usernameController = TextEditingController();
   final _nikController = TextEditingController();
-  final _numberController = TextEditingController();
-  final _roleController = TextEditingController();
+  String nik = '';
+  String password = '';
+
+  bool _isChecked = false;
+
+  List<User> isUserAuthenticated(List<User> userList) {
+    List<User> authenticatedUsers = [];
+
+    for (var user in userList) {
+      if (user.nik == _nikController.text &&
+          user.password == _passwordController.text) {
+        User loginUser = User(
+          name: user.name,
+          nik: user.nik,
+          password: "",
+          role: user.role,
+          number: user.number,
+        );
+        authenticatedUsers
+            .add(loginUser); // Autentikasi berhasil, tambahkan user ke list
+      }
+    }
+    return authenticatedUsers; // Mengembalikan list kosong atau list user yang diautentikasi
+  }
+
+  void saveData(name, pass) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('nik', name);
+    await prefs.setString('password', pass);
+  }
+
+  void getData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      nik = prefs.getString('nik') ?? "";
+      password = prefs.getString('password') ?? "";
+      _passwordController.text = password;
+      _nikController.text = nik;
+    });
+    // print('nik: $nik, Password: $password');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
     final userListProvider = Provider.of<UserListProvider>(context);
-
     final userList = userListProvider.users;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(''),
-        backgroundColor: Color(0xFFFF9900),
-      ),
       body: Column(
         children: [
           Container(
@@ -55,14 +97,14 @@ class _Signup_screenState extends State<Signup_screen> {
               ],
             ),
             width: double.infinity,
-            height: 40,
+            height: 180.0,
             child: Text(''),
           ),
           SizedBox(
             height: 25,
           ),
           Text(
-            'Sign Up',
+            'Log In',
             style: TextStyle(
               fontSize: 35, // Ukuran font
               // fontStyle: FontStyle.italic, // Gaya font (miring)
@@ -76,60 +118,11 @@ class _Signup_screenState extends State<Signup_screen> {
           Container(
             width: 300,
             child: TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(
-                // labelText: 'Password',
-                hintText: 'Name',
-                prefixIcon: Icon(Icons.person), // Ikon di depan TextField
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Container(
-            width: 300,
-            child: TextField(
               controller: _nikController,
               decoration: InputDecoration(
                 // labelText: 'Password',
                 hintText: 'NIK',
                 prefixIcon: Icon(Icons.vpn_key), // Ikon di depan TextField
-              ),
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Container(
-            width: 300,
-            child: TextField(
-              controller: _roleController,
-              decoration: InputDecoration(
-                // labelText: 'Password',
-                hintText: 'Role',
-                prefixIcon:
-                    Icon(Icons.business_center), // Ikon di depan TextField
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Container(
-            width: 300,
-            child: TextField(
-              controller: _numberController,
-              // obscureText: true, // Hide password input
-              decoration: InputDecoration(
-                // labelText: 'Password',
-                hintText: 'Number',
-                prefixIcon: Icon(Icons.phone), // Ikon di depan TextField
-                // suffixIcon: Icon(Icons.check),
               ),
               keyboardType: TextInputType.number,
               inputFormatters: <TextInputFormatter>[
@@ -158,19 +151,50 @@ class _Signup_screenState extends State<Signup_screen> {
           ),
           Container(
             width: 300,
-            child: TextField(
-              controller: _confirmpasswordController,
-              obscureText: true, // Hide password input
-              decoration: InputDecoration(
-                // labelText: 'Password',
-                hintText: 'Confirm Password',
-                prefixIcon: Icon(Icons.lock), // Ikon di depan TextField
-                // suffixIcon: Icon(Icons.check),
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _isChecked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isChecked = value!;
+                        });
+                      },
+                      checkColor: Colors.white,
+                      fillColor: MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                        // Warna latar belakang ketika checkbox dicentang
+                        if (states.contains(MaterialState.selected)) {
+                          return Colors
+                              .orange; // Warna orange ketika checkbox dicentang
+                        }
+                        // Warna latar belakang ketika checkbox tidak dicentang
+                        return Colors.white;
+                      }),
+                    ),
+                    Text('Remember Me'),
+                  ],
+                ),
+                InkWell(
+                  onTap: () {
+                    // Tindakan yang ingin dilakukan saat CircleAvatar diklik
+                    print('forgotpassword diklik!');
+                  },
+                  borderRadius: BorderRadius.circular(
+                      5), // Membuat efek ink menyesuaikan bentuk CircleAvatar
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(color: Colors.orange),
+                  ),
+                ),
+              ],
             ),
           ),
           SizedBox(
-            height: 30,
+            height: 50,
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -183,68 +207,55 @@ class _Signup_screenState extends State<Signup_screen> {
               shadowColor: Colors.black,
             ),
             onPressed: () {
-              if (_usernameController.text.isEmpty ||
-                  _nikController.text.isEmpty ||
-                  _roleController.text.isEmpty ||
-                  _numberController.text.isEmpty ||
-                  _passwordController.text.isEmpty) {
-                // Show dialog for empty username
-                String errorMessage = "";
-                if (_usernameController.text.isEmpty) {
-                  errorMessage = 'Username is required.';
-                } else if (_nikController.text.isEmpty) {
-                  errorMessage = 'NIK is required.';
-                } else if (_roleController.text.isEmpty) {
-                  errorMessage = 'Role is required.';
-                } else if (_numberController.text.isEmpty) {
-                  errorMessage = 'Number is required.';
-                } else if (_passwordController.text.isEmpty) {
-                  errorMessage = 'Password is required.';
+              if (_nikController.text == "0000" &&
+                  _passwordController.text == "admin") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserPage()),
+                );
+              } else {
+                List<User> loginUser = isUserAuthenticated(userList);
+                if (loginUser.isNotEmpty) {
+                  _isChecked
+                      ? saveData(_nikController.text, _passwordController.text)
+                      : null;
+                  userListProvider.addOnlineUser(loginUser[0]);
+                  // print(userListProvider.onlineusers);
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Succeed'),
+                      content: Text('Your Login is Succeed'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Dashboard_screen()),
+                          ),
+                          child: Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Failed'),
+                      content: Text('Your Login is Failed'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
                 }
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text('Error'),
-                    content: Text(errorMessage),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text('OK'),
-                      ),
-                    ],
-                  ),
-                );
-                return;
               }
-
-              if (_passwordController.text != _confirmpasswordController.text) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text('Error'),
-                    content: Text('Confirm Password Is Incoorrect'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text('OK'),
-                      ),
-                    ],
-                  ),
-                );
-                return;
-              }
-              print('ok');
-              User newUser = User(
-                  name: _usernameController.text,
-                  nik: _nikController.text,
-                  password: _passwordController.text,
-                  role: _roleController.text,
-                  number: _numberController.text);
-              // userListProvider.addUser(newUser);
-
-              Navigator.pop(context, newUser);
             },
-            child: Text('Sign Up'),
+            child: Text('Log In'),
           ),
           // SizedBox(
           //   height: 100,
@@ -262,7 +273,7 @@ class _Signup_screenState extends State<Signup_screen> {
           //       ),
           //     ),
           //     Text(
-          //       ' Or signup with ',
+          //       ' Or login with ',
           //       style: TextStyle(color: Colors.grey),
           //     ),
           //     Expanded(

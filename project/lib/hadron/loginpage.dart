@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project/Devon/home_page.dart';
+// import 'package:project/Devon/maintenance_page.dart';
 import 'package:project/jerry/user.dart';
+import 'package:project/Devon/home_page.dart';
 import 'dart:async';
 
 class WelcomePage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _WelcomePageState extends State<WelcomePage> {
         title: Text('Welcome Page'),
       ),
       body: Center(
-        child: Image.asset('../../images/KM Logo 2.png', width: 300),
+        child: Image.asset('assets/logo.png', width: 300),
       ),
     );
   }

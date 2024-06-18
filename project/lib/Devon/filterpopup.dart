@@ -62,9 +62,8 @@ class _FilterPopupState extends State<FilterPopup> {
           },
           child: Text('Cancel'),
         ),
-        ElevatedButton(
+        TextButton(
           onPressed: () {
-            // Collect selected filters
             List<String> selectedFilters = [];
             if (_option1) {
               selectedFilters.add('Urgent');
@@ -76,15 +75,31 @@ class _FilterPopupState extends State<FilterPopup> {
             // Return selected filters
             Navigator.of(context).pop(selectedFilters);
           },
-          style: ElevatedButton.styleFrom(
-            elevation: 0,
-            padding: EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
           child: Text('Apply'),
         ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     // Collect selected filters
+        //     List<String> selectedFilters = [];
+        //     if (_option1) {
+        //       selectedFilters.add('Urgent');
+        //     }
+        //     if (_option2) {
+        //       selectedFilters.add('Regular');
+        //     }
+
+        //     // Return selected filters
+        //     Navigator.of(context).pop(selectedFilters);
+        //   },
+        //   style: ElevatedButton.styleFrom(
+        //     elevation: 0,
+        //     padding: EdgeInsets.symmetric(vertical: 16),
+        //     shape: RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.circular(12),
+        //     ),
+        //   ),
+        //   child: Text('Apply'),
+        // ),
       ],
     );
   }
