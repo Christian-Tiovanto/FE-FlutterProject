@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:project/Devon/providers.dart';
 import 'package:project/devon/history_page.dart';
 import 'package:project/jerrywijaya/profile.dart';
+import 'package:project/tian/LetterContentWidget.dart';
 import 'package:project/tian/PengajuanSurat.dart';
 // import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:project/devon/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
@@ -292,9 +293,6 @@ class _HomePageState extends State<HomePage> {
           onRefresh: _refresh,
           child: ListView.builder(
               itemCount: LoggedInUser?.MailInbox.where((user) {
-                print('user.progres == Pending');
-                print(user.progres == 'Pending');
-                print(LoggedInUser.MailInbox);
                 return user.progres == 'Pending' &&
                     selectedFilters!.contains(user.status) &&
                     (controller.text.isEmpty ||
@@ -368,6 +366,12 @@ class _HomePageState extends State<HomePage> {
 mail(BuildContext context, List<Mail> _data, int index) {
   return InkWell(
     onTap: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => LetterContentWidget(
+                    dataSurat: _data[index],
+                  )));
       // Tambahkan logika yang ingin dilakukan saat card diklik di sini
       // print('Card clicked: ${_data[index]['name']}');
     },

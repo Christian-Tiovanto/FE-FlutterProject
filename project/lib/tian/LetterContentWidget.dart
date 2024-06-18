@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:project/Devon/providers.dart';
 import 'package:project/tian/PengajuanSuratWidget/dropDownMenuWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/pengajuanAppBarWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/textFieldWidget.dart';
 
 class LetterContentWidget extends StatelessWidget {
-  final Map<String, dynamic> dataSurat;
+  final Mail dataSurat;
   const LetterContentWidget({super.key, required this.dataSurat});
 
   @override
@@ -25,20 +26,20 @@ class LetterContentWidget extends StatelessWidget {
                   leading: CircleAvatar(
                       radius: 24,
                       child: Text(
-                        this.dataSurat['name'][0].toUpperCase(),
+                        this.dataSurat.name[0].toUpperCase(),
                         style: TextStyle(fontSize: 20),
                       )),
                   title: Row(
                     children: [
                       Text(
-                        this.dataSurat['name'],
+                        this.dataSurat.name,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         width: 10,
                       ),
                       Text(
-                        "12 Mei",
+                        this.dataSurat.tgl,
                       )
                     ],
                   ),
@@ -55,7 +56,7 @@ class LetterContentWidget extends StatelessWidget {
                 ),
                 Container(
                   child: Text(
-                    this.dataSurat['Subject'],
+                    this.dataSurat.Subject,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
