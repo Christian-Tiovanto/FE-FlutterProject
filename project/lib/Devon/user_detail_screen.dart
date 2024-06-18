@@ -308,7 +308,8 @@ class _UserDetail_screenState extends State<UserDetail_screen> {
                   nik: _nikController.text,
                   password: _passwordController.text,
                   role: dropdown,
-                  number: _numberController.text);
+                  number: _numberController.text,
+                  MailInbox: []);
               // userListProvider.addUser(newUser);
               userListProvider.updateUser(widget.index, updateUser);
 

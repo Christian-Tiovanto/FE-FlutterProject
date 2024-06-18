@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:project/Devon/providers.dart';
 import 'package:project/devon/history_page.dart';
 import 'package:project/jerrywijaya/profile.dart';
 import 'package:project/tian/PengajuanSurat.dart';
 // import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:project/devon/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -21,78 +23,76 @@ class _HomePageState extends State<HomePage> {
   List<String>? selectedFilters = ['Urgent', 'Regular'];
   final SearchController controller = SearchController();
 
-  List<Map<String, dynamic>> _allusers = [
-    {
-      "name": "andy",
-      "Subject": "Surat Pengunduran Diri",
-      "tgl": "Apr 17",
-      "status": "Regular",
-      "progres": "Pending"
-    },
-    {
-      "name": "Devon",
-      "Subject": "Surat Pengajuan Cuti",
-      "tgl": "Apr 18",
-      "status": "Regular",
-      "progres": "Pending"
-    },
-    {
-      "name": "Chris",
-      "Subject": "Surat Pengajuan Pembelian Unit",
-      "tgl": "Apr 19",
-      "status": "Urgent",
-      "progres": "Finished"
-    },
-    {
-      "name": "Jerry",
-      "Subject": "Surat Pengajuan Cuti",
-      "tgl": "Apr 18",
-      "status": "Regular",
-      "progres": "Cancelled"
-    },
-    {
-      "name": "Jerry W",
-      "Subject": "Surat Pengajuan Pembelian Unit",
-      "tgl": "Apr 19",
-      "status": "Urgent",
-      "progres": "Pending"
-    },
-    {
-      "name": "Hadron",
-      "Subject": "Surat Pengajuan Cuti",
-      "tgl": "Apr 18",
-      "status": "Regular",
-      "progres": "Finished"
-    },
-    {
-      "name": "Lina ",
-      "Subject": "Surat Pengajuan Pembelian Unit",
-      "tgl": "Apr 19",
-      "status": "Urgent",
-      "progres": "Pending"
-    },
-  ];
-
-  Future<void> _refresh() async {
-    await Future.delayed(Duration(seconds: 1));
-
-    setState(() {
-      _allusers.add(
-        {
-          "name": "Ayu ",
-          "Subject": "Surat Pengajuan Pembelian Unit",
-          "tgl": "Apr 25",
-          "status": "Urgent",
-          "progres": "Pending"
-        },
-      );
-    });
-  }
+  // List<Map<String, dynamic>> LoggedInUser.MailInbox = [
+  //   {
+  //     "name": "andy",
+  //     "Subject": "Surat Pengunduran Diri",
+  //     "tgl": "Apr 17",
+  //     "status": "Regular",
+  //     "progres": "Pending"
+  //   },
+  //   {
+  //     "name": "Devon",
+  //     "Subject": "Surat Pengajuan Cuti",
+  //     "tgl": "Apr 18",
+  //     "status": "Regular",
+  //     "progres": "Pending"
+  //   },
+  //   {
+  //     "name": "Chris",
+  //     "Subject": "Surat Pengajuan Pembelian Unit",
+  //     "tgl": "Apr 19",
+  //     "status": "Urgent",
+  //     "progres": "Finished"
+  //   },
+  //   {
+  //     "name": "Jerry",
+  //     "Subject": "Surat Pengajuan Cuti",
+  //     "tgl": "Apr 18",
+  //     "status": "Regular",
+  //     "progres": "Cancelled"
+  //   },
+  //   {
+  //     "name": "Jerry W",
+  //     "Subject": "Surat Pengajuan Pembelian Unit",
+  //     "tgl": "Apr 19",
+  //     "status": "Urgent",
+  //     "progres": "Pending"
+  //   },
+  //   {
+  //     "name": "Hadron",
+  //     "Subject": "Surat Pengajuan Cuti",
+  //     "tgl": "Apr 18",
+  //     "status": "Regular",
+  //     "progres": "Finished"
+  //   },
+  //   {
+  //     "name": "Lina ",
+  //     "Subject": "Surat Pengajuan Pembelian Unit",
+  //     "tgl": "Apr 19",
+  //     "status": "Urgent",
+  //     "progres": "Pending"
+  //   },
+  // ];
 
   List<String> searchhistory = [];
 
   @override
   Widget build(BuildContext context) {
+    final LoggedInUser = Provider.of<UserListProvider>(context).onlineusers;
+    Future<void> _refresh() async {
+      await Future.delayed(Duration(seconds: 1));
+
+      setState(() {
+        LoggedInUser!.MailInbox.add(Mail(
+            name: "Ayu ",
+            Subject: "Surat Pengajuan Pembelian Unit",
+            tgl: "Apr 25",
+            status: "Urgent",
+            progres: "Pending"));
+      });
+    }
+
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, innerBoxIsScrolled) => [
@@ -144,15 +144,6 @@ class _HomePageState extends State<HomePage> {
                             onPressed: () {},
                             icon: const Icon(Icons.search),
                           ),
-                          //untuk menambahkan icon di samping kanan search bar
-                          /*
-                          trailing: [
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.mic),
-                            ),
-                          ],
-                          */
                           hintText: 'Search in Mail',
                           onTap: () => controller.openView(),
                         );
@@ -188,27 +179,27 @@ class _HomePageState extends State<HomePage> {
                             const Divider(),
                             ListView.builder(
                                 shrinkWrap: true,
-                                itemCount: _allusers
+                                itemCount: LoggedInUser!.MailInbox
                                     .where((user) =>
-                                        user['progres'] == 'Pending' &&
+                                        user.progres == 'Pending' &&
                                         (controller.text.isEmpty ||
-                                            user['name']
+                                            user.name
                                                 .toString()
                                                 .toLowerCase()
                                                 .contains(controller.text
                                                     .toLowerCase())))
                                     .length,
                                 itemBuilder: (context, index) {
-                                  final filteredUsers = _allusers
-                                      .where((user) =>
-                                          user['progres'] == 'Pending' &&
-                                          (controller.text.isEmpty ||
-                                              user['name']
-                                                  .toString()
-                                                  .toLowerCase()
-                                                  .contains(controller.text
-                                                      .toLowerCase())))
-                                      .toList();
+                                  final filteredUsers =
+                                      LoggedInUser.MailInbox.where((user) =>
+                                              user.progres == 'Pending' &&
+                                              (controller.text.isEmpty ||
+                                                  user.name
+                                                      .toString()
+                                                      .toLowerCase()
+                                                      .contains(controller.text
+                                                          .toLowerCase())))
+                                          .toList();
                                   return mail(context, filteredUsers, index);
                                 }),
                           ]
@@ -300,23 +291,25 @@ class _HomePageState extends State<HomePage> {
         body: RefreshIndicator(
           onRefresh: _refresh,
           child: ListView.builder(
-              itemCount: _allusers
-                  .where((user) =>
-                      user['progres'] == 'Pending' &&
-                      selectedFilters!.contains(user['status']) &&
-                      (controller.text.isEmpty ||
-                          user['name']
-                              .toString()
-                              .toLowerCase()
-                              .contains(controller.text.toLowerCase())))
-                  .length,
+              itemCount: LoggedInUser?.MailInbox.where((user) {
+                print('user.progres == Pending');
+                print(user.progres == 'Pending');
+                print(LoggedInUser.MailInbox);
+                return user.progres == 'Pending' &&
+                    selectedFilters!.contains(user.status) &&
+                    (controller.text.isEmpty ||
+                        user.name
+                            .toString()
+                            .toLowerCase()
+                            .contains(controller.text.toLowerCase()));
+              }).length,
               itemBuilder: (context, index) {
-                final filteredUsers = _allusers
+                final filteredUsers = LoggedInUser!.MailInbox
                     .where((user) =>
-                        user['progres'] == 'Pending' &&
-                        selectedFilters!.contains(user['status']) &&
+                        user.progres == 'Pending' &&
+                        selectedFilters!.contains(user.status) &&
                         (controller.text.isEmpty ||
-                            user['name']
+                            user.name
                                 .toString()
                                 .toLowerCase()
                                 .contains(controller.text.toLowerCase())))
@@ -372,11 +365,11 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
+mail(BuildContext context, List<Mail> _data, int index) {
   return InkWell(
     onTap: () {
       // Tambahkan logika yang ingin dilakukan saat card diklik di sini
-      print('Card clicked: ${_data[index]['name']}');
+      // print('Card clicked: ${_data[index]['name']}');
     },
     child: Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -399,7 +392,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                   radius: 24,
                   backgroundColor: Colors.blue,
                   child: Text(
-                    _data[index]['name'][0].toUpperCase(),
+                    _data[index].name[0].toUpperCase(),
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -415,14 +408,14 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                     width: 200,
                     child: Text(
                       overflow: TextOverflow.ellipsis,
-                      _data[index]['name'].toString(),
+                      _data[index].name.toString(),
                       style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
                   ),
                   Container(
                     child: Text(
                       overflow: TextOverflow.ellipsis,
-                      _data[index]['tgl'].toString(), // Tanggal disini
+                      _data[index].tgl.toString(), // Tanggal disini
                       style: TextStyle(color: Colors.black, fontSize: 13),
                     ),
                   ),
@@ -439,7 +432,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                         // color: Colors.blue,
                         child: Text(
                           overflow: TextOverflow.ellipsis,
-                          '${_data[index]["Subject"].toString()}',
+                          '${_data[index].Subject.toString()}',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 15,
@@ -451,7 +444,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                         child: Text(
                           overflow: TextOverflow.ellipsis,
 
-                          '${_data[index]["status"].toString()}', // Teks urgent disini
+                          '${_data[index].status.toString()}', // Teks urgent disini
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 13,

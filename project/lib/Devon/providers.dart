@@ -28,19 +28,35 @@ class Settings_provider extends ChangeNotifier {
   }
 }
 
+class Mail {
+  final String name;
+  final String Subject;
+  final String tgl;
+  final String status;
+  final String progres;
+
+  Mail(
+      {required this.Subject,
+      required this.name,
+      required this.tgl,
+      required this.status,
+      required this.progres});
+}
+
 class User {
   final String name;
   final String nik;
   final String password;
   final String role;
   final String number;
-
+  final List<Mail> MailInbox;
   User(
       {required this.name,
       required this.nik,
       required this.password,
       required this.role,
-      required this.number});
+      required this.number,
+      required this.MailInbox});
 }
 
 class UserListProvider extends ChangeNotifier {
@@ -50,14 +66,90 @@ class UserListProvider extends ChangeNotifier {
         nik: "12442",
         password: "devon",
         role: "Manager",
-        number: "081375"),
+        number: "081375",
+        MailInbox: [
+          Mail(
+              name: "andy",
+              Subject: "Surat Pengunduran Diri",
+              tgl: "Apr 17",
+              status: "Regular",
+              progres: "Pending"),
+          Mail(
+              name: "Devon",
+              Subject: "Surat Pengajuan Cuti",
+              tgl: "Apr 18",
+              status: "Regular",
+              progres: "Pending"),
+          Mail(
+              name: "Chris",
+              Subject: "Surat Pengajuan Pembelian Unit",
+              tgl: "Apr 19",
+              status: "Urgent",
+              progres: "Finished"),
+          Mail(
+              name: "Jerry",
+              Subject: "Surat Pengajuan Cuti",
+              tgl: "Apr 18",
+              status: "Regular",
+              progres: "Cancelled"),
+          Mail(
+              name: "Jerry W",
+              Subject: "Surat Pengajuan Pembelian Unit",
+              tgl: "Apr 19",
+              status: "Urgent",
+              progres: "Pending"),
+          Mail(
+              name: "Hadron",
+              Subject: "Surat Pengajuan Cuti",
+              tgl: "Apr 18",
+              status: "Regular",
+              progres: "Finished"),
+          Mail(
+              name: "Lina ",
+              Subject: "Surat Pengajuan Pembelian Unit",
+              tgl: "Apr 19",
+              status: "Urgent",
+              progres: "Pending")
+        ]),
+    User(
+        name: "Christian",
+        nik: "22111",
+        password: "christian",
+        role: "Manager",
+        number: "081375",
+        MailInbox: [
+          Mail(
+              name: "Jerry",
+              Subject: "Surat Pengajuan Cuti",
+              tgl: "Apr 18",
+              status: "Regular",
+              progres: "Cancelled"),
+          Mail(
+              name: "Jerry W",
+              Subject: "Surat Pengajuan Pembelian Unit",
+              tgl: "Apr 19",
+              status: "Urgent",
+              progres: "Pending"),
+          Mail(
+              name: "Hadron",
+              Subject: "Surat Pengajuan Cuti",
+              tgl: "Apr 18",
+              status: "Regular",
+              progres: "Finished"),
+          Mail(
+              name: "Lina ",
+              Subject: "Surat Pengajuan Pembelian Unit",
+              tgl: "Apr 19",
+              status: "Urgent",
+              progres: "Pending")
+        ]),
   ];
 
-  List<User> _onlineusers = [];
+  User? _onlineusers;
 
   List<User> get users => _users;
 
-  List<User> get onlineusers => _onlineusers;
+  User? get onlineusers => _onlineusers;
 
   void addUser(User user) {
     _users.add(user);
@@ -75,12 +167,25 @@ class UserListProvider extends ChangeNotifier {
   }
 
   void addOnlineUser(User onlineuser) {
-    _onlineusers.add(onlineuser);
+    _onlineusers = onlineuser;
     notifyListeners();
   }
 
   void removeOnlineUser() {
-    _onlineusers.removeAt(0);
+    _onlineusers = null;
+    notifyListeners();
+  }
+}
+
+class userDataProvider extends ChangeNotifier {
+  List<Map<String, dynamic>> _allusers = [];
+
+  get getDataUser {
+    return _allusers;
+  }
+
+  void addUser(user) {
+    _allusers.add(user);
     notifyListeners();
   }
 }

@@ -34,13 +34,7 @@ class _Login_screenState extends State<Login_screen> {
     for (var user in userList) {
       if (user.nik == _nikController.text &&
           user.password == _passwordController.text) {
-        User loginUser = User(
-          name: user.name,
-          nik: user.nik,
-          password: "",
-          role: user.role,
-          number: user.number,
-        );
+        User loginUser = user;
         authenticatedUsers
             .add(loginUser); // Autentikasi berhasil, tambahkan user ke list
       }

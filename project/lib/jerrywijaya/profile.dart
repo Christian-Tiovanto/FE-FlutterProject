@@ -19,7 +19,7 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget> {
   @override
   Widget build(BuildContext context) {
     final userListProvider = Provider.of<UserListProvider>(context);
-    final userList = userListProvider.onlineusers[0];
+    final userList = userListProvider.onlineusers;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -128,7 +128,7 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget> {
   }
 }
 
-body(BuildContext context, User user) {
+body(BuildContext context, User? user) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -143,7 +143,7 @@ body(BuildContext context, User user) {
                 backgroundColor: Colors.grey,
                 child: Center(
                   child: Text(
-                    user.name[0].toUpperCase(),
+                    user!.name[0].toUpperCase(),
                     style: TextStyle(color: Colors.black, fontSize: 100),
                     textAlign: TextAlign.center,
                   ),
