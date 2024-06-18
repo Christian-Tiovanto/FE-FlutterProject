@@ -61,6 +61,11 @@ class UserListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateUser(int index, User user) {
+    _users[index] = user;
+    notifyListeners();
+  }
+
   void addOnlineUser(User onlineuser) {
     _onlineusers.add(onlineuser);
     notifyListeners();

@@ -62,6 +62,12 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget> {
                 //   context,
                 //   MaterialPageRoute(builder: (context) => maintenance_page()),
                 // );
+              } else if (value == 'Loading') {
+                print('Loading');
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => maintenance_page()),
+                // );
               } else {
                 print('error');
                 //               Navigator.push(
@@ -75,6 +81,7 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget> {
                 {'icon': Icons.settings, 'text': 'Settings'},
                 {'icon': Icons.build, 'text': 'Maintenance'},
                 {'icon': Icons.update, 'text': 'Updating'},
+                {'icon': Icons.refresh, 'text': 'Loading'},
                 {'icon': Icons.error, 'text': 'Error'},
               ].map((choice) {
                 return PopupMenuItem<String>(
