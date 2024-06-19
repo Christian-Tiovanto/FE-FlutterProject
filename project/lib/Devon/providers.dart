@@ -38,7 +38,7 @@ class Mail {
   final String Subject;
   final String tgl;
   final String status;
-  final String progres;
+  String progres;
 
   Mail(
       {required this.Subject,

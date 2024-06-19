@@ -3,6 +3,7 @@ import 'package:project/Devon/providers.dart';
 import 'package:project/tian/PengajuanSuratWidget/dropDownMenuWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/pengajuanAppBarWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/textFieldWidget.dart';
+import 'package:provider/provider.dart';
 
 class LetterContentWidget extends StatelessWidget {
   final Mail dataSurat;
@@ -77,7 +78,10 @@ class LetterContentWidget extends StatelessWidget {
                   child: Text(
                       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut gravida tellus et lacus venenatis molestie. Fusce sit amet volutpat nisi, eget elementum felis. Phasellus ligula metus, facilisis quis est sed, molestie tempus felis. Maecenas nec felis ex. Nulla id semper metus. Aliquam urna mauris, viverra sit amet volutpat ultrices, iaculis at est. Quisque id accumsan mauris.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut gravida tellus et lacus venenatis molestie. Fusce sit amet volutpat nisi, eget elementum felis. Phasellus ligula metus, facilisis quis est sed, molestie tempus felis. Maecenas nec felis ex. Nulla id semper metus. Aliquam urna mauris, viverra sit amet volutpat ultrices, iaculis at est. Quisque id accumsan mauris.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut gravida tellus et lacus venenatis molestie. Fusce sit amet volutpat nisi, eget elementum felis. Phasellus ligula metus, facilisis quis est sed, molestie tempus felis. Maecenas nec felis ex. Nulla id semper metus. Aliquam urna mauris, viverra sit amet volutpat ultrices, iaculis at est. Quisque id accumsan mauris.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut gravida tellus et lacus venenatis molestie. Fusce sit amet volutpat nisi, eget elementum felis. Phasellus ligula metus, facilisis quis est sed, molestie tempus felis. Maecenas nec felis ex. Nulla id semper metus. Aliquam urna mauris, viverra sit amet volutpat ultrices, iaculis at est. Quisque id accumsan mauris."),
                 ),
-                ResponsePopUpFormWidget(),
+                ResponsePopUpFormWidget(
+                  dataSurat: dataSurat,
+                  LetterContentWidgetContext: context,
+                ),
               ],
             ),
           ],
@@ -88,12 +92,16 @@ class LetterContentWidget extends StatelessWidget {
 }
 
 class ResponsePopUpFormWidget extends StatelessWidget {
-  const ResponsePopUpFormWidget({
-    super.key,
-  });
+  final Mail dataSurat;
+  final BuildContext LetterContentWidgetContext;
+  const ResponsePopUpFormWidget(
+      {super.key,
+      required this.dataSurat,
+      required this.LetterContentWidgetContext});
 
   @override
   Widget build(BuildContext context) {
+    final MailFinished = Provider.of<UserListProvider>(context);
     return FilledButton.tonal(
       onPressed: () => showDialog<String>(
         context: context,
@@ -129,7 +137,12 @@ class ResponsePopUpFormWidget extends StatelessWidget {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
+              onPressed: () {
+                dataSurat.progres = 'Finished';
+                MailFinished.addMail();
+                Navigator.pop(context, 'OK');
+                Navigator.pop(LetterContentWidgetContext, 'OK');
+              },
               child: const Text('OK'),
             ),
           ],
