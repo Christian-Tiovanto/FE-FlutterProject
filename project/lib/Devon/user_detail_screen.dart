@@ -25,6 +25,7 @@ class _UserDetail_screenState extends State<UserDetail_screen> {
   @override
   Widget build(BuildContext context) {
     final userListProvider = Provider.of<UserListProvider>(context);
+    final prov = Provider.of<Settings_provider>(context);
 
     final userList = userListProvider.users;
     final _passwordController =
@@ -83,7 +84,11 @@ class _UserDetail_screenState extends State<UserDetail_screen> {
             child: Center(
               child: Text(
                 userList[widget.index].name[0].toUpperCase(),
-                style: TextStyle(color: Colors.black, fontSize: 80),
+                style: TextStyle(
+                    color: prov.enableDarkMode == true
+                        ? Colors.white
+                        : Colors.black,
+                    fontSize: 80),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -150,8 +155,12 @@ class _UserDetail_screenState extends State<UserDetail_screen> {
                   SizedBox(
                     width: 3,
                   ),
-                  Icon(Icons.business_center,
-                      color: Colors.black), // Icon di sebelah kiri hint text
+                  Icon(
+                    Icons.business_center,
+                    color: prov.enableDarkMode == true
+                        ? Colors.white
+                        : Colors.black,
+                  ), // Icon di sebelah kiri hint text
                   SizedBox(width: 10),
                   // Spasi antara ikon dan teks
                   dropdown.isEmpty
@@ -166,15 +175,29 @@ class _UserDetail_screenState extends State<UserDetail_screen> {
                 ],
               ), // Hint text
               icon: dropdown.isEmpty
-                  ? Icon(Icons.arrow_drop_down, color: Colors.black)
-                  : Icon(Icons.arrow_drop_down, color: Colors.white),
+                  ? Icon(
+                      Icons.arrow_drop_down,
+                      color: prov.enableDarkMode == true
+                          ? Colors.white
+                          : Colors.black,
+                    )
+                  : Icon(
+                      Icons.arrow_drop_down,
+                      color: prov.enableDarkMode == true
+                          ? Colors.white
+                          : Colors.black,
+                    ),
 // Icon di sebelah kanan
               iconSize: 24,
               elevation: 16,
-              style: TextStyle(color: Colors.black, fontSize: 16),
+              style: TextStyle(
+                  color:
+                      prov.enableDarkMode == true ? Colors.white : Colors.black,
+                  fontSize: 16),
               underline: Container(
                 height: 1,
-                color: Colors.black,
+                color:
+                    prov.enableDarkMode == true ? Colors.white : Colors.black,
               ),
               onChanged: (String? newValue) {
                 setState(() {
@@ -273,7 +296,12 @@ class _UserDetail_screenState extends State<UserDetail_screen> {
                   body: Center(
                     child: Text(
                       errorMessage,
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        color: prov.enableDarkMode == true
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                   ),
                   title: 'This is Ignored',

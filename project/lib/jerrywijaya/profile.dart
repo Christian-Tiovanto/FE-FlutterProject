@@ -18,6 +18,7 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget> {
   int _selectedIndex = 2;
   @override
   Widget build(BuildContext context) {
+    final prov = Provider.of<Settings_provider>(context);
     final userListProvider = Provider.of<UserListProvider>(context);
     final userList = userListProvider.onlineusers;
     return Scaffold(
@@ -129,6 +130,7 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget> {
 }
 
 body(BuildContext context, User? user) {
+  final prov = Provider.of<Settings_provider>(context);
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -144,7 +146,11 @@ body(BuildContext context, User? user) {
                 child: Center(
                   child: Text(
                     user!.name[0].toUpperCase(),
-                    style: TextStyle(color: Colors.black, fontSize: 100),
+                    style: TextStyle(
+                        color: prov.enableDarkMode == true
+                            ? Colors.white
+                            : Colors.black,
+                        fontSize: 100),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -155,8 +161,10 @@ body(BuildContext context, User? user) {
               child: Text(
                 'Nama : ${user.name}',
                 style: TextStyle(
-                    fontSize: 22,
-                    color: Theme.of(context).textTheme.bodyText1?.color),
+                  fontSize: 22,
+                  color:
+                      prov.enableDarkMode == true ? Colors.white : Colors.black,
+                ),
               ),
             ),
             SizedBox(height: 10),
@@ -164,8 +172,10 @@ body(BuildContext context, User? user) {
               child: Text(
                 'Role : ${user.role}',
                 style: TextStyle(
-                    fontSize: 20,
-                    color: Theme.of(context).textTheme.bodyText1?.color),
+                  fontSize: 20,
+                  color:
+                      prov.enableDarkMode == true ? Colors.white : Colors.black,
+                ),
               ),
             ),
             SizedBox(height: 10),
@@ -177,14 +187,18 @@ body(BuildContext context, User? user) {
             Text(
               'NIK :',
               style: TextStyle(
-                  fontSize: 22,
-                  color: Theme.of(context).textTheme.bodyText1?.color),
+                fontSize: 22,
+                color:
+                    prov.enableDarkMode == true ? Colors.white : Colors.black,
+              ),
             ),
             Text(
               user.nik,
               style: TextStyle(
-                  fontSize: 20,
-                  color: Theme.of(context).textTheme.bodyText1?.color),
+                fontSize: 20,
+                color:
+                    prov.enableDarkMode == true ? Colors.white : Colors.black,
+              ),
             ),
             SizedBox(height: 10),
             Divider(
@@ -195,14 +209,18 @@ body(BuildContext context, User? user) {
             Text(
               'Nomor HP :',
               style: TextStyle(
-                  fontSize: 20,
-                  color: Theme.of(context).textTheme.bodyText1?.color),
+                fontSize: 20,
+                color:
+                    prov.enableDarkMode == true ? Colors.white : Colors.black,
+              ),
             ),
             Text(
               user.number,
               style: TextStyle(
-                  fontSize: 20,
-                  color: Theme.of(context).textTheme.bodyText1?.color),
+                fontSize: 20,
+                color:
+                    prov.enableDarkMode == true ? Colors.white : Colors.black,
+              ),
             ),
           ],
         ),

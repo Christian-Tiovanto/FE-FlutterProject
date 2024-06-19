@@ -527,6 +527,7 @@ class _HistoryPageState extends State<HistoryPage>
 }
 
 mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
+  final prov = Provider.of<Settings_provider>(context);
   return InkWell(
     onTap: () {
       // Tambahkan logika yang ingin dilakukan saat card diklik di sini
@@ -536,7 +537,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
       margin: const EdgeInsets.symmetric(vertical: 5),
       height: 94,
       child: Card(
-        color: Colors.white,
+        color: prov.enableDarkMode == true ? Colors.black : Colors.white,
         elevation: 0,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -570,14 +571,22 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                     child: Text(
                       overflow: TextOverflow.ellipsis,
                       _data[index]['name'].toString(),
-                      style: TextStyle(color: Colors.black, fontSize: 20),
+                      style: TextStyle(
+                          color: prov.enableDarkMode == true
+                              ? Colors.white
+                              : Colors.black,
+                          fontSize: 20),
                     ),
                   ),
                   Container(
                     child: Text(
                       overflow: TextOverflow.ellipsis,
                       _data[index]['tgl'].toString(), // Tanggal disini
-                      style: TextStyle(color: Colors.black, fontSize: 13),
+                      style: TextStyle(
+                          color: prov.enableDarkMode == true
+                              ? Colors.white
+                              : Colors.black,
+                          fontSize: 13),
                     ),
                   ),
                 ],
@@ -595,7 +604,9 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                           overflow: TextOverflow.ellipsis,
                           '${_data[index]["Subject"].toString()}',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: prov.enableDarkMode == true
+                                ? Colors.white
+                                : Colors.black,
                             fontSize: 15,
                           ),
                         ),
@@ -607,7 +618,9 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
 
                           '${_data[index]["status"].toString()}', // Teks urgent disini
                           style: TextStyle(
-                            color: Colors.black,
+                            color: prov.enableDarkMode == true
+                                ? Colors.white
+                                : Colors.black,
                             fontSize: 13,
                           ),
                         ),

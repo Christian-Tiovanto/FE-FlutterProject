@@ -32,7 +32,7 @@ class _Signup_screenState extends State<Signup_screen> {
   @override
   Widget build(BuildContext context) {
     final userListProvider = Provider.of<UserListProvider>(context);
-
+    final prov = Provider.of<Settings_provider>(context);
     final userList = userListProvider.users;
     String? dropdownValue;
 
@@ -76,7 +76,7 @@ class _Signup_screenState extends State<Signup_screen> {
               fontSize: 35, // Ukuran font
               // fontStyle: FontStyle.italic, // Gaya font (miring)
               fontWeight: FontWeight.bold, // Berat font (tebal)
-              color: Colors.black,
+              color: prov.enableDarkMode == true ? Colors.white : Colors.black,
             ),
           ),
           SizedBox(
@@ -141,8 +141,12 @@ class _Signup_screenState extends State<Signup_screen> {
                   SizedBox(
                     width: 3,
                   ),
-                  Icon(Icons.business_center,
-                      color: Colors.black), // Icon di sebelah kiri hint text
+                  Icon(
+                    Icons.business_center,
+                    color: prov.enableDarkMode == true
+                        ? Colors.white
+                        : Colors.black,
+                  ), // Icon di sebelah kiri hint text
                   SizedBox(width: 10),
                   // Spasi antara ikon dan teks
                   dropdown.isEmpty
@@ -157,15 +161,29 @@ class _Signup_screenState extends State<Signup_screen> {
                 ],
               ), // Hint text
               icon: dropdown.isEmpty
-                  ? Icon(Icons.arrow_drop_down, color: Colors.black)
-                  : Icon(Icons.arrow_drop_down, color: Colors.white),
+                  ? Icon(
+                      Icons.arrow_drop_down,
+                      color: prov.enableDarkMode == true
+                          ? Colors.white
+                          : Colors.black,
+                    )
+                  : Icon(
+                      Icons.arrow_drop_down,
+                      color: prov.enableDarkMode == true
+                          ? Colors.black
+                          : Colors.white,
+                    ),
 // Icon di sebelah kanan
               iconSize: 24,
               elevation: 16,
-              style: TextStyle(color: Colors.black, fontSize: 16),
+              style: TextStyle(
+                  color:
+                      prov.enableDarkMode == true ? Colors.white : Colors.black,
+                  fontSize: 16),
               underline: Container(
                 height: 1,
-                color: Colors.black,
+                color:
+                    prov.enableDarkMode == true ? Colors.white : Colors.black,
               ),
               onChanged: (String? newValue) {
                 setState(() {
@@ -289,7 +307,12 @@ class _Signup_screenState extends State<Signup_screen> {
                   body: Center(
                     child: Text(
                       errorMessage,
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        color: prov.enableDarkMode == true
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                   ),
                   title: 'This is Ignored',
@@ -309,7 +332,12 @@ class _Signup_screenState extends State<Signup_screen> {
                   body: Center(
                     child: Text(
                       'Confirm Password Is Incorrect',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        color: prov.enableDarkMode == true
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                   ),
                   title: 'This is Ignored',

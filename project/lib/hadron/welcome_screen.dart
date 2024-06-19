@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 // import 'package:scrappingwebsite/login_screen.dart';
 // import 'package:scrappingwebsite/signup_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:project/Devon/providers.dart';
 import 'dart:async';
 
 import 'package:project/hadron/login_screen.dart';
+import 'package:provider/provider.dart';
 
 class Welcome_screen extends StatefulWidget {
   const Welcome_screen({super.key});
@@ -27,6 +29,7 @@ class _Welcome_screenState extends State<Welcome_screen> {
 
   @override
   Widget build(BuildContext context) {
+    final prov = Provider.of<Settings_provider>(context);
     return Scaffold(
       body: Column(
         children: [
@@ -62,7 +65,7 @@ class _Welcome_screenState extends State<Welcome_screen> {
               fontSize: 35, // Ukuran font
               // fontStyle: FontStyle.italic, // Gaya font (miring)
               fontWeight: FontWeight.bold, // Berat font (tebal)
-              color: Colors.black,
+              color: prov.enableDarkMode == true ? Colors.white : Colors.black,
             ),
           ),
           Text(
@@ -71,7 +74,7 @@ class _Welcome_screenState extends State<Welcome_screen> {
               fontSize: 35, // Ukuran font
               // fontStyle: FontStyle.italic, // Gaya font (miring)
               fontWeight: FontWeight.bold, // Berat font (tebal)
-              color: Colors.black,
+              color: prov.enableDarkMode == true ? Colors.white : Colors.black,
             ),
           ),
           SizedBox(

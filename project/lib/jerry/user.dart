@@ -124,6 +124,7 @@ class _UserPageState extends State<UserPage> {
 
 card(BuildContext context, User user, int index) {
   final userListProvider = Provider.of<UserListProvider>(context);
+  final prov = Provider.of<Settings_provider>(context);
 
   return InkWell(
     onTap: () async {
@@ -175,8 +176,22 @@ card(BuildContext context, User user, int index) {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(user.name),
-                          Text('${user.role} - ${user.nik}')
+                          Text(
+                            '${user.name}',
+                            style: TextStyle(
+                              color: prov.enableDarkMode == true
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                          Text(
+                            '${user.role} - ${user.nik}',
+                            style: TextStyle(
+                              color: prov.enableDarkMode == true
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          )
                         ],
                       ),
                       IconButton(
