@@ -29,6 +29,9 @@ void main() {
     ChangeNotifierProvider(
       create: (_) => UserListProvider(),
     ),
+    ChangeNotifierProvider(
+      create: (_) => MailValue(),
+    ),
   ], child: const MyApp()));
 }
 
@@ -41,7 +44,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: prov.enableDarkMode == true ? prov.dark : prov.light,
-      home: Welcome_screen(),
+      home: HomePage(),
     );
   }
 }

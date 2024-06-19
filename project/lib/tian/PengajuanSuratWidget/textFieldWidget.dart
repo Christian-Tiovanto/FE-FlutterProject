@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:project/Devon/providers.dart';
+import 'package:provider/provider.dart';
 
 class TextFieldExample extends StatefulWidget {
   final bool isBorder;
-  const TextFieldExample({super.key, required this.isBorder});
+  final String title;
+  List subjectValue;
+  TextFieldExample({
+    required this.subjectValue,
+    super.key,
+    required this.isBorder,
+    required this.title,
+  });
 
   @override
   State<TextFieldExample> createState() => _TextFieldExampleState();
@@ -26,9 +35,13 @@ class _TextFieldExampleState extends State<TextFieldExample> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onChanged: (value) {
+        widget.subjectValue[0] = value;
+        print(widget.subjectValue);
+      },
       scrollPhysics: const NeverScrollableScrollPhysics(),
       decoration: InputDecoration(
-          hintText: "Subject",
+          hintText: widget.title,
           border:
               widget.isBorder ? const UnderlineInputBorder() : InputBorder.none,
           contentPadding:

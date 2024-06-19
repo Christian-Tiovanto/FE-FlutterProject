@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
-
-const List<String> list = <String>['Sudah Diputuskan', 'Sudah Diberi Arahan'];
+import 'package:project/Devon/providers.dart';
+import 'package:provider/provider.dart';
 
 class DropdownMenuExample extends StatefulWidget {
-  final List<String>? listData;
-  const DropdownMenuExample({super.key, this.listData});
+  final List<String> listData;
+  const DropdownMenuExample({super.key, required this.listData});
 
   @override
   State<DropdownMenuExample> createState() => _DropdownButtonExampleState();
 }
 
 class _DropdownButtonExampleState extends State<DropdownMenuExample> {
-  String dropdownValue = list.first;
+  late String dropdownValue;
+  @override
+  void initState() {
+    super.initState();
+    dropdownValue = widget.listData.first; // Access 'widget' here
+  }
 
   @override
   Widget build(BuildContext context) {
+    final PrioritasSuratValue = Provider.of<MailValue>(context).PrioritasSurat;
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: 500, maxWidth: 200),
       child: DropdownButton<String>(
@@ -26,10 +32,13 @@ class _DropdownButtonExampleState extends State<DropdownMenuExample> {
         onChanged: (String? value) {
           // This is called when the user selects an item.
           setState(() {
+            PrioritasSuratValue[0] = value!;
+            print('PrioritasSuratValue');
+            print(PrioritasSuratValue);
             dropdownValue = value!;
           });
         },
-        items: list.map<DropdownMenuItem<String>>((String value) {
+        items: widget.listData.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: ConstrainedBox(

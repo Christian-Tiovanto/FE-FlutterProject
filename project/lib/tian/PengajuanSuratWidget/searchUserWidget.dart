@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:project/Devon/providers.dart';
 import 'package:project/tian/PengajuanSuratWidget/containerKolomPengajuanWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/dropDownMenuWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/textFieldWidget.dart';
+import 'package:provider/provider.dart';
 
 class SearchUserWidget extends StatefulWidget {
-  const SearchUserWidget({super.key});
-
+  SearchUserWidget(
+      {super.key,
+      required this.selectedUsers,
+      required this.Subject,
+      required this.IsiSurat});
+  final List<User> selectedUsers;
+  List Subject;
+  String IsiSurat;
   @override
   State<SearchUserWidget> createState() => _SearchUserWidgetState();
 }
@@ -13,30 +21,18 @@ class SearchUserWidget extends StatefulWidget {
 class _SearchUserWidgetState extends State<SearchUserWidget> {
   bool _visible = false;
 
-  List _selectedUsers = [];
-
   final snackBar = SnackBar(
     content: Text('Yay! A SnackBar!'),
   );
 
-  final List<Map<String, dynamic>> _allUsers = [
-    {"id": 1, "name": "Andy", "age": 29},
-    {"id": 2, "name": "Aragon", "age": 40},
-    {"id": 3, "name": "Bob", "age": 5},
-    {"id": 4, "name": "Barbara", "age": 35},
-    {"id": 5, "name": "Candy", "age": 21},
-    {"id": 6, "name": "Colin", "age": 55},
-    {"id": 7, "name": "Audra", "age": 30},
-    {"id": 8, "name": "Banana", "age": 14},
-    {"id": 9, "name": "Caversky", "age": 100},
-    {"id": 10, "name": "Becky", "age": 32},
-  ];
-
-  // This list holds the data for the list view
-  List<Map<String, dynamic>> _foundUsers = [];
-
+  List<User> _foundUsers = [];
+  List<User> _allUsers = [];
   @override
   initState() {
+    Future.delayed(
+        Duration.zero,
+        () => _allUsers =
+            Provider.of<UserListProvider>(context, listen: false).users);
     _foundUsers = _allUsers;
     super.initState();
   }
@@ -53,13 +49,13 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
       }
     }
 
-    List<Map<String, dynamic>> results = [];
+    List<User> results = [];
 
     if (enteredKeyword.isEmpty) {
       // if the search field is empty or only contains white-space, we'll display all users
       results = _allUsers;
     } else {
-      results = _allUsers.where((user) => callback(user["name"])).toList();
+      results = _allUsers.where((user) => callback(user.name)).toList();
       _foundUsers = results;
       print(_foundUsers);
     }
@@ -67,6 +63,7 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // This list holds the data for the list view
     return Column(
       children: [
         Row(
@@ -81,12 +78,12 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
             Expanded(
               child: Wrap(
                 children: [
-                  _selectedUsers.isEmpty
+                  widget.selectedUsers.isEmpty
                       ? SizedBox(
                           width: 0,
                         )
                       : ListView.builder(
-                          itemCount: _selectedUsers.length,
+                          itemCount: widget.selectedUsers.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             return ListTile(
@@ -96,18 +93,17 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                               leading: CircleAvatar(
                                 radius: 24,
                                 child: Text(
-                                  index.toString(),
+                                  widget.selectedUsers[index].name[0]
+                                      .toUpperCase(),
                                   style: TextStyle(fontSize: 10),
                                 ),
                               ),
-                              title: Text(
-                                  '${_selectedUsers[index]['name']}@gmail.com'),
+                              title:
+                                  Text('${widget.selectedUsers[index].name}'),
                               trailing: TextButton(
                                 onPressed: () {
-                                  print("ea");
                                   setState(() {
-                                    _selectedUsers.removeAt(index);
-                                    print("asem");
+                                    widget.selectedUsers.removeAt(index);
                                   });
                                 },
                                 child: const Icon(IconData(0xef28,
@@ -142,27 +138,27 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
           child: Visibility(
             replacement: Column(
               children: [
-                ContainerKolomPengajuanSuratWidget(
-                  firstPart: Text("Jenis Surat"),
-                  thirdPart: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 200, maxHeight: 500),
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        isCollapsed: true,
-                        contentPadding: EdgeInsets.all(10),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              50.0), // Set the radius as per your need
-                        ),
-                      ),
-                      child: DropdownMenuExample(
-                        listData: ['1', '2', '3'],
-                      ),
-                    ),
-                  ),
-                  containerPadding:
-                      PaddingLeftAndRight(leftPadding: 20, rightPadding: 20),
-                ),
+                // ContainerKolomPengajuanSuratWidget(
+                //   firstPart: Text("Jenis Surat"),
+                //   thirdPart: ConstrainedBox(
+                //     constraints: BoxConstraints(maxWidth: 200, maxHeight: 500),
+                //     child: InputDecorator(
+                //       decoration: InputDecoration(
+                //         isCollapsed: true,
+                //         contentPadding: EdgeInsets.all(10),
+                //         border: OutlineInputBorder(
+                //           borderRadius: BorderRadius.circular(
+                //               50.0), // Set the radius as per your need
+                //         ),
+                //       ),
+                //       child: DropdownMenuExample(
+                //         listData: ['1', '2', '3'],
+                //       ),
+                //     ),
+                //   ),
+                //   containerPadding:
+                //       PaddingLeftAndRight(leftPadding: 20, rightPadding: 20),
+                // ),
                 SizedBox(
                   height: 10,
                 ),
@@ -180,7 +176,7 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                         ),
                       ),
                       child: DropdownMenuExample(
-                        listData: ['1', '2', '3'],
+                        listData: ['Urgent', "Regular"],
                       ),
                     ),
                   ),
@@ -189,9 +185,13 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                 ),
                 TextFieldExample(
                   isBorder: true,
+                  subjectValue: widget.Subject,
+                  title: "Subject",
                 ),
                 TextFieldExample(
                   isBorder: false,
+                  subjectValue: widget.Subject,
+                  title: "Tulis Isi Surat",
                 ),
               ],
             ),
@@ -204,10 +204,10 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                       return TextButton(
                         onPressed: () {
                           // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          _selectedUsers.add(_foundUsers[index]);
+                          widget.selectedUsers.add(_foundUsers[index]);
                           setState(() {});
                         },
-                        child: _selectedUsers.contains(_foundUsers[index])
+                        child: widget.selectedUsers.contains(_foundUsers[index])
                             ? Opacity(
                                 opacity: 0.5,
                                 child: ListTile(
@@ -221,9 +221,8 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                                     ),
                                   ),
                                   title: Text(
-                                      '${_foundUsers[index]['name']}@gmail.com'),
-                                  subtitle: Text(
-                                      '${_foundUsers[index]['name']}@gmail.com'),
+                                      '${_foundUsers[index].name.toLowerCase()}'),
+                                  subtitle: Text('${_foundUsers[index].role}'),
                                 ),
                               )
                             : ListTile(
@@ -232,14 +231,13 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                                 leading: CircleAvatar(
                                   radius: 24,
                                   child: Text(
-                                    "User",
+                                    _foundUsers[index].name[0].toUpperCase(),
                                     style: TextStyle(fontSize: 10),
                                   ),
                                 ),
                                 title: Text(
-                                    '${_foundUsers[index]['name']}@gmail.com'),
-                                subtitle: Text(
-                                    '${_foundUsers[index]['name']}@gmail.com'),
+                                    '${_foundUsers[index].name.toLowerCase()}'),
+                                subtitle: Text('${_foundUsers[index].role}'),
                               ),
                       );
                     })

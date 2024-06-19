@@ -28,6 +28,11 @@ class Settings_provider extends ChangeNotifier {
   }
 }
 
+class MailValue extends ChangeNotifier {
+  List subjectValue = [''];
+  List PrioritasSurat = [''];
+}
+
 class Mail {
   final String name;
   final String Subject;
@@ -161,6 +166,10 @@ class UserListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addMail() {
+    notifyListeners();
+  }
+
   void updateUser(int index, User user) {
     _users[index] = user;
     notifyListeners();
@@ -173,19 +182,6 @@ class UserListProvider extends ChangeNotifier {
 
   void removeOnlineUser() {
     _onlineusers = null;
-    notifyListeners();
-  }
-}
-
-class userDataProvider extends ChangeNotifier {
-  List<Map<String, dynamic>> _allusers = [];
-
-  get getDataUser {
-    return _allusers;
-  }
-
-  void addUser(user) {
-    _allusers.add(user);
     notifyListeners();
   }
 }

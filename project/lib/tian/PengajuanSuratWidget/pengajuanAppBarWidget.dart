@@ -6,15 +6,20 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
     implements PreferredSizeWidget {
   final bool sendIcon;
   final BuildContext contextPage;
-  final List userData;
+  final List<User> selectedUser;
+  final List Subject;
   const PengajuanSuratAppBarWidget(
       {super.key,
+      required this.Subject,
       required this.sendIcon,
       required this.contextPage,
-      required this.userData});
+      required this.selectedUser});
 
   @override
   Widget build(BuildContext context) {
+    final sender = Provider.of<UserListProvider>(context).users[0];
+    final PrioritasSuratValue = Provider.of<MailValue>(context).PrioritasSurat;
+
     return AppBar(
       automaticallyImplyLeading: true,
       backgroundColor: Colors.grey[350],
@@ -32,16 +37,21 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
                   quarterTurns: 3,
                   child: TextButton(
                     onPressed: () {
-                      Provider.of<userDataProvider>(context, listen: false)
-                          .addUser(
-                        {
-                          "name": "Ayu ",
-                          "Subject": "Surat Pengajuan Pembelian Unit",
-                          "tgl": "Apr 25",
-                          "status": "Urgent",
-                          "progres": "Pending"
-                        },
-                      );
+                      for (var user in selectedUser) {
+                        DateTime now = DateTime.now();
+                        String formattedDate = "${now.day}-${now.month}";
+                        print('Subject');
+                        print(Subject);
+                        print(PrioritasSuratValue);
+                        user.MailInbox.add(Mail(
+                            Subject: Subject[0],
+                            name: sender!.name,
+                            tgl: formattedDate,
+                            status: PrioritasSuratValue[0],
+                            progres: "Pending"));
+                      }
+                      Provider.of<UserListProvider>(context, listen: false)
+                          .addMail();
                       Navigator.pop(this.contextPage);
                     },
                     child: Icon(IconData(0xe571,

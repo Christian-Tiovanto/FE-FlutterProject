@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final LoggedInUser = Provider.of<UserListProvider>(context).onlineusers;
+    final LoggedInUser = Provider.of<UserListProvider>(context).users[0];
     Future<void> _refresh() async {
       await Future.delayed(Duration(seconds: 1));
 
@@ -325,10 +325,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => PengajuanSurat(
-                      userData: [],
-                    )),
+            MaterialPageRoute(builder: (context) => PengajuanSurat()),
           );
         },
       ),

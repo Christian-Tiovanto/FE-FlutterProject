@@ -14,9 +14,10 @@ class LetterContentWidget extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: PengajuanSuratAppBarWidget(
+          Subject: [],
           sendIcon: false,
           contextPage: context,
-          userData: [],
+          selectedUser: [],
         ),
         body: ListView(
           children: [
@@ -115,6 +116,8 @@ class ResponsePopUpFormWidget extends StatelessWidget {
                   width: double.infinity,
                   child: TextFieldExample(
                     isBorder: false,
+                    title: "",
+                    subjectValue: [],
                   ),
                 ),
               ],
