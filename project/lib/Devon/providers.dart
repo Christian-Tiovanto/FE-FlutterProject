@@ -30,7 +30,7 @@ class Settings_provider extends ChangeNotifier {
 
 class MailValue extends ChangeNotifier {
   List subjectValue = [''];
-  List PrioritasSurat = [''];
+  List PrioritasSurat = ['Urgent'];
 }
 
 class Mail {

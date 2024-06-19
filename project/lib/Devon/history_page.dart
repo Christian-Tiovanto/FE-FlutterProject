@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/Devon/home_page.dart';
+import 'package:project/Devon/providers.dart';
 import 'package:project/jerrywijaya/profile.dart';
+import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:project/Devon/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -98,6 +100,7 @@ class _HistoryPageState extends State<HistoryPage>
 
   @override
   Widget build(BuildContext context) {
+    final LoggedInUser = Provider.of<UserListProvider>(context).onlineusers;
     return DefaultTabController(
         length: 3,
         child: Scaffold(

@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: prov.enableDarkMode == true ? prov.dark : prov.light,
-      home: HomePage(),
+      home: Welcome_screen(),
     );
   }
 }

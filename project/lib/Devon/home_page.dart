@@ -23,64 +23,11 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   List<String>? selectedFilters = ['Urgent', 'Regular'];
   final SearchController controller = SearchController();
-
-  // List<Map<String, dynamic>> LoggedInUser.MailInbox = [
-  //   {
-  //     "name": "andy",
-  //     "Subject": "Surat Pengunduran Diri",
-  //     "tgl": "Apr 17",
-  //     "status": "Regular",
-  //     "progres": "Pending"
-  //   },
-  //   {
-  //     "name": "Devon",
-  //     "Subject": "Surat Pengajuan Cuti",
-  //     "tgl": "Apr 18",
-  //     "status": "Regular",
-  //     "progres": "Pending"
-  //   },
-  //   {
-  //     "name": "Chris",
-  //     "Subject": "Surat Pengajuan Pembelian Unit",
-  //     "tgl": "Apr 19",
-  //     "status": "Urgent",
-  //     "progres": "Finished"
-  //   },
-  //   {
-  //     "name": "Jerry",
-  //     "Subject": "Surat Pengajuan Cuti",
-  //     "tgl": "Apr 18",
-  //     "status": "Regular",
-  //     "progres": "Cancelled"
-  //   },
-  //   {
-  //     "name": "Jerry W",
-  //     "Subject": "Surat Pengajuan Pembelian Unit",
-  //     "tgl": "Apr 19",
-  //     "status": "Urgent",
-  //     "progres": "Pending"
-  //   },
-  //   {
-  //     "name": "Hadron",
-  //     "Subject": "Surat Pengajuan Cuti",
-  //     "tgl": "Apr 18",
-  //     "status": "Regular",
-  //     "progres": "Finished"
-  //   },
-  //   {
-  //     "name": "Lina ",
-  //     "Subject": "Surat Pengajuan Pembelian Unit",
-  //     "tgl": "Apr 19",
-  //     "status": "Urgent",
-  //     "progres": "Pending"
-  //   },
-  // ];
-
   List<String> searchhistory = [];
 
   @override
   Widget build(BuildContext context) {
-    final LoggedInUser = Provider.of<UserListProvider>(context).users[0];
+    final LoggedInUser = Provider.of<UserListProvider>(context).onlineusers;
     Future<void> _refresh() async {
       await Future.delayed(Duration(seconds: 1));
 
@@ -293,6 +240,7 @@ class _HomePageState extends State<HomePage> {
           onRefresh: _refresh,
           child: ListView.builder(
               itemCount: LoggedInUser?.MailInbox.where((user) {
+                // print(user.progres)
                 return user.progres == 'Pending' &&
                     selectedFilters!.contains(user.status) &&
                     (controller.text.isEmpty ||
