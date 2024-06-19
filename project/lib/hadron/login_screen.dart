@@ -75,6 +75,7 @@ class _Login_screenState extends State<Login_screen> {
   Widget build(BuildContext context) {
     final userListProvider = Provider.of<UserListProvider>(context);
     final userList = userListProvider.users;
+    final prov = Provider.of<Settings_provider>(context);
 
     return Scaffold(
       body: Column(
@@ -111,7 +112,7 @@ class _Login_screenState extends State<Login_screen> {
               fontSize: 35, // Ukuran font
               // fontStyle: FontStyle.italic, // Gaya font (miring)
               fontWeight: FontWeight.bold, // Berat font (tebal)
-              color: Colors.black,
+              color: prov.enableDarkMode == true ? Colors.white : Colors.black,
             ),
           ),
           SizedBox(
@@ -184,7 +185,14 @@ class _Login_screenState extends State<Login_screen> {
                         return Colors.white;
                       }),
                     ),
-                    Text('Remember Me'),
+                    Text(
+                      'Remember Me',
+                      style: TextStyle(
+                        color: prov.enableDarkMode == true
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    ),
                   ],
                 ),
                 InkWell(
@@ -225,7 +233,12 @@ class _Login_screenState extends State<Login_screen> {
                   body: Center(
                     child: Text(
                       'Welcome Admin',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        color: prov.enableDarkMode == true
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                   ),
                   title: 'This is Ignored',
@@ -250,7 +263,12 @@ class _Login_screenState extends State<Login_screen> {
                     body: Center(
                       child: Text(
                         'Your Login Is Succeed',
-                        style: TextStyle(fontStyle: FontStyle.italic),
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: prov.enableDarkMode == true
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                       ),
                     ),
                     title: 'This is Ignored',
@@ -269,7 +287,12 @@ class _Login_screenState extends State<Login_screen> {
                     body: Center(
                       child: Text(
                         'Your Login Is Failed',
-                        style: TextStyle(fontStyle: FontStyle.italic),
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: prov.enableDarkMode == true
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                       ),
                     ),
                     title: 'This is Ignored',

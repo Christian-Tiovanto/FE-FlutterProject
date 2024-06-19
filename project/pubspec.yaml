@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  salomon_bottom_bar: ^3.0.0
+  salomon_bottom_bar: ^3.3.2
   provider: ^6.1.2
   flutter_spinkit: ^5.2.1
   shared_preferences: ^2.2.3

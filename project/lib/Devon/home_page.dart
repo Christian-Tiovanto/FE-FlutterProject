@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:project/Devon/providers.dart';
 import 'package:project/devon/history_page.dart';
 import 'package:project/jerrywijaya/profile.dart';
 import 'package:project/tian/PengajuanSurat.dart';
 // import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:project/devon/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -93,6 +95,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final prov = Provider.of<Settings_provider>(context);
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, innerBoxIsScrolled) => [
@@ -161,7 +164,14 @@ class _HomePageState extends State<HomePage> {
                         return [
                           Padding(
                             padding: EdgeInsets.all(10.0),
-                            child: Text('Recent Mail Searches'),
+                            child: Text(
+                              'Recent Mail Searches',
+                              style: TextStyle(
+                                color: prov.enableDarkMode == true
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
                           ),
                           Wrap(
                             children:
@@ -290,7 +300,9 @@ class _HomePageState extends State<HomePage> {
                   'Mailbox',
                   style: TextStyle(
                     fontSize: 15,
-                    color: Theme.of(context).textTheme.bodyText1?.color,
+                    color: prov.enableDarkMode == true
+                        ? Colors.white
+                        : Colors.black,
                   ),
                 ),
               ),
@@ -328,7 +340,8 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.grey[300],
         // elevation: 10.0,
-        label: Icon(Icons.edit, color: Theme.of(context).textTheme.bodyText2?.color),
+        label: Icon(Icons.edit,
+            color: Theme.of(context).textTheme.bodyText2?.color),
         // icon: Icon(Icons.edit),
         onPressed: () {
           Navigator.push(
@@ -369,6 +382,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
+  final prov = Provider.of<Settings_provider>(context);
   return InkWell(
     onTap: () {
       // Tambahkan logika yang ingin dilakukan saat card diklik di sini
@@ -378,7 +392,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
       margin: const EdgeInsets.symmetric(vertical: 5),
       height: 94,
       child: Card(
-        color: Colors.white,
+        color: prov.enableDarkMode == true ? Colors.black : Colors.white,
         elevation: 0,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -397,7 +411,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                   child: Text(
                     _data[index]['name'][0].toUpperCase(),
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 20,
                     ),
                   ),
@@ -412,14 +426,22 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                     child: Text(
                       overflow: TextOverflow.ellipsis,
                       _data[index]['name'].toString(),
-                      style: TextStyle(color: Colors.black, fontSize: 20),
+                      style: TextStyle(
+                          color: prov.enableDarkMode == true
+                              ? Colors.white
+                              : Colors.black,
+                          fontSize: 20),
                     ),
                   ),
                   Container(
                     child: Text(
                       overflow: TextOverflow.ellipsis,
                       _data[index]['tgl'].toString(), // Tanggal disini
-                      style: TextStyle(color: Colors.black, fontSize: 13),
+                      style: TextStyle(
+                          color: prov.enableDarkMode == true
+                              ? Colors.white
+                              : Colors.black,
+                          fontSize: 13),
                     ),
                   ),
                 ],
@@ -437,7 +459,9 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                           overflow: TextOverflow.ellipsis,
                           '${_data[index]["Subject"].toString()}',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: prov.enableDarkMode == true
+                                ? Colors.white
+                                : Colors.black,
                             fontSize: 15,
                           ),
                         ),
@@ -449,7 +473,9 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
 
                           '${_data[index]["status"].toString()}', // Teks urgent disini
                           style: TextStyle(
-                            color: Colors.black,
+                            color: prov.enableDarkMode == true
+                                ? Colors.white
+                                : Colors.black,
                             fontSize: 13,
                           ),
                         ),
