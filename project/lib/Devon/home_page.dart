@@ -287,7 +287,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      //   bottomNavigationBar: ConvexAppBar(
+      //   bottom NavigationBar: ConvexAppBar(
       //       initialActiveIndex: _selectedIndex,
       //       color: Colors.white,
       //       backgroundColor: Colors.grey,

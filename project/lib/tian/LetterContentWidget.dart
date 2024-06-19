@@ -11,81 +11,112 @@ class LetterContentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: PengajuanSuratAppBarWidget(
-          Subject: [],
-          sendIcon: false,
-          contextPage: context,
-          selectedUser: [],
-        ),
-        body: ListView(
-          children: [
-            Column(
-              children: [
-                ListTile(
-                  leading: CircleAvatar(
-                      radius: 24,
-                      child: Text(
-                        this.dataSurat.name[0].toUpperCase(),
-                        style: TextStyle(fontSize: 20),
-                      )),
-                  title: Row(
-                    children: [
-                      Text(
-                        this.dataSurat.name,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        this.dataSurat.tgl,
-                      )
-                    ],
-                  ),
-                  subtitle: Text('Kepada Saya'),
-                  trailing: SizedBox(
-                    width: 60,
+    final prov = Provider.of<Settings_provider>(context);
+
+    return Scaffold(
+      appBar: PengajuanSuratAppBarWidget(
+        Subject: [],
+        sendIcon: false,
+        contextPage: context,
+        selectedUser: [],
+      ),
+      body: ListView(
+        children: [
+          Column(
+            children: [
+              ListTile(
+                leading: CircleAvatar(
+                    radius: 24,
                     child: Text(
-                      textAlign: TextAlign.center,
-                      "General Manager",
-                      maxLines: 100,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      this.dataSurat.name[0].toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color:
+                            prov.enableDarkMode ? Colors.white : Colors.black,
+                      ),
+                    )),
+                title: Row(
+                  children: [
+                    Text(
+                      this.dataSurat.name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color:
+                            prov.enableDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      this.dataSurat.tgl,
+                      style: TextStyle(
+                        color:
+                            prov.enableDarkMode ? Colors.white : Colors.black,
+                      ),
+                    )
+                  ],
+                ),
+                subtitle: Text(
+                  'Kepada Saya',
+                  style: TextStyle(
+                    color: prov.enableDarkMode ? Colors.white : Colors.black,
+                  ),
+                ),
+                trailing: SizedBox(
+                  width: 60,
+                  child: Text(
+                    "General Manager",
+                    textAlign: TextAlign.center,
+                    maxLines: 100,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: prov.enableDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                 ),
-                Container(
-                  child: Text(
-                    this.dataSurat.Subject,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              Container(
+                child: Text(
+                  this.dataSurat.Subject,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: prov.enableDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
-                Divider(
-                  color: Colors.black,
-                  height: 50,
-                  thickness: 1,
-                ),
-                Container(
-                  child: Text(
-                    "Pemberitahuan",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              Divider(
+                color: Colors.black,
+                height: 50,
+                thickness: 1,
+              ),
+              Container(
+                child: Text(
+                  "Pemberitahuan",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: prov.enableDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut gravida tellus et lacus venenatis molestie. Fusce sit amet volutpat nisi, eget elementum felis. Phasellus ligula metus, facilisis quis est sed, molestie tempus felis. Maecenas nec felis ex. Nulla id semper metus. Aliquam urna mauris, viverra sit amet volutpat ultrices, iaculis at est. Quisque id accumsan mauris.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut gravida tellus et lacus venenatis molestie. Fusce sit amet volutpat nisi, eget elementum felis. Phasellus ligula metus, facilisis quis est sed, molestie tempus felis. Maecenas nec felis ex. Nulla id semper metus. Aliquam urna mauris, viverra sit amet volutpat ultrices, iaculis at est. Quisque id accumsan mauris.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut gravida tellus et lacus venenatis molestie. Fusce sit amet volutpat nisi, eget elementum felis. Phasellus ligula metus, facilisis quis est sed, molestie tempus felis. Maecenas nec felis ex. Nulla id semper metus. Aliquam urna mauris, viverra sit amet volutpat ultrices, iaculis at est. Quisque id accumsan mauris.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut gravida tellus et lacus venenatis molestie. Fusce sit amet volutpat nisi, eget elementum felis. Phasellus ligula metus, facilisis quis est sed, molestie tempus felis. Maecenas nec felis ex. Nulla id semper metus. Aliquam urna mauris, viverra sit amet volutpat ultrices, iaculis at est. Quisque id accumsan mauris."),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Text(
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut gravida tellus et lacus venenatis molestie. Fusce sit amet volutpat nisi, eget elementum felis. Phasellus ligula metus, facilisis quis est sed, molestie tempus felis. Maecenas nec felis ex. Nulla id semper metus. Aliquam urna mauris, viverra sit amet volutpat ultrices, iaculis at est. Quisque id accumsan mauris.Lorem ipsum dolor sit amet, conse elit. Ut gravida tellus et lacus venenatis molestie. Fusce sit amet volutpat nisi, eget elementum felis. Phasellus ligula metus, facilisis quis est sed, molestie tempus felis. Maecenas nec felis ex. Nulla id semper metus. Aliquam urna mauris, viverra sit amet volutpat ultrices, iaculis at est. Quisque id accumsan mauris",
+                  style: TextStyle(
+                    color: prov.enableDarkMode ? Colors.white : Colors.black,
+                  ),
                 ),
-                ResponsePopUpFormWidget(
-                  dataSurat: dataSurat,
-                  LetterContentWidgetContext: context,
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+              ResponsePopUpFormWidget(
+                dataSurat: dataSurat,
+                LetterContentWidgetContext: context,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -94,14 +125,17 @@ class LetterContentWidget extends StatelessWidget {
 class ResponsePopUpFormWidget extends StatelessWidget {
   final Mail dataSurat;
   final BuildContext LetterContentWidgetContext;
-  const ResponsePopUpFormWidget(
-      {super.key,
-      required this.dataSurat,
-      required this.LetterContentWidgetContext});
+  const ResponsePopUpFormWidget({
+    super.key,
+    required this.dataSurat,
+    required this.LetterContentWidgetContext,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final prov = Provider.of<Settings_provider>(context);
     final MailFinished = Provider.of<UserListProvider>(context);
+
     return FilledButton.tonal(
       onPressed: () => showDialog<String>(
         context: context,
@@ -112,12 +146,22 @@ class ResponsePopUpFormWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("RESPON"),
+                Text(
+                  "RESPON",
+                  style: TextStyle(
+                    color: prov.enableDarkMode ? Colors.white : Colors.black,
+                  ),
+                ),
                 DropdownMenuExample(
                   listData: ["1", "2"],
                 ),
                 SizedBox(height: 20),
-                Text("TANGGAPAN"),
+                Text(
+                  "TANGGAPAN",
+                  style: TextStyle(
+                    color: prov.enableDarkMode ? Colors.white : Colors.black,
+                  ),
+                ),
                 SizedBox(height: 20),
                 Container(
                   color: Colors.grey.shade100,
@@ -150,8 +194,10 @@ class ResponsePopUpFormWidget extends StatelessWidget {
       ),
       child: const Text('Beri Respon'),
       style: ButtonStyle(
-          fixedSize: MaterialStateProperty.all(
-              Size.fromWidth(MediaQuery.of(context).size.width - 10))),
+        fixedSize: MaterialStateProperty.all(
+          Size.fromWidth(MediaQuery.of(context).size.width - 10),
+        ),
+      ),
     );
   }
 }

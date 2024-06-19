@@ -63,7 +63,7 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // This list holds the data for the list view
+    final prov = Provider.of<Settings_provider>(context);
     return Column(
       children: [
         Row(
@@ -71,7 +71,14 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
             Container(
               padding: EdgeInsets.only(left: 20),
               child: Align(
-                child: Text("Kepada   "),
+                child: Text(
+                  "Kepada   ",
+                  style: TextStyle(
+                    color: prov.enableDarkMode == true
+                        ? Colors.white
+                        : Colors.black,
+                  ),
+                ),
                 alignment: Alignment.topCenter,
               ),
             ),
@@ -95,7 +102,12 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                                 child: Text(
                                   widget.selectedUsers[index].name[0]
                                       .toUpperCase(),
-                                  style: TextStyle(fontSize: 10),
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: prov.enableDarkMode == true
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
                                 ),
                               ),
                               title:
@@ -163,7 +175,12 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                   height: 10,
                 ),
                 ContainerKolomPengajuanSuratWidget(
-                  firstPart: Text("Prioritas Surat"),
+                  firstPart: Text("Prioritas Surat",
+                      style: TextStyle(
+                        color: prov.enableDarkMode == true
+                            ? Colors.white
+                            : Colors.black,
+                      )),
                   thirdPart: ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: 200, maxHeight: 500),
                     child: InputDecorator(

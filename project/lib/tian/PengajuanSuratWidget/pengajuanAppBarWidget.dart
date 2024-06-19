@@ -19,12 +19,16 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
   Widget build(BuildContext context) {
     final sender = Provider.of<UserListProvider>(context).users[0];
     final PrioritasSuratValue = Provider.of<MailValue>(context).PrioritasSurat;
+    final prov = Provider.of<Settings_provider>(context);
 
     return AppBar(
       automaticallyImplyLeading: true,
-      backgroundColor: Colors.grey[350],
+      backgroundColor: Colors.grey,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back),
+        icon: Icon(
+          Icons.arrow_back,
+          color: prov.enableDarkMode == true ? Colors.white : Colors.black,
+        ),
         onPressed: () {
           Navigator.pop(this.contextPage);
         },
@@ -54,8 +58,13 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
                           .addMail();
                       Navigator.pop(this.contextPage);
                     },
-                    child: Icon(IconData(0xe571,
-                        fontFamily: 'MaterialIcons', matchTextDirection: true)),
+                    child: Icon(
+                        color: prov.enableDarkMode == true
+                            ? Colors.white
+                            : Colors.black,
+                        IconData(0xe571,
+                            fontFamily: 'MaterialIcons',
+                            matchTextDirection: true)),
                   ),
                 ),
               )

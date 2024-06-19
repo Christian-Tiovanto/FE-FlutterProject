@@ -31,44 +31,56 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
 
   @override
   Widget build(BuildContext context) {
-    List subjectValue = Provider.of<MailValue>(context).subjectValue;
+    final LoggedInUser = Provider.of<UserListProvider>(context).onlineusers;
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: PengajuanSuratAppBarWidget(
-          contextPage: context,
-          sendIcon: true,
-          Subject: subjectValue,
-          selectedUser: SelectedUser,
-        ),
-        body: Column(
-          children: [
-            ListView(
-              shrinkWrap: true,
-              children: [
-                ContainerKolomPengajuanSuratWidget(
-                  firstPart: Text("Dari : "),
-                  secondPart: Text('Hadron@gmail.com',
-                      style: TextStyle(height: 1, fontSize: 15)),
-                  containerPadding:
-                      PaddingLeftAndRight(leftPadding: 20, rightPadding: 20),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: SearchUserWidget(
-                      Subject: subjectValue,
-                      IsiSurat: IsiSurat,
-                      selectedUsers: SelectedUser,
-                    )),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
+    List subjectValue = Provider.of<MailValue>(context).subjectValue;
+    final prov = Provider.of<Settings_provider>(context);
+    return Scaffold(
+      appBar: PengajuanSuratAppBarWidget(
+        contextPage: context,
+        sendIcon: true,
+        Subject: subjectValue,
+        selectedUser: SelectedUser,
       ),
-      debugShowCheckedModeBanner: false,
+      body: Column(
+        children: [
+          ListView(
+            shrinkWrap: true,
+            children: [
+              ContainerKolomPengajuanSuratWidget(
+                firstPart: Text(
+                  "Dari : ",
+                  style: TextStyle(
+                    color: prov.enableDarkMode == true
+                        ? Colors.white
+                        : Colors.black,
+                  ),
+                ),
+                secondPart: Text(LoggedInUser!.name,
+                    style: TextStyle(
+                      height: 1,
+                      fontSize: 15,
+                      color: prov.enableDarkMode == true
+                          ? Colors.white
+                          : Colors.black,
+                    )),
+                containerPadding:
+                    PaddingLeftAndRight(leftPadding: 20, rightPadding: 20),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                      child: SearchUserWidget(
+                    Subject: subjectValue,
+                    IsiSurat: IsiSurat,
+                    selectedUsers: SelectedUser,
+                  )),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
