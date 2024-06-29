@@ -333,6 +333,7 @@ class _HomePageState extends State<HomePage> {
                                 .toLowerCase()
                                 .contains(controller.text.toLowerCase())))
                     .toList();
+
                 return mail(context, filteredUsers, index);
               }),
         ),

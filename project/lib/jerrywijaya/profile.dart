@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:project/Devon/error_page.dart';
 import 'package:project/Devon/history_page.dart';
 import 'package:project/Devon/home_page.dart';
+import 'package:project/Devon/loading_page.dart';
+import 'package:project/Devon/maintenance_page.dart';
 import 'package:project/Devon/providers.dart';
+import 'package:project/Devon/updating_page.dart';
 import 'package:project/jerry/setting.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -52,29 +56,29 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget> {
                   MaterialPageRoute(builder: (context) => SettingWidget()),
                 );
               } else if (value == 'Maintenance') {
-                print('maintenace');
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => maintenance_page()),
-                // );
+                // print('maintenace');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Maintenance_page()),
+                );
               } else if (value == 'Updating') {
-                print('updating');
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => maintenance_page()),
-                // );
+                // print('updating');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Updating_page()),
+                );
               } else if (value == 'Loading') {
-                print('Loading');
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => maintenance_page()),
-                // );
+                // print('Loading');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Loading_page()),
+                );
               } else {
-                print('error');
-                //               Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => maintenance_page()),
-                // );
+                // print('error');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Error_page()),
+                );
               }
             },
             itemBuilder: (BuildContext context) {

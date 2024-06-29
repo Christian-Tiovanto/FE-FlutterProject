@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:project/Devon/error_page.dart';
+import 'package:project/Devon/filepicker.dart';
 import 'package:project/Devon/history_page.dart';
 import 'package:project/Devon/home_page.dart';
 import 'package:project/Devon/dashboard.dart';
+import 'package:project/Devon/loading_page.dart';
+import 'package:project/Devon/maintenance_page.dart';
 import 'package:project/Devon/testing.dart';
+import 'package:project/Devon/updating_page.dart';
 import 'package:project/Devon/user_detail_screen.dart';
 import 'package:project/hadron/login_screen.dart';
 // import 'package:project/Devon/error_page.dart';
@@ -38,7 +43,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: prov.enableDarkMode == true ? prov.dark : prov.light,
-      home: Login_screen(),
+      home: FilepickerWidget(),
     );
   }
 }
