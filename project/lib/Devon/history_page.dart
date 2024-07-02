@@ -20,73 +20,58 @@ class _HistoryPageState extends State<HistoryPage>
     with SingleTickerProviderStateMixin {
   // int _selectedIndex = 1;
   List<String>? selectedFilters = ['Urgent', 'Regular'];
-  Future<void> _refresh() async {
-    await Future.delayed(Duration(seconds: 1));
 
-    setState(() {
-      _allusers.add(
-        {
-          "name": "Ayu ",
-          "Subject": "Surat Pengajuan Pembelian Unit",
-          "tgl": "Apr 25",
-          "status": "Urgent",
-          "progres": "Pending"
-        },
-      );
-    });
-  }
-
-  List<Map<String, dynamic>> _allusers = [
-    {
-      "name": "andy",
-      "Subject": "Surat Pengunduran Diri",
-      "tgl": "Apr 17",
-      "status": "Regular",
-      "progres": "Pending"
-    },
-    {
-      "name": "Devon",
-      "Subject": "Surat Pengajuan Cuti",
-      "tgl": "Apr 18",
-      "status": "Regular",
-      "progres": "Pending"
-    },
-    {
-      "name": "Chris",
-      "Subject": "Surat Pengajuan Pembelian Unit",
-      "tgl": "Apr 19",
-      "status": "Urgent",
-      "progres": "Finished"
-    },
-    {
-      "name": "Jerry",
-      "Subject": "Surat Pengajuan Cuti",
-      "tgl": "Apr 18",
-      "status": "Regular",
-      "progres": "Cancelled"
-    },
-    {
-      "name": "Jerry W",
-      "Subject": "Surat Pengajuan Pembelian Unit",
-      "tgl": "Apr 19",
-      "status": "Urgent",
-      "progres": "Pending"
-    },
-    {
-      "name": "Hadron",
-      "Subject": "Surat Pengajuan Cuti",
-      "tgl": "Apr 18",
-      "status": "Regular",
-      "progres": "Finished"
-    },
-    {
-      "name": "Lina ",
-      "Subject": "Surat Pengajuan Pembelian Unit",
-      "tgl": "Apr 19",
-      "status": "Urgent",
-      "progres": "Pending"
-    },
-  ];
+  // List<Map<String, dynamic>> LoggedInUser?.MailInbox = [
+  //   {
+  //     "name": "andy",
+  //     "Subject": "Surat Pengunduran Diri",
+  //     "tgl": "Apr 17",
+  //     "status": "Regular",
+  //     "progres": "Pending"
+  //   },
+  //   {
+  //     "name": "Devon",
+  //     "Subject": "Surat Pengajuan Cuti",
+  //     "tgl": "Apr 18",
+  //     "status": "Regular",
+  //     "progres": "Pending"
+  //   },
+  //   {
+  //     "name": "Chris",
+  //     "Subject": "Surat Pengajuan Pembelian Unit",
+  //     "tgl": "Apr 19",
+  //     "status": "Urgent",
+  //     "progres": "Finished"
+  //   },
+  //   {
+  //     "name": "Jerry",
+  //     "Subject": "Surat Pengajuan Cuti",
+  //     "tgl": "Apr 18",
+  //     "status": "Regular",
+  //     "progres": "Cancelled"
+  //   },
+  //   {
+  //     "name": "Jerry W",
+  //     "Subject": "Surat Pengajuan Pembelian Unit",
+  //     "tgl": "Apr 19",
+  //     "status": "Urgent",
+  //     "progres": "Pending"
+  //   },
+  //   {
+  //     "name": "Hadron",
+  //     "Subject": "Surat Pengajuan Cuti",
+  //     "tgl": "Apr 18",
+  //     "status": "Regular",
+  //     "progres": "Finished"
+  //   },
+  //   {
+  //     "name": "Lina ",
+  //     "Subject": "Surat Pengajuan Pembelian Unit",
+  //     "tgl": "Apr 19",
+  //     "status": "Urgent",
+  //     "progres": "Pending"
+  //   },
+  // ];
 
   late TabController _convexTabController;
 
@@ -101,6 +86,20 @@ class _HistoryPageState extends State<HistoryPage>
   @override
   Widget build(BuildContext context) {
     final LoggedInUser = Provider.of<UserListProvider>(context).onlineusers;
+
+    Future<void> _refresh() async {
+      await Future.delayed(Duration(seconds: 1));
+
+      setState(() {
+        LoggedInUser?.MailInbox.add(Mail(
+            name: "Ayu ",
+            Subject: "Surat Pengajuan Pembelian Unit",
+            tgl: "Apr 25",
+            status: "Urgent",
+            progres: "Pending"));
+      });
+    }
+
     return DefaultTabController(
         length: 3,
         child: Scaffold(
@@ -218,18 +217,18 @@ class _HistoryPageState extends State<HistoryPage>
                       child: RefreshIndicator(
                         onRefresh: _refresh,
                         child: ListView.builder(
-                            itemCount: _allusers
+                            itemCount: LoggedInUser?.MailInbox
                                 .where((user) =>
-                                    user['progres'] == 'Pending' &&
-                                    selectedFilters!.contains(user['status']))
+                                    user.name == 'Pending' &&
+                                    selectedFilters!.contains(user.status))
                                 .length,
                             itemBuilder: (context, index) {
-                              final filteredUsers = _allusers
+                              final filteredUsers = LoggedInUser?.MailInbox
                                   .where((user) =>
-                                      user['progres'] == 'Pending' &&
-                                      selectedFilters!.contains(user['status']))
+                                      user.name == 'Pending' &&
+                                      selectedFilters!.contains(user.status))
                                   .toList();
-                              final user = filteredUsers[index];
+                              final user = filteredUsers![index];
                               return mail(context, filteredUsers, index);
                             }),
                       ),
@@ -320,21 +319,21 @@ class _HistoryPageState extends State<HistoryPage>
                       child: RefreshIndicator(
                         onRefresh: _refresh,
                         child: ListView.builder(
-                          itemCount: _allusers
+                          itemCount: LoggedInUser?.MailInbox
                               .where((user) =>
-                                  user['progres'] == 'Finished' &&
-                                  selectedFilters!.contains(user['status']))
+                                  user.progres == 'Finished' &&
+                                  selectedFilters!.contains(user.status))
                               .length,
                           itemBuilder: (context, index) {
-                            final filteredUsers = _allusers
+                            final filteredUsers = LoggedInUser?.MailInbox
                                 .where((user) =>
-                                    user['progres'] == 'Finished' &&
-                                    selectedFilters!.contains(user['status']))
+                                    user.progres == 'Finished' &&
+                                    selectedFilters!.contains(user.status))
                                 .toList();
-                            final user = filteredUsers[index];
+                            final user = filteredUsers![index];
                             return Dismissible(
-                                key: Key(filteredUsers[index][
-                                    'name']), // Gunakan nilai yang unik sebagai key
+                                key: Key(filteredUsers![index]
+                                    .name), // Gunakan nilai yang unik sebagai key
                                 direction: DismissDirection
                                     .startToEnd, // Slide dari kiri ke kanan
                                 background: Container(
@@ -353,7 +352,7 @@ class _HistoryPageState extends State<HistoryPage>
                                   // Aksi ketika item di-slide
                                   setState(() {
                                     // Hapus item dari daftar
-                                    _allusers.remove(user);
+                                    LoggedInUser?.MailInbox.remove(user);
                                   });
                                 },
                                 child: mail(context, filteredUsers, index));
@@ -447,21 +446,21 @@ class _HistoryPageState extends State<HistoryPage>
                       child: RefreshIndicator(
                         onRefresh: _refresh,
                         child: ListView.builder(
-                          itemCount: _allusers
+                          itemCount: LoggedInUser?.MailInbox
                               .where((user) =>
-                                  user['progres'] == 'Cancelled' &&
-                                  selectedFilters!.contains(user['status']))
+                                  user.name == 'Cancelled' &&
+                                  selectedFilters!.contains(user.status))
                               .length,
                           itemBuilder: (context, index) {
-                            final filteredUsers = _allusers
+                            final filteredUsers = LoggedInUser?.MailInbox
                                 .where((user) =>
-                                    user['progres'] == 'Cancelled' &&
-                                    selectedFilters!.contains(user['status']))
+                                    user.name == 'Cancelled' &&
+                                    selectedFilters!.contains(user.status))
                                 .toList();
-                            final user = filteredUsers[index];
+                            final user = filteredUsers![index];
                             return Dismissible(
-                                key: Key(filteredUsers[index][
-                                    'name']), // Gunakan nilai yang unik sebagai key
+                                key: Key(filteredUsers[index]
+                                    .name), // Gunakan nilai yang unik sebagai key
                                 direction: DismissDirection
                                     .startToEnd, // Slide dari kiri ke kanan
                                 background: Container(
@@ -480,7 +479,7 @@ class _HistoryPageState extends State<HistoryPage>
                                   // Aksi ketika item di-slide
                                   setState(() {
                                     // Hapus item dari daftar
-                                    _allusers.remove(user);
+                                    LoggedInUser?.MailInbox.remove(user);
                                   });
                                 },
                                 child: mail(context, filteredUsers, index));
@@ -526,12 +525,12 @@ class _HistoryPageState extends State<HistoryPage>
   }
 }
 
-mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
+mail(BuildContext context, List<Mail>? _data, int index) {
   final prov = Provider.of<Settings_provider>(context);
   return InkWell(
     onTap: () {
       // Tambahkan logika yang ingin dilakukan saat card diklik di sini
-      print('Card clicked: ${_data[index]['name']}');
+      print('Card clicked: ${_data![index].name}');
     },
     child: Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -554,7 +553,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                   radius: 24,
                   backgroundColor: Colors.blue,
                   child: Text(
-                    _data[index]['name'][0].toUpperCase(),
+                    _data![index].name[0].toUpperCase(),
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -570,7 +569,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                     width: 200,
                     child: Text(
                       overflow: TextOverflow.ellipsis,
-                      _data[index]['name'].toString(),
+                      _data![index].name.toString(),
                       style: TextStyle(
                           color: prov.enableDarkMode == true
                               ? Colors.white
@@ -581,7 +580,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                   Container(
                     child: Text(
                       overflow: TextOverflow.ellipsis,
-                      _data[index]['tgl'].toString(), // Tanggal disini
+                      _data[index].tgl.toString(), // Tanggal disini
                       style: TextStyle(
                           color: prov.enableDarkMode == true
                               ? Colors.white
@@ -602,7 +601,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                         // color: Colors.blue,
                         child: Text(
                           overflow: TextOverflow.ellipsis,
-                          '${_data[index]["Subject"].toString()}',
+                          '${_data[index].Subject.toString()}',
                           style: TextStyle(
                             color: prov.enableDarkMode == true
                                 ? Colors.white
@@ -616,7 +615,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                         child: Text(
                           overflow: TextOverflow.ellipsis,
 
-                          '${_data[index]["status"].toString()}', // Teks urgent disini
+                          '${_data[index].status.toString()}', // Teks urgent disini
                           style: TextStyle(
                             color: prov.enableDarkMode == true
                                 ? Colors.white

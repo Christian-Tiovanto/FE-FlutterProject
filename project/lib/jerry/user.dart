@@ -210,17 +210,29 @@ card(BuildContext context, User user, int index) {
                                       Text(
                                         '${user.name} - ${user.role} Will be deleted',
                                         style: TextStyle(
-                                            fontStyle: FontStyle.italic),
+                                          fontStyle: FontStyle.italic,
+                                          color: prov.enableDarkMode == true
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
                                       ),
                                       Text(
                                         'Permanently,',
                                         style: TextStyle(
-                                            fontStyle: FontStyle.italic),
+                                          fontStyle: FontStyle.italic,
+                                          color: prov.enableDarkMode == true
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
                                       ),
                                       Text(
                                         'Are You Sure?',
                                         style: TextStyle(
-                                            fontStyle: FontStyle.italic),
+                                          fontStyle: FontStyle.italic,
+                                          color: prov.enableDarkMode == true
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
                                       ),
                                     ],
                                   ),
