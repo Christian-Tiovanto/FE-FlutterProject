@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/Devon/providers.dart';
 import 'package:project/devon/history_page.dart';
+import 'package:project/hadron/tesdate.dart';
 import 'package:project/jerrywijaya/profile.dart';
 import 'package:project/tian/PengajuanSurat.dart';
 // import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -231,7 +232,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SliverToBoxAdapter(
-              child: Column(
+              child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
@@ -294,6 +295,68 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final DateTimeRange? picked =
+                        await showDialog<DateTimeRange?>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return DateRangePickerWidget();
+                      },
+                    );
+
+                    if (picked != null) {
+                      // Lakukan sesuatu dengan tanggal yang dipilih
+                      print(
+                          'Start Date: ${picked.start}, End Date: ${picked.end}');
+                    }
+                  },
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(10), // Atur radius di sini
+                      ),
+                    ),
+                    minimumSize: MaterialStateProperty.all(
+                        Size(140, 35)), // Atur ukuran di sini
+                    // Atau menggunakan fixedSize:
+                    // fixedSize: MaterialStateProperty.all(Size(130, 9)),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                    elevation: MaterialStateProperty.all<double>(0),
+                    side: MaterialStateProperty.all<BorderSide>(
+                      BorderSide(
+                        color: Color.fromARGB(
+                            255, 94, 94, 94), // Atur warna border di sini
+                        width: 1.0, // Atur lebar border di sini
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Date Filter',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      SizedBox(width: 5), // Jarak antara teks dan ikon
+                      Icon(Icons.calendar_today,
+                          size: 15,
+                          color: Colors
+                              .black), // Ganti dengan ikon yang diinginkan
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          )),
+          SliverToBoxAdapter(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Text(
