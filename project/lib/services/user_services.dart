@@ -22,10 +22,12 @@ class UserService {
               <String, String>{"email": name, "password": password}));
       if (response.statusCode == 200) {
         prefs.setString("token", jsonDecode(response.body)['token']);
-        AwesomeDialogCall(context, 'Your Login is Succeed', true);
+        AwesomeDialogCall(
+            context, 'Your Login is Succeed', true, prov.enableDarkMode);
         return true;
       } else {
-        AwesomeDialogCall(context, 'Your Login is Failed', false);
+        AwesomeDialogCall(
+            context, 'Your Login is Failed', false, prov.enableDarkMode);
       }
     } catch (e) {
       throw Exception(e.toString());
@@ -33,7 +35,8 @@ class UserService {
   }
 }
 
-void AwesomeDialogCall(BuildContext context, String message, bool login) {
+void AwesomeDialogCall(
+    BuildContext context, String message, bool login, bool prov) {
   AwesomeDialog(
     context: context,
     animType: AnimType.scale,
@@ -41,7 +44,9 @@ void AwesomeDialogCall(BuildContext context, String message, bool login) {
     body: Center(
       child: Text(
         message,
-        style: TextStyle(fontStyle: FontStyle.italic),
+        style: TextStyle(
+            color: prov ? Colors.white : Colors.black,
+            fontStyle: FontStyle.italic),
       ),
     ),
     title: 'This is Ignored',
