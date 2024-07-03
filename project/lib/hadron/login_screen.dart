@@ -5,6 +5,7 @@ import 'package:project/Devon/dashboard.dart';
 
 import 'package:project/Devon/home_page.dart';
 import 'package:project/jerry/user.dart';
+import 'package:project/services/user_services.dart';
 // import 'package:scrappingwebsite/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
@@ -217,7 +218,7 @@ class _Login_screenState extends State<Login_screen> {
               minimumSize: Size(200, 45),
               shadowColor: Colors.black,
             ),
-            onPressed: () {
+            onPressed: () async {
               if (_nikController.text == "0000" &&
                   _passwordController.text == "admin") {
                 AwesomeDialog(
@@ -243,57 +244,12 @@ class _Login_screenState extends State<Login_screen> {
                   ),
                 ).show();
               } else {
-                List<User> loginUser = isUserAuthenticated(userList);
-                if (loginUser.isNotEmpty) {
-                  _isChecked
-                      ? saveData(_nikController.text, _passwordController.text)
-                      : null;
-                  userListProvider.addOnlineUser(loginUser[0]);
-                  // print(userListProvider.onlineusers);
-                  AwesomeDialog(
-                    context: context,
-                    animType: AnimType.scale,
-                    dialogType: DialogType.success,
-                    body: Center(
-                      child: Text(
-                        'Your Login Is Succeed',
-                        style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          color: prov.enableDarkMode == true
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                      ),
-                    ),
-                    title: 'This is Ignored',
-                    desc: 'This is also Ignored',
-                    btnOkOnPress: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Dashboard_screen()),
-                    ),
-                  ).show();
-                } else {
-                  AwesomeDialog(
-                    context: context,
-                    animType: AnimType.scale,
-                    dialogType: DialogType.error,
-                    body: Center(
-                      child: Text(
-                        'Your Login Is Failed',
-                        style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          color: prov.enableDarkMode == true
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                      ),
-                    ),
-                    title: 'This is Ignored',
-                    desc: 'This is also Ignored',
-                    btnOkColor: Colors.red,
-                    btnOkOnPress: () {},
-                  ).show();
+                try {
+                  await UserService().login(
+                      _nikController.text, _passwordController.text, context);
+                } catch (e) {
+                  print('e');
+                  print(e);
                 }
               }
             },

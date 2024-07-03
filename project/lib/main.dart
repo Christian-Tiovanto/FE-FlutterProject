@@ -20,8 +20,12 @@ import 'package:project/jerrywijaya/profile.dart';
 import 'package:project/tian/PengajuanSurat.dart';
 import 'package:project/tian/PengajuanSuratWidget/searchUserWidget.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final bool isLoggedIn = prefs.containsKey("token");
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
       create: (_) => Settings_provider(),
@@ -32,19 +36,23 @@ void main() {
     ChangeNotifierProvider(
       create: (_) => MailValue(),
     ),
-  ], child: const MyApp()));
+  ], child: MyApp(isLoggedIn: isLoggedIn)));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+  const MyApp({Key? key, required this.isLoggedIn}) : super(key: key);
+  final bool isLoggedIn;
   @override
   Widget build(BuildContext context) {
     final prov = Provider.of<Settings_provider>(context);
     return MaterialApp(
+      initialRoute: isLoggedIn ? "/HomeScreen" : "/",
+      routes: {
+        "/": (context) => const Login_screen(),
+        "/HomeScreen": (context) => HomePage()
+      },
       debugShowCheckedModeBanner: false,
       theme: prov.enableDarkMode == true ? prov.dark : prov.light,
-      home: Login_screen(),
     );
   }
 }
