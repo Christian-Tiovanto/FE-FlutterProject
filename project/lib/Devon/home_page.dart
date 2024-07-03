@@ -383,6 +383,9 @@ class _HomePageState extends State<HomePage> {
 
 mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
   final prov = Provider.of<Settings_provider>(context);
+  bool isFinished = _data[index]['progres'] == 'Finished';
+  bool isPending = _data[index]['progres'] == 'Pending';
+
   return InkWell(
     onTap: () {
       // Tambahkan logika yang ingin dilakukan saat card diklik di sini
@@ -390,7 +393,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
     },
     child: Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
-      height: 94,
+      height: 120, // Meningkatkan tinggi kontainer untuk penambahan LinearProgressIndicator
       child: Card(
         color: prov.enableDarkMode == true ? Colors.black : Colors.white,
         elevation: 0,
@@ -421,10 +424,8 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    // color: Colors.red,
                     width: 200,
                     child: Text(
-                      overflow: TextOverflow.ellipsis,
                       _data[index]['name'].toString(),
                       style: TextStyle(
                           color: prov.enableDarkMode == true
@@ -435,7 +436,6 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                   ),
                   Container(
                     child: Text(
-                      overflow: TextOverflow.ellipsis,
                       _data[index]['tgl'].toString(), // Tanggal disini
                       style: TextStyle(
                           color: prov.enableDarkMode == true
@@ -454,9 +454,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                     children: [
                       Container(
                         width: 200,
-                        // color: Colors.blue,
                         child: Text(
-                          overflow: TextOverflow.ellipsis,
                           '${_data[index]["Subject"].toString()}',
                           style: TextStyle(
                             color: prov.enableDarkMode == true
@@ -467,10 +465,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                         ),
                       ),
                       Container(
-                        // color: Colors.red,
                         child: Text(
-                          overflow: TextOverflow.ellipsis,
-
                           '${_data[index]["status"].toString()}', // Teks urgent disini
                           style: TextStyle(
                             color: prov.enableDarkMode == true
@@ -484,20 +479,24 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                   ),
                   SizedBox(height: 9), // Jarak antara baris pertama dan kedua
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Container(
-                          color: Colors.green,
-                          height: 2.0,
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          color: Colors.red,
-                          height: 2.0,
-                        ),
-                      ),
+                      isPending
+                          ? Expanded(
+                              child: LinearProgressIndicator(
+                                backgroundColor: Colors.red[300],
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                                value: 0.5, // Sesuaikan dengan nilai progress yang sesuai
+                              ),
+                            )
+                          : SizedBox(), // Tampilkan indicator hanya jika status Pending
+                      isFinished
+                          ? Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 24,
+                            )
+                          : SizedBox(), // Tampilkan icon jika status Finished
                     ],
                   ),
                 ],

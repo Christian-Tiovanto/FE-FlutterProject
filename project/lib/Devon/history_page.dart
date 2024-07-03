@@ -528,128 +528,122 @@ class _HistoryPageState extends State<HistoryPage>
 mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
   final prov = Provider.of<Settings_provider>(context);
   return InkWell(
-    onTap: () {
-      // Tambahkan logika yang ingin dilakukan saat card diklik di sini
-      print('Card clicked: ${_data[index]['name']}');
-    },
-    child: Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      height: 94,
-      child: Card(
-        color: prov.enableDarkMode == true ? Colors.black : Colors.white,
-        elevation: 0,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 16),
-              leading: Container(
-                padding: EdgeInsets.all(0),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-                child: CircleAvatar(
-                  radius: 24,
-                  backgroundColor: Colors.blue,
-                  child: Text(
-                    _data[index]['name'][0].toUpperCase(),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                    ),
+      onTap: () {
+        // Tambahkan logika yang ingin dilakukan saat card diklik di sini
+        print('Card clicked: ${_data[index]['name']}');
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        height: 110,
+        child: Card(
+          color: prov.enableDarkMode == true ? Colors.black : Colors.white,
+          elevation: 0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                leading: Container(
+                  padding: EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.black, width: 2),
                   ),
-                ),
-              ),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    // color: Colors.red,
-                    width: 200,
+                  child: CircleAvatar(
+                    radius: 24,
+                    backgroundColor: Colors.blue,
                     child: Text(
-                      overflow: TextOverflow.ellipsis,
-                      _data[index]['name'].toString(),
+                      _data[index]['name'][0].toUpperCase(),
                       style: TextStyle(
-                          color: prov.enableDarkMode == true
-                              ? Colors.white
-                              : Colors.black,
-                          fontSize: 20),
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
-                  Container(
-                    child: Text(
-                      overflow: TextOverflow.ellipsis,
-                      _data[index]['tgl'].toString(), // Tanggal disini
-                      style: TextStyle(
-                          color: prov.enableDarkMode == true
-                              ? Colors.white
-                              : Colors.black,
-                          fontSize: 13),
-                    ),
-                  ),
-                ],
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 200,
-                        // color: Colors.blue,
-                        child: Text(
-                          overflow: TextOverflow.ellipsis,
-                          '${_data[index]["Subject"].toString()}',
-                          style: TextStyle(
+                ),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 200,
+                      child: Text(
+                        _data[index]['name'].toString(),
+                        style: TextStyle(
                             color: prov.enableDarkMode == true
                                 ? Colors.white
                                 : Colors.black,
-                            fontSize: 15,
-                          ),
-                        ),
+                            fontSize: 20),
                       ),
-                      Container(
-                        // color: Colors.red,
-                        child: Text(
-                          overflow: TextOverflow.ellipsis,
-
-                          '${_data[index]["status"].toString()}', // Teks urgent disini
-                          style: TextStyle(
+                    ),
+                    Container(
+                      child: Text(
+                        _data[index]['tgl'].toString(),
+                        style: TextStyle(
                             color: prov.enableDarkMode == true
                                 ? Colors.white
                                 : Colors.black,
-                            fontSize: 13,
+                            fontSize: 13),
+                      ),
+                    ),
+                  ],
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 200,
+                          child: Text(
+                            '${_data[index]["Subject"].toString()}',
+                            style: TextStyle(
+                              color: prov.enableDarkMode == true
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 15,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 9), // Jarak antara baris pertama dan kedua
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          color: Colors.green,
-                          height: 2.0,
+                        Container(
+                          child: Text(
+                            '${_data[index]["status"].toString()}',
+                            style: TextStyle(
+                              color: prov.enableDarkMode == true
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 13,
+                            ),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          color: Colors.red,
-                          height: 2.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                    SizedBox(height: 9),
+                    LinearProgressIndicator(
+                      value: _calculateProgress(_data[index]['progres']),
+                      backgroundColor: Colors.red[300],
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
+
+  // Function untuk menghitung nilai progress
+  double _calculateProgress(String progress) {
+    switch (progress) {
+      case 'Pending':
+        return 0.2; // Contoh nilai untuk 'Pending'
+      case 'Finished':
+        return 1.0; // Contoh nilai untuk 'Finished'
+      case 'Cancelled':
+        return 0.5; // Contoh nilai untuk 'Cancelled'
+      default:
+        return 0.0;
+    }
+  }

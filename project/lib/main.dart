@@ -17,6 +17,7 @@ import 'package:project/jerry/user.dart';
 import 'package:project/jerrywijaya/profile.dart';
 import 'package:project/tian/PengajuanSurat.dart';
 import 'package:provider/provider.dart';
+import 'package:project/jerrywijaya/walkthrough.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: prov.enableDarkMode == true ? prov.dark : prov.light,
-      home: Login_screen(),
+      home: Welcome_screen(),
     );
   }
 }

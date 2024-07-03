@@ -6,6 +6,7 @@ import 'package:project/Devon/providers.dart';
 import 'dart:async';
 
 import 'package:project/hadron/login_screen.dart';
+import 'package:project/jerrywijaya/walkthrough.dart';
 import 'package:provider/provider.dart';
 
 class Welcome_screen extends StatefulWidget {
@@ -22,7 +23,7 @@ class _Welcome_screenState extends State<Welcome_screen> {
     Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Login_screen()),
+        MaterialPageRoute(builder: (context) => WalkthroughSlider()),
       );
     });
   }
