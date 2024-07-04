@@ -622,8 +622,12 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                     LinearProgressIndicator(
                       value: _calculateProgress(_data[index]['progres']),
                       backgroundColor: Colors.red[300],
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                      _data[index]['progres'] == 'Cancelled'
+                          ? Colors.red // Warna merah untuk Cancelled
+                          : Colors.green, // Warna biru untuk yang lainnya
                     ),
+                  ),
                   ],
                 ),
               ),

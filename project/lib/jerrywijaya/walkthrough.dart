@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project/devon/home_page.dart';
-import 'package:project/hadron/login_screen.dart'; // Import home page
+import 'package:project/hadron/login_screen.dart';
 
 class WalkthroughSlider extends StatefulWidget {
   @override
