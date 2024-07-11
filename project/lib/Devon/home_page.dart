@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/Devon/providers.dart';
 import 'package:project/devon/history_page.dart';
+import 'package:project/hadron/tesdate.dart';
 import 'package:project/jerrywijaya/profile.dart';
 import 'package:project/tian/PengajuanSurat.dart';
 // import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
       "name": "andy",
       "Subject": "Surat Pengunduran Diri",
       "tgl": "Apr 17",
+      "tglfilter": DateTime(2023, 4, 19),
       "status": "Regular",
       "progres": "Pending"
     },
@@ -35,6 +37,7 @@ class _HomePageState extends State<HomePage> {
       "name": "Devon",
       "Subject": "Surat Pengajuan Cuti",
       "tgl": "Apr 18",
+      "tglfilter": DateTime(2023, 4, 19),
       "status": "Regular",
       "progres": "Pending"
     },
@@ -42,6 +45,7 @@ class _HomePageState extends State<HomePage> {
       "name": "Chris",
       "Subject": "Surat Pengajuan Pembelian Unit",
       "tgl": "Apr 19",
+      "tglfilter": DateTime(2023, 4, 19),
       "status": "Urgent",
       "progres": "Finished"
     },
@@ -49,6 +53,7 @@ class _HomePageState extends State<HomePage> {
       "name": "Jerry",
       "Subject": "Surat Pengajuan Cuti",
       "tgl": "Apr 18",
+      "tglfilter": DateTime(2023, 4, 30),
       "status": "Regular",
       "progres": "Cancelled"
     },
@@ -56,6 +61,7 @@ class _HomePageState extends State<HomePage> {
       "name": "Jerry W",
       "Subject": "Surat Pengajuan Pembelian Unit",
       "tgl": "Apr 19",
+      "tglfilter": DateTime(2023, 4, 26),
       "status": "Urgent",
       "progres": "Pending"
     },
@@ -63,6 +69,7 @@ class _HomePageState extends State<HomePage> {
       "name": "Hadron",
       "Subject": "Surat Pengajuan Cuti",
       "tgl": "Apr 18",
+      "tglfilter": DateTime(2023, 3, 19),
       "status": "Regular",
       "progres": "Finished"
     },
@@ -70,6 +77,7 @@ class _HomePageState extends State<HomePage> {
       "name": "Lina ",
       "Subject": "Surat Pengajuan Pembelian Unit",
       "tgl": "Apr 19",
+      "tglfilter": DateTime(2023, 5, 19),
       "status": "Urgent",
       "progres": "Pending"
     },
@@ -92,6 +100,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<String> searchhistory = [];
+  DateTime startDate = DateTime(2023, 4, 19);
+  DateTime endDate = DateTime(2023, 5, 30);
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +241,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SliverToBoxAdapter(
-              child: Column(
+              child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
@@ -296,6 +306,68 @@ class _HomePageState extends State<HomePage> {
               ),
               Padding(
                 padding: EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final DateTimeRange? picked =
+                        await showDialog<DateTimeRange?>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return DateRangePickerWidget();
+                      },
+                    );
+
+                    if (picked != null) {
+                      // Lakukan sesuatu dengan tanggal yang dipilih
+                      print(
+                          'Start Date: ${picked.start}, End Date: ${picked.end}');
+                    }
+                  },
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(10), // Atur radius di sini
+                      ),
+                    ),
+                    minimumSize: MaterialStateProperty.all(
+                        Size(140, 35)), // Atur ukuran di sini
+                    // Atau menggunakan fixedSize:
+                    // fixedSize: MaterialStateProperty.all(Size(130, 9)),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                    elevation: MaterialStateProperty.all<double>(0),
+                    side: MaterialStateProperty.all<BorderSide>(
+                      BorderSide(
+                        color: Color.fromARGB(
+                            255, 94, 94, 94), // Atur warna border di sini
+                        width: 1.0, // Atur lebar border di sini
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Date Filter',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      SizedBox(width: 5), // Jarak antara teks dan ikon
+                      Icon(Icons.calendar_today,
+                          size: 15,
+                          color: Colors
+                              .black), // Ganti dengan ikon yang diinginkan
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          )),
+          SliverToBoxAdapter(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(10.0),
                 child: Text(
                   'Mailbox',
                   style: TextStyle(
@@ -312,27 +384,33 @@ class _HomePageState extends State<HomePage> {
         body: RefreshIndicator(
           onRefresh: _refresh,
           child: ListView.builder(
-              itemCount: _allusers
-                  .where((user) =>
-                      user['progres'] == 'Pending' &&
+              itemCount: _allusers.where((user) {
+                print(startDate);
+                print(endDate);
+                DateTime userdate = user['tglfilter'];
+                return user['progres'] == 'Pending' &&
+                    selectedFilters!.contains(user['status']) &&
+                    userdate.isAfter(startDate.subtract(Duration(days: 1))) &&
+                    userdate.isBefore(endDate.add(Duration(days: 1))) &&
+                    (controller.text.isEmpty ||
+                        user['name']
+                            .toString()
+                            .toLowerCase()
+                            .contains(controller.text.toLowerCase()));
+              }).length,
+              itemBuilder: (context, index) {
+                final filteredUsers = _allusers.where((user) {
+                  DateTime userdate = user['tglfilter'];
+                  return user['progres'] == 'Pending' &&
                       selectedFilters!.contains(user['status']) &&
+                      userdate.isAfter(startDate.subtract(Duration(days: 1))) &&
+                      userdate.isBefore(endDate.add(Duration(days: 1))) &&
                       (controller.text.isEmpty ||
                           user['name']
                               .toString()
                               .toLowerCase()
-                              .contains(controller.text.toLowerCase())))
-                  .length,
-              itemBuilder: (context, index) {
-                final filteredUsers = _allusers
-                    .where((user) =>
-                        user['progres'] == 'Pending' &&
-                        selectedFilters!.contains(user['status']) &&
-                        (controller.text.isEmpty ||
-                            user['name']
-                                .toString()
-                                .toLowerCase()
-                                .contains(controller.text.toLowerCase())))
-                    .toList();
+                              .contains(controller.text.toLowerCase()));
+                }).toList();
 
                 return mail(context, filteredUsers, index);
               }),

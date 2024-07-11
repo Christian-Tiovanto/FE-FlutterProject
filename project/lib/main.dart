@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: prov.enableDarkMode == true ? prov.dark : prov.light,
-      home: Welcome_screen(),
+      home: Dashboard_screen(),
     );
   }
 }
