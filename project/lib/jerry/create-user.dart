@@ -354,7 +354,8 @@ class _Signup_screenState extends State<Signup_screen> {
                   password: _passwordController.text,
                   role: dropdown,
                   number: _numberController.text,
-                  MailInbox: []);
+                  MailInbox: [],
+                  userId: "");
               // userListProvider.addUser(newUser);
 
               Navigator.pop(context, newUser);

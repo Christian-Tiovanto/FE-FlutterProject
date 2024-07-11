@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 
 class DropdownMenuExample extends StatefulWidget {
   final List<String> listData;
-  const DropdownMenuExample({super.key, required this.listData});
+  String value;
+  DropdownMenuExample({super.key, required this.listData, required this.value});
 
   @override
   State<DropdownMenuExample> createState() => _DropdownButtonExampleState();
@@ -33,7 +34,9 @@ class _DropdownButtonExampleState extends State<DropdownMenuExample> {
           // This is called when the user selects an item.
           setState(() {
             PrioritasSuratValue[0] = value!;
+            widget.value = value!;
             print('PrioritasSuratValue');
+            print(widget.value);
             print(PrioritasSuratValue);
             dropdownValue = value!;
           });

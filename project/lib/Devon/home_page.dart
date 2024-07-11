@@ -5,8 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:project/Devon/providers.dart';
 import 'package:project/devon/history_page.dart';
 import 'package:project/jerrywijaya/profile.dart';
+import 'package:project/services/user_services.dart';
 import 'package:project/tian/LetterContentWidget.dart';
 import 'package:project/tian/PengajuanSurat.dart';
+import 'package:intl/intl.dart';
 // import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:project/devon/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -22,26 +24,40 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   List<String>? selectedFilters = ['Urgent', 'Regular'];
+  List<Mail> lettersList = [];
+  bool resultFetched = false;
   final SearchController controller = SearchController();
   List<String> searchhistory = [];
 
+  void getUserLetter() async {
+    final results = await LetterService().getUserLetter();
+    setState(() {
+      lettersList = results;
+      resultFetched = true;
+      print('lettersList');
+      print(lettersList);
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserLetter();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final LoggedInUser = Provider.of<UserListProvider>(context).onlineusers;
     Future<void> _refresh() async {
-      await Future.delayed(Duration(seconds: 1));
-
-      setState(() {
-        LoggedInUser!.MailInbox.add(Mail(
-            name: "Ayu ",
-            Subject: "Surat Pengajuan Pembelian Unit",
-            tgl: "Apr 25",
-            status: "Urgent",
-            progres: "Pending"));
-      });
+      // await Future.delayed(Duration(seconds: 1));
+      getUserLetter();
     }
 
     final prov = Provider.of<Settings_provider>(context);
+    // return Scaffold(
+    //   body: Text("ea"),
+    // );
+
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, innerBoxIsScrolled) => [
@@ -135,9 +151,9 @@ class _HomePageState extends State<HomePage> {
                             const Divider(),
                             ListView.builder(
                                 shrinkWrap: true,
-                                itemCount: LoggedInUser!.MailInbox
+                                itemCount: lettersList
                                     .where((user) =>
-                                        user.progres == 'Pending' &&
+                                        user.progres == 'request' &&
                                         (controller.text.isEmpty ||
                                             user.name
                                                 .toString()
@@ -146,17 +162,18 @@ class _HomePageState extends State<HomePage> {
                                                     .toLowerCase())))
                                     .length,
                                 itemBuilder: (context, index) {
-                                  final filteredUsers =
-                                      LoggedInUser.MailInbox.where((user) =>
-                                              user.progres == 'Pending' &&
-                                              (controller.text.isEmpty ||
-                                                  user.name
-                                                      .toString()
-                                                      .toLowerCase()
-                                                      .contains(controller.text
-                                                          .toLowerCase())))
-                                          .toList();
-                                  return mail(context, filteredUsers, index);
+                                  final filteredUsers = lettersList
+                                      .where((user) =>
+                                          user.progres == 'request' &&
+                                          (controller.text.isEmpty ||
+                                              user.name
+                                                  .toString()
+                                                  .toLowerCase()
+                                                  .contains(controller.text
+                                                      .toLowerCase())))
+                                      .toList();
+                                  return mail(
+                                      context, filteredUsers, index, _refresh);
                                 }),
                           ]
                         ];
@@ -249,9 +266,8 @@ class _HomePageState extends State<HomePage> {
         body: RefreshIndicator(
           onRefresh: _refresh,
           child: ListView.builder(
-              itemCount: LoggedInUser?.MailInbox.where((user) {
-                // print(user.progres)
-                return user.progres == 'Pending' &&
+              itemCount: lettersList.where((user) {
+                return user.progres == 'request' &&
                     selectedFilters!.contains(user.status) &&
                     (controller.text.isEmpty ||
                         user.name
@@ -260,17 +276,16 @@ class _HomePageState extends State<HomePage> {
                             .contains(controller.text.toLowerCase()));
               }).length,
               itemBuilder: (context, index) {
-                final filteredUsers = LoggedInUser!.MailInbox
-                    .where((user) =>
-                        user.progres == 'Pending' &&
-                        selectedFilters!.contains(user.status) &&
-                        (controller.text.isEmpty ||
-                            user.name
-                                .toString()
-                                .toLowerCase()
-                                .contains(controller.text.toLowerCase())))
-                    .toList();
-                return mail(context, filteredUsers, index);
+                final filteredUsers = lettersList.where((user) {
+                  return user.progres == 'request' &&
+                      selectedFilters!.contains(user.status) &&
+                      (controller.text.isEmpty ||
+                          user.name
+                              .toString()
+                              .toLowerCase()
+                              .contains(controller.text.toLowerCase()));
+                }).toList();
+                return mail(context, filteredUsers, index, _refresh);
               }),
         ),
       ),
@@ -280,56 +295,39 @@ class _HomePageState extends State<HomePage> {
         label: Icon(Icons.edit,
             color: Theme.of(context).textTheme.bodyText2?.color),
         // icon: Icon(Icons.edit),
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final response = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => PengajuanSurat()),
           );
+          print('response');
+          print(response);
+          if (response == "OK") {
+            _refresh();
+            setState(() {});
+          }
         },
       ),
-      //   bottom NavigationBar: ConvexAppBar(
-      //       initialActiveIndex: _selectedIndex,
-      //       color: Colors.white,
-      //       backgroundColor: Colors.grey,
-      //       items: [
-      //         TabItem(icon: Icons.mail),
-      //         TabItem(icon: Icons.history),
-      //         TabItem(icon: Icons.person),
-      //       ],
-      //       onTap: (int index) {
-      //         if (index == 0) {
-      //           // Navigator.push(
-      //           //   context,
-      //           //   MaterialPageRoute(builder: (context) => HistoryPage()),
-      //           // );
-      //         } else if (index == 1) {
-      //           Navigator.push(
-      //             context,
-      //             MaterialPageRoute(builder: (context) => HistoryPage()),
-      //           );
-      //         } else {
-      //           Navigator.push(
-      //             context,
-      //             MaterialPageRoute(builder: (context) => ProfilePageWidget()),
-      //           );
-      //         }
-      //       }),
     );
   }
 }
 
-mail(BuildContext context, List<Mail> _data, int index) {
+mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
   final prov = Provider.of<Settings_provider>(context);
+  // print('_data');
+  // print(_data);
+  // return Text("ea");
   return InkWell(
-    onTap: () {
-      Navigator.push(
+    onTap: () async {
+      final response = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => LetterContentWidget(
                     dataSurat: _data[index],
                   )));
-      // Tambahkan logika yang ingin dilakukan saat card diklik di sini
-      // print('Card clicked: ${_data[index]['name']}');
+      if (response == "OK") {
+        refreshFunction();
+      }
     },
     child: Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -379,7 +377,9 @@ mail(BuildContext context, List<Mail> _data, int index) {
                   Container(
                     child: Text(
                       overflow: TextOverflow.ellipsis,
-                      _data[index].tgl.toString(), // Tanggal disini
+                      DateFormat('d-MMM')
+                          .format(_data[index].tgl as DateTime)
+                          .toString(), // Tanggal disini
                       style: TextStyle(
                           color: prov.enableDarkMode == true
                               ? Colors.white

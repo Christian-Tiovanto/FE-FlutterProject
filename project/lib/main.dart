@@ -17,12 +17,20 @@ import 'package:project/hadron/welcome_screen.dart';
 import 'package:project/jerry/create-user.dart';
 import 'package:project/jerry/user.dart';
 import 'package:project/jerrywijaya/profile.dart';
+import 'package:project/services/user_services.dart';
 import 'package:project/tian/PengajuanSurat.dart';
 import 'package:project/tian/PengajuanSuratWidget/searchUserWidget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  try {
+    print("tes letter service");
+    await LetterService().getUserLetter();
+  } catch (e) {
+    print('e');
+    print(e);
+  }
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final bool isLoggedIn = prefs.containsKey("token");
@@ -49,7 +57,7 @@ class MyApp extends StatelessWidget {
       initialRoute: isLoggedIn ? "/HomeScreen" : "/",
       routes: {
         "/": (context) => const Login_screen(),
-        "/HomeScreen": (context) => HomePage()
+        "/HomeScreen": (context) => Dashboard_screen()
       },
       debugShowCheckedModeBanner: false,
       theme: prov.enableDarkMode == true ? prov.dark : prov.light,

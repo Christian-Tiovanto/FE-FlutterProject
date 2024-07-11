@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project/Devon/providers.dart';
+import 'package:project/services/user_services.dart';
 import 'package:provider/provider.dart';
 
 class PengajuanSuratAppBarWidget extends StatelessWidget
@@ -8,8 +9,12 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
   final BuildContext contextPage;
   final List<User> selectedUser;
   final List Subject;
+  final List description;
+  final List prioritas;
   const PengajuanSuratAppBarWidget(
       {super.key,
+      required this.prioritas,
+      required this.description,
       required this.Subject,
       required this.sendIcon,
       required this.contextPage,
@@ -17,7 +22,7 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    final sender = Provider.of<UserListProvider>(context).users[0];
+    // final sender = Provider.of<UserListProvider>(context).users[0];
     final PrioritasSuratValue = Provider.of<MailValue>(context).PrioritasSurat;
     final prov = Provider.of<Settings_provider>(context);
 
@@ -40,23 +45,25 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
                 child: RotatedBox(
                   quarterTurns: 3,
                   child: TextButton(
-                    onPressed: () {
-                      for (var user in selectedUser) {
-                        DateTime now = DateTime.now();
-                        String formattedDate = "${now.day}-${now.month}";
-                        print('Subject');
-                        print(Subject);
-                        print(PrioritasSuratValue);
-                        user.MailInbox.add(Mail(
-                            Subject: Subject[0],
-                            name: sender!.name,
-                            tgl: formattedDate,
-                            status: PrioritasSuratValue[0],
-                            progres: "Pending"));
+                    onPressed: () async {
+                      final snackBar = SnackBar(
+                        backgroundColor: Colors.red,
+                        content: const Text('No Recipient Selected !'),
+                      );
+                      if (selectedUser.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        return;
                       }
-                      Provider.of<UserListProvider>(context, listen: false)
-                          .addMail();
-                      Navigator.pop(this.contextPage);
+                      List recipients = selectedUser.map((users) {
+                        return {"userId": users.userId};
+                      }).toList();
+                      try {
+                        await LetterService().postUserLetter(Subject[0],
+                            description[0], prioritas[0], recipients);
+                      } catch (error) {
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                      Navigator.pop(this.contextPage, "OK");
                     },
                     child: Icon(
                         color: prov.enableDarkMode == true

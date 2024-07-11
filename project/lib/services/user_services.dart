@@ -8,8 +8,32 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
+  Future getAllUsers() async {
+    print('getAllUsers');
+    final prefs = await SharedPreferences.getInstance();
+    final url = Uri.parse("http://localhost:3000/api/v1/users/list-all-users");
+    try {
+      final response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          "Authorization": prefs.getString('token')!
+        },
+      );
+      if (response.statusCode == 200) {
+        print('userList');
+        List results = jsonDecode(response.body)['data'];
+        List<User> userList =
+            List<User>.from(results.map((value) => User.fromJson(value)));
+        print(userList);
+        return userList;
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future login(String name, String password, BuildContext context) async {
-    print("eaaaa");
     final prov = Provider.of<Settings_provider>(context, listen: false);
     final prefs = await SharedPreferences.getInstance();
     final url = Uri.parse("http://localhost:3000/api/v1/users/login");
@@ -18,8 +42,8 @@ class UserService {
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: jsonEncode(
-              <String, String>{"email": name, "password": password}));
+          body:
+              jsonEncode(<String, String>{"nik": name, "password": password}));
       if (response.statusCode == 200) {
         prefs.setString("token", jsonDecode(response.body)['token']);
         AwesomeDialogCall(
@@ -29,6 +53,66 @@ class UserService {
         AwesomeDialogCall(
             context, 'Your Login is Failed', false, prov.enableDarkMode);
       }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+}
+
+class LetterService {
+  Future updateLetterRecipientStatus(letterId, recipientResponse) async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      final url = Uri.parse(
+          'http://localhost:3000/api/v1/letters/$letterId/recipient-checked/$recipientResponse');
+      final response = await http.put(url, headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": prefs.getString('token')!
+      });
+      if (response.statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future postUserLetter(subject, description, priority, recipients) async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      final url = Uri.parse("http://localhost:3000/api/v1/letters/");
+      final response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            "Authorization": prefs.getString('token')!
+          },
+          body: jsonEncode(<String, dynamic>{
+            "subject": subject,
+            "description": description,
+            "priority": priority,
+            "recipients": recipients
+          }));
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future getUserLetter() async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      final url = Uri.parse(
+          "http://localhost:3000/api/v1/letters/current-user?checkedStatusIsRequest=true&status=ongoing");
+      final response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          "Authorization": prefs.getString('token')!
+        },
+      );
+      List results = jsonDecode(response.body)['letters'];
+      List<Mail> lettersList =
+          List<Mail>.from(results.map((value) => Mail.fromJson(value)));
+      return lettersList;
     } catch (e) {
       throw Exception(e.toString());
     }

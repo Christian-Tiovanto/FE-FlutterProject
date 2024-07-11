@@ -21,58 +21,6 @@ class _HistoryPageState extends State<HistoryPage>
   // int _selectedIndex = 1;
   List<String>? selectedFilters = ['Urgent', 'Regular'];
 
-  // List<Map<String, dynamic>> LoggedInUser?.MailInbox = [
-  //   {
-  //     "name": "andy",
-  //     "Subject": "Surat Pengunduran Diri",
-  //     "tgl": "Apr 17",
-  //     "status": "Regular",
-  //     "progres": "Pending"
-  //   },
-  //   {
-  //     "name": "Devon",
-  //     "Subject": "Surat Pengajuan Cuti",
-  //     "tgl": "Apr 18",
-  //     "status": "Regular",
-  //     "progres": "Pending"
-  //   },
-  //   {
-  //     "name": "Chris",
-  //     "Subject": "Surat Pengajuan Pembelian Unit",
-  //     "tgl": "Apr 19",
-  //     "status": "Urgent",
-  //     "progres": "Finished"
-  //   },
-  //   {
-  //     "name": "Jerry",
-  //     "Subject": "Surat Pengajuan Cuti",
-  //     "tgl": "Apr 18",
-  //     "status": "Regular",
-  //     "progres": "Cancelled"
-  //   },
-  //   {
-  //     "name": "Jerry W",
-  //     "Subject": "Surat Pengajuan Pembelian Unit",
-  //     "tgl": "Apr 19",
-  //     "status": "Urgent",
-  //     "progres": "Pending"
-  //   },
-  //   {
-  //     "name": "Hadron",
-  //     "Subject": "Surat Pengajuan Cuti",
-  //     "tgl": "Apr 18",
-  //     "status": "Regular",
-  //     "progres": "Finished"
-  //   },
-  //   {
-  //     "name": "Lina ",
-  //     "Subject": "Surat Pengajuan Pembelian Unit",
-  //     "tgl": "Apr 19",
-  //     "status": "Urgent",
-  //     "progres": "Pending"
-  //   },
-  // ];
-
   late TabController _convexTabController;
 
   @override
@@ -90,14 +38,7 @@ class _HistoryPageState extends State<HistoryPage>
     Future<void> _refresh() async {
       await Future.delayed(Duration(seconds: 1));
 
-      setState(() {
-        LoggedInUser?.MailInbox.add(Mail(
-            name: "Ayu ",
-            Subject: "Surat Pengajuan Pembelian Unit",
-            tgl: "Apr 25",
-            status: "Urgent",
-            progres: "Pending"));
-      });
+      setState(() {});
     }
 
     return DefaultTabController(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project/Devon/providers.dart';
+import 'package:project/services/user_services.dart';
 import 'package:project/tian/PengajuanSuratWidget/containerKolomPengajuanWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/dropDownMenuWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/textFieldWidget.dart';
@@ -10,9 +11,11 @@ class SearchUserWidget extends StatefulWidget {
       {super.key,
       required this.selectedUsers,
       required this.Subject,
-      required this.IsiSurat});
+      required this.IsiSurat,
+      required this.description});
   final List<User> selectedUsers;
   List Subject;
+  List description;
   String IsiSurat;
   @override
   State<SearchUserWidget> createState() => _SearchUserWidgetState();
@@ -27,17 +30,22 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
 
   List<User> _foundUsers = [];
   List<User> _allUsers = [];
-  @override
-  initState() {
-    Future.delayed(
-        Duration.zero,
-        () => _allUsers =
-            Provider.of<UserListProvider>(context, listen: false).users);
-    _foundUsers = _allUsers;
-    super.initState();
+
+  void getAllUsers() async {
+    final results = await UserService().getAllUsers();
+    print('results');
+    print(results);
+    setState(() {
+      _allUsers = results;
+    });
   }
 
-  // This function is called whenever the text field changes
+  @override
+  initState() {
+    super.initState();
+    getAllUsers();
+  }
+
   void _runFilter(String enteredKeyword) {
     final regexp = r'^' '$enteredKeyword.*';
     RegExp exp = RegExp(regexp);
@@ -52,7 +60,6 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
     List<User> results = [];
 
     if (enteredKeyword.isEmpty) {
-      // if the search field is empty or only contains white-space, we'll display all users
       results = _allUsers;
     } else {
       results = _allUsers.where((user) => callback(user.name)).toList();
@@ -150,27 +157,6 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
           child: Visibility(
             replacement: Column(
               children: [
-                // ContainerKolomPengajuanSuratWidget(
-                //   firstPart: Text("Jenis Surat"),
-                //   thirdPart: ConstrainedBox(
-                //     constraints: BoxConstraints(maxWidth: 200, maxHeight: 500),
-                //     child: InputDecorator(
-                //       decoration: InputDecoration(
-                //         isCollapsed: true,
-                //         contentPadding: EdgeInsets.all(10),
-                //         border: OutlineInputBorder(
-                //           borderRadius: BorderRadius.circular(
-                //               50.0), // Set the radius as per your need
-                //         ),
-                //       ),
-                //       child: DropdownMenuExample(
-                //         listData: ['1', '2', '3'],
-                //       ),
-                //     ),
-                //   ),
-                //   containerPadding:
-                //       PaddingLeftAndRight(leftPadding: 20, rightPadding: 20),
-                // ),
                 SizedBox(
                   height: 10,
                 ),
@@ -193,6 +179,7 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                         ),
                       ),
                       child: DropdownMenuExample(
+                        value: "",
                         listData: ['Urgent', "Regular"],
                       ),
                     ),
@@ -207,7 +194,7 @@ class _SearchUserWidgetState extends State<SearchUserWidget> {
                 ),
                 TextFieldExample(
                   isBorder: false,
-                  subjectValue: widget.Subject,
+                  subjectValue: widget.description,
                   title: "Tulis Isi Surat",
                 ),
               ],

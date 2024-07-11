@@ -337,7 +337,8 @@ class _UserDetail_screenState extends State<UserDetail_screen> {
                   password: _passwordController.text,
                   role: dropdown,
                   number: _numberController.text,
-                  MailInbox: []);
+                  MailInbox: [],
+                  userId: "");
               // userListProvider.addUser(newUser);
               userListProvider.updateUser(widget.index, updateUser);
 

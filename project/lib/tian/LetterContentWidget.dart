@@ -1,24 +1,42 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:project/Devon/providers.dart';
+import 'package:project/services/user_services.dart';
 import 'package:project/tian/PengajuanSuratWidget/dropDownMenuWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/pengajuanAppBarWidget.dart';
 import 'package:project/tian/PengajuanSuratWidget/textFieldWidget.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class LetterContentWidget extends StatelessWidget {
+class LetterContentWidget extends StatefulWidget {
   final Mail dataSurat;
   const LetterContentWidget({super.key, required this.dataSurat});
 
   @override
+  State<LetterContentWidget> createState() => _LetterContentWidgetState();
+}
+
+class _LetterContentWidgetState extends State<LetterContentWidget> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final prov = Provider.of<Settings_provider>(context);
-
+    String responseValue = "";
     return Scaffold(
       appBar: PengajuanSuratAppBarWidget(
         Subject: [],
         sendIcon: false,
         contextPage: context,
+        prioritas: [],
         selectedUser: [],
+        description: [],
       ),
       body: ListView(
         children: [
@@ -28,7 +46,7 @@ class LetterContentWidget extends StatelessWidget {
                 leading: CircleAvatar(
                     radius: 24,
                     child: Text(
-                      this.dataSurat.name[0].toUpperCase(),
+                      this.widget.dataSurat.name[0].toUpperCase(),
                       style: TextStyle(
                         fontSize: 20,
                         color:
@@ -38,7 +56,7 @@ class LetterContentWidget extends StatelessWidget {
                 title: Row(
                   children: [
                     Text(
-                      this.dataSurat.name,
+                      this.widget.dataSurat.name,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color:
@@ -49,7 +67,9 @@ class LetterContentWidget extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      this.dataSurat.tgl,
+                      DateFormat("yyyy-MM-dd")
+                          .format(this.widget.dataSurat.tgl)
+                          .toString(),
                       style: TextStyle(
                         color:
                             prov.enableDarkMode ? Colors.white : Colors.black,
@@ -78,7 +98,7 @@ class LetterContentWidget extends StatelessWidget {
               ),
               Container(
                 child: Text(
-                  this.dataSurat.Subject,
+                  this.widget.dataSurat.Subject,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -104,14 +124,14 @@ class LetterContentWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Text(
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut gravida tellus et lacus venenatis molestie. Fusce sit amet volutpat nisi, eget elementum felis. Phasellus ligula metus, facilisis quis est sed, molestie tempus felis. Maecenas nec felis ex. Nulla id semper metus. Aliquam urna mauris, viverra sit amet volutpat ultrices, iaculis at est. Quisque id accumsan mauris.Lorem ipsum dolor sit amet, conse elit. Ut gravida tellus et lacus venenatis molestie. Fusce sit amet volutpat nisi, eget elementum felis. Phasellus ligula metus, facilisis quis est sed, molestie tempus felis. Maecenas nec felis ex. Nulla id semper metus. Aliquam urna mauris, viverra sit amet volutpat ultrices, iaculis at est. Quisque id accumsan mauris",
+                  widget.dataSurat.description,
                   style: TextStyle(
                     color: prov.enableDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
               ),
               ResponsePopUpFormWidget(
-                dataSurat: dataSurat,
+                dataSurat: widget.dataSurat,
                 LetterContentWidgetContext: context,
               ),
             ],
@@ -135,7 +155,7 @@ class ResponsePopUpFormWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final prov = Provider.of<Settings_provider>(context);
     final MailFinished = Provider.of<UserListProvider>(context);
-
+    final ResponseSuratValue = Provider.of<MailValue>(context).responseSurat;
     return FilledButton.tonal(
       onPressed: () => showDialog<String>(
         context: context,
@@ -153,7 +173,8 @@ class ResponsePopUpFormWidget extends StatelessWidget {
                   ),
                 ),
                 DropdownMenuExample(
-                  listData: ["1", "2"],
+                  value: "",
+                  listData: ["rejected", "approved"],
                 ),
                 SizedBox(height: 20),
                 Text(
@@ -169,7 +190,7 @@ class ResponsePopUpFormWidget extends StatelessWidget {
                   child: TextFieldExample(
                     isBorder: false,
                     title: "",
-                    subjectValue: [],
+                    subjectValue: [""],
                   ),
                 ),
               ],
@@ -181,9 +202,18 @@ class ResponsePopUpFormWidget extends StatelessWidget {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                dataSurat.progres = 'Finished';
-                MailFinished.addMail();
+              onPressed: () async {
+                final snackBar = SnackBar(
+                  backgroundColor: Colors.green,
+                  content: const Text('Berhasil Memberikan respon !'),
+                );
+                final response = await LetterService()
+                    .updateLetterRecipientStatus(
+                        dataSurat.mailId, ResponseSuratValue[0]);
+                print(response);
+                if (response == true) {
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
                 Navigator.pop(context, 'OK');
                 Navigator.pop(LetterContentWidgetContext, 'OK');
               },

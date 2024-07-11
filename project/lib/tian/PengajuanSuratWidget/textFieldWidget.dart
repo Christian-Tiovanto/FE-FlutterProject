@@ -34,10 +34,10 @@ class _TextFieldExampleState extends State<TextFieldExample> {
 
   @override
   Widget build(BuildContext context) {
+    widget.subjectValue[0] = " ";
     return TextField(
       onChanged: (value) {
         widget.subjectValue[0] = value;
-        print(widget.subjectValue);
       },
       scrollPhysics: const NeverScrollableScrollPhysics(),
       decoration: InputDecoration(
