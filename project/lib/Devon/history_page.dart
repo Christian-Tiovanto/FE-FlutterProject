@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:project/Devon/home_page.dart';
 import 'package:project/Devon/providers.dart';
 import 'package:project/jerrywijaya/profile.dart';
+import 'package:project/services/user_services.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:project/Devon/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
@@ -20,8 +22,24 @@ class _HistoryPageState extends State<HistoryPage>
     with SingleTickerProviderStateMixin {
   // int _selectedIndex = 1;
   List<String>? selectedFilters = ['Urgent', 'Regular'];
-
+  List<MailSent> lettersList = [];
   late TabController _convexTabController;
+  bool resultFetched = false;
+
+  void getUserLetter() async {
+    try {
+      final results = await LetterService().getUserCreatedLetter("ongoing");
+      setState(() {
+        lettersList = results;
+        resultFetched = true;
+        print('lettersList');
+        print(lettersList);
+      });
+    } catch (error) {
+      print('error history');
+      print(error);
+    }
+  }
 
   @override
   void initState() {
@@ -29,6 +47,7 @@ class _HistoryPageState extends State<HistoryPage>
     // Mengatur initialIndex pada TabController ke 2 untuk ConvexAppBar
     _convexTabController =
         TabController(length: 3, vsync: this, initialIndex: 1);
+    getUserLetter();
   }
 
   @override
@@ -48,13 +67,13 @@ class _HistoryPageState extends State<HistoryPage>
             automaticallyImplyLeading: false,
 
             title: const Text(
-              'History',
+              'History Kirim Surat',
               style: TextStyle(fontWeight: FontWeight.bold),
             ), // Judul AppBar
             bottom: const TabBar(
               tabs: [
                 Tab(
-                  text: 'Pending',
+                  text: 'Ongoing',
                 ),
                 Tab(
                   text: 'Finished',
@@ -147,7 +166,7 @@ class _HistoryPageState extends State<HistoryPage>
                     Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Text(
-                        'Pending',
+                        'Ongoing',
                         style: TextStyle(
                           fontSize: 15,
                           color: Theme.of(context).textTheme.bodyText1?.color,
@@ -158,15 +177,15 @@ class _HistoryPageState extends State<HistoryPage>
                       child: RefreshIndicator(
                         onRefresh: _refresh,
                         child: ListView.builder(
-                            itemCount: LoggedInUser?.MailInbox
+                            itemCount: lettersList
                                 .where((user) =>
-                                    user.name == 'Pending' &&
+                                    user.letterStatus == 'ongoing' &&
                                     selectedFilters!.contains(user.status))
                                 .length,
                             itemBuilder: (context, index) {
-                              final filteredUsers = LoggedInUser?.MailInbox
+                              final filteredUsers = lettersList
                                   .where((user) =>
-                                      user.name == 'Pending' &&
+                                      user.letterStatus == 'ongoing' &&
                                       selectedFilters!.contains(user.status))
                                   .toList();
                               final user = filteredUsers![index];
@@ -260,13 +279,13 @@ class _HistoryPageState extends State<HistoryPage>
                       child: RefreshIndicator(
                         onRefresh: _refresh,
                         child: ListView.builder(
-                          itemCount: LoggedInUser?.MailInbox
+                          itemCount: lettersList
                               .where((user) =>
                                   user.progres == 'Finished' &&
                                   selectedFilters!.contains(user.status))
                               .length,
                           itemBuilder: (context, index) {
-                            final filteredUsers = LoggedInUser?.MailInbox
+                            final filteredUsers = lettersList
                                 .where((user) =>
                                     user.progres == 'Finished' &&
                                     selectedFilters!.contains(user.status))
@@ -293,7 +312,7 @@ class _HistoryPageState extends State<HistoryPage>
                                   // Aksi ketika item di-slide
                                   setState(() {
                                     // Hapus item dari daftar
-                                    LoggedInUser?.MailInbox.remove(user);
+                                    lettersList.remove(user);
                                   });
                                 },
                                 child: mail(context, filteredUsers, index));
@@ -387,13 +406,13 @@ class _HistoryPageState extends State<HistoryPage>
                       child: RefreshIndicator(
                         onRefresh: _refresh,
                         child: ListView.builder(
-                          itemCount: LoggedInUser?.MailInbox
+                          itemCount: lettersList
                               .where((user) =>
                                   user.name == 'Cancelled' &&
                                   selectedFilters!.contains(user.status))
                               .length,
                           itemBuilder: (context, index) {
-                            final filteredUsers = LoggedInUser?.MailInbox
+                            final filteredUsers = lettersList
                                 .where((user) =>
                                     user.name == 'Cancelled' &&
                                     selectedFilters!.contains(user.status))
@@ -420,7 +439,7 @@ class _HistoryPageState extends State<HistoryPage>
                                   // Aksi ketika item di-slide
                                   setState(() {
                                     // Hapus item dari daftar
-                                    LoggedInUser?.MailInbox.remove(user);
+                                    lettersList.remove(user);
                                   });
                                 },
                                 child: mail(context, filteredUsers, index));
@@ -466,7 +485,7 @@ class _HistoryPageState extends State<HistoryPage>
   }
 }
 
-mail(BuildContext context, List<Mail>? _data, int index) {
+mail(BuildContext context, List<MailSent>? _data, int index) {
   final prov = Provider.of<Settings_provider>(context);
   return InkWell(
     onTap: () {
@@ -521,7 +540,9 @@ mail(BuildContext context, List<Mail>? _data, int index) {
                   Container(
                     child: Text(
                       overflow: TextOverflow.ellipsis,
-                      _data[index].tgl.toString(), // Tanggal disini
+                      DateFormat('d-MMM')
+                          .format(_data[index].tgl as DateTime)
+                          .toString(), // Tanggal disini
                       style: TextStyle(
                           color: prov.enableDarkMode == true
                               ? Colors.white

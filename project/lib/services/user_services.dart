@@ -117,6 +117,29 @@ class LetterService {
       throw Exception(e.toString());
     }
   }
+
+  Future getUserCreatedLetter(status) async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      final url = Uri.parse(
+          "http://localhost:3000/api/v1/letters/userCreatedLetters/$status");
+      final response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          "Authorization": prefs.getString('token')!
+        },
+      );
+      List results = jsonDecode(response.body)['data'];
+      print(results);
+      List<MailSent> lettersList =
+          List<MailSent>.from(results.map((value) => MailSent.fromJson(value)));
+      print(lettersList);
+      return lettersList;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }
 
 void AwesomeDialogCall(

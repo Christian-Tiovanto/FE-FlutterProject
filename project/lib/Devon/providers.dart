@@ -64,6 +64,38 @@ class Mail {
       required this.description});
 }
 
+class MailSent {
+  final String name;
+  final String Subject;
+  final DateTime tgl;
+  final String status;
+  String progres;
+  final String description;
+  final String mailId;
+  final String letterStatus;
+  factory MailSent.fromJson(Map<String, dynamic> json) {
+    return MailSent(
+        Subject: json['subject'],
+        name: json['creator']['name'],
+        tgl: DateTime.parse(json['dateCreated']) as DateTime,
+        status: json['priority'],
+        letterStatus: json['status'],
+        description: json['description'],
+        progres: json['recipients'][0]['checked'],
+        mailId: json['_id']);
+  }
+
+  MailSent(
+      {required this.Subject,
+      required this.mailId,
+      required this.name,
+      required this.letterStatus,
+      required this.tgl,
+      required this.status,
+      required this.progres,
+      required this.description});
+}
+
 class User {
   final String name;
   final String nik;
@@ -73,14 +105,15 @@ class User {
   final List<Mail> MailInbox;
   final String userId;
   factory User.fromJson(Map<String, dynamic> json) {
+    print(json);
     return User(
         userId: json['_id'],
         MailInbox: [],
         name: json['name'] == null ? "none1" : json['name'],
         role: json['role'] == null ? "none2" : json['role'],
         password: '',
-        nik: json['nik'] == null ? "none3" : json['nik'],
-        number: '0814410');
+        nik: json['nik'].toString() == null ? "none3" : json['nik'].toString(),
+        number: json['phone_number'] == null ? "" : json['phone_number']);
   }
   User(
       {required this.name,

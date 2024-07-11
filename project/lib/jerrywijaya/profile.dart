@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:project/Devon/history_page.dart';
 import 'package:project/Devon/home_page.dart';
 import 'package:project/Devon/providers.dart';
@@ -6,6 +7,7 @@ import 'package:project/jerry/setting.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePageWidget extends StatefulWidget {
   const ProfilePageWidget({Key? key}) : super(key: key);
@@ -15,117 +17,144 @@ class ProfilePageWidget extends StatefulWidget {
 }
 
 class _ProfilePageWidgetState extends State<ProfilePageWidget> {
+  bool userFetched = false;
+
+  late User userData;
+  initPrefsAndGetUserData() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (!prefs.containsKey('token'))
+        throw Exception("You have to logged in first");
+      String token = prefs.getString('token')!;
+      setState(() {
+        userData = User.fromJson(JwtDecoder.decode(token));
+        userFetched = true;
+        print("axis");
+      });
+    } catch (e) {
+      print('error di profile');
+      print(e);
+    }
+  }
+
+  @override
+  initState() {
+    super.initState();
+    initPrefsAndGetUserData();
+  }
+
   int _selectedIndex = 2;
   @override
   Widget build(BuildContext context) {
     final prov = Provider.of<Settings_provider>(context);
-    final userListProvider = Provider.of<UserListProvider>(context);
-    final userList = userListProvider.onlineusers;
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          'Profile Page',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back),
-        //   onPressed: () {
-        //     Navigator.of(context).pop();
-        //   },
-        // ),
-        actions: <Widget>[
-          // IconButton(
-          //   icon: Icon(Icons.shopping_cart_outlined),
-          //   onPressed: () {
-          //     // Lakukan sesuatu saat ikon diklik
-          //     print('Ikon diklik');
-          //   },
-          // ),
-          PopupMenuButton<String>(
-            onSelected: (String value) {
-              // Lakukan sesuatu saat item dipilih
-              if (value == 'Settings') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingWidget()),
-                );
-              } else if (value == 'Maintenance') {
-                print('maintenace');
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => maintenance_page()),
-                // );
-              } else if (value == 'Updating') {
-                print('updating');
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => maintenance_page()),
-                // );
-              } else if (value == 'Loading') {
-                print('Loading');
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => maintenance_page()),
-                // );
-              } else {
-                print('error');
-                //               Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => maintenance_page()),
-                // );
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                {'icon': Icons.settings, 'text': 'Settings'},
-                {'icon': Icons.build, 'text': 'Maintenance'},
-                {'icon': Icons.update, 'text': 'Updating'},
-                {'icon': Icons.refresh, 'text': 'Loading'},
-                {'icon': Icons.error, 'text': 'Error'},
-              ].map((choice) {
-                return PopupMenuItem<String>(
-                  value: choice['text'] as String,
-                  child: ListTile(
-                    leading: Icon(choice['icon'] as IconData),
-                    title: Text(choice['text'] as String),
-                  ),
-                );
-              }).toList();
-            },
-          ),
-        ],
-      ),
-      body: body(context, userList),
-      // bottomNavigationBar: ConvexAppBar(
-      //     initialActiveIndex: _selectedIndex,
-      //     color: Colors.white,
-      //     backgroundColor: Colors.grey,
-      //     items: [
-      //       TabItem(icon: Icons.mail),
-      //       TabItem(icon: Icons.history),
-      //       TabItem(icon: Icons.person),
-      //     ],
-      //     onTap: (int index) {
-      //       if (index == 0) {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => HomePage()),
-      //         );
-      //       } else if (index == 1) {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => HistoryPage()),
-      //         );
-      //       } else {
-      //         // Navigator.push(
-      //         //   context,
-      //         //   MaterialPageRoute(builder: (context) => ProfilePageWidget()),
-      //         // );
-      //       }
-      //     }),
-    );
+    return !userFetched
+        ? CircularProgressIndicator()
+        : Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text(
+                'Profile Page',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              centerTitle: true,
+              // leading: IconButton(
+              //   icon: Icon(Icons.arrow_back),
+              //   onPressed: () {
+              //     Navigator.of(context).pop();
+              //   },
+              // ),
+              actions: <Widget>[
+                // IconButton(
+                //   icon: Icon(Icons.shopping_cart_outlined),
+                //   onPressed: () {
+                //     // Lakukan sesuatu saat ikon diklik
+                //     print('Ikon diklik');
+                //   },
+                // ),
+                PopupMenuButton<String>(
+                  onSelected: (String value) {
+                    // Lakukan sesuatu saat item dipilih
+                    if (value == 'Settings') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SettingWidget()),
+                      );
+                    } else if (value == 'Maintenance') {
+                      print('maintenace');
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => maintenance_page()),
+                      // );
+                    } else if (value == 'Updating') {
+                      print('updating');
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => maintenance_page()),
+                      // );
+                    } else if (value == 'Loading') {
+                      print('Loading');
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => maintenance_page()),
+                      // );
+                    } else {
+                      print('error');
+                      //               Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => maintenance_page()),
+                      // );
+                    }
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      {'icon': Icons.settings, 'text': 'Settings'},
+                      {'icon': Icons.build, 'text': 'Maintenance'},
+                      {'icon': Icons.update, 'text': 'Updating'},
+                      {'icon': Icons.refresh, 'text': 'Loading'},
+                      {'icon': Icons.error, 'text': 'Error'},
+                    ].map((choice) {
+                      return PopupMenuItem<String>(
+                        value: choice['text'] as String,
+                        child: ListTile(
+                          leading: Icon(choice['icon'] as IconData),
+                          title: Text(choice['text'] as String),
+                        ),
+                      );
+                    }).toList();
+                  },
+                ),
+              ],
+            ),
+            body: body(context, userData),
+            // bottomNavigationBar: ConvexAppBar(
+            //     initialActiveIndex: _selectedIndex,
+            //     color: Colors.white,
+            //     backgroundColor: Colors.grey,
+            //     items: [
+            //       TabItem(icon: Icons.mail),
+            //       TabItem(icon: Icons.history),
+            //       TabItem(icon: Icons.person),
+            //     ],
+            //     onTap: (int index) {
+            //       if (index == 0) {
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(builder: (context) => HomePage()),
+            //         );
+            //       } else if (index == 1) {
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(builder: (context) => HistoryPage()),
+            //         );
+            //       } else {
+            //         // Navigator.push(
+            //         //   context,
+            //         //   MaterialPageRoute(builder: (context) => ProfilePageWidget()),
+            //         // );
+            //       }
+            //     }),
+          );
   }
 }
 
