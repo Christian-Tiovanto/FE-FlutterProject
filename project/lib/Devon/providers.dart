@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:jwt_decode/jwt_decode.dart';
 
 class Settings_provider extends ChangeNotifier {
   var light = ThemeData(
@@ -82,5 +87,27 @@ class UserListProvider extends ChangeNotifier {
   void removeOnlineUser() {
     _onlineusers.removeAt(0);
     notifyListeners();
+  }
+
+  Future<void> getAllUsers(BuildContext context) async {
+    final apiUrl =
+        'http://localhost:3000/api/v1/users/list-all-users'; // Ganti dengan URL API Anda
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        // Jika permintaan berhasil, parse JSON response
+        _users = jsonDecode(response.body)['data'];
+        notifyListeners(); // Memberitahu listener bahwa data telah berubah
+      } else {
+        // Jika terjadi kesalahan pada permintaan HTTP
+        throw Exception('Failed to load users');
+      }
+    } catch (e) {
+      // Tangkap dan cetak kesalahan
+      print('Error: $e');
+      throw Exception('Server error');
+    }
   }
 }
