@@ -314,9 +314,6 @@ class _HomePageState extends State<HomePage> {
 
 mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
   final prov = Provider.of<Settings_provider>(context);
-  // print('_data');
-  // print(_data);
-  // return Text("ea");
   return InkWell(
     onTap: () async {
       final response = await Navigator.push(
@@ -331,7 +328,8 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
     },
     child: Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
-      height: 94,
+      height:
+          120, // Meningkatkan tinggi kontainer untuk penambahan LinearProgressIndicator
       child: Card(
         color: prov.enableDarkMode == true ? Colors.black : Colors.white,
         elevation: 0,
@@ -362,7 +360,6 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    // color: Colors.red,
                     width: 200,
                     child: Text(
                       overflow: TextOverflow.ellipsis,
@@ -397,7 +394,6 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
                     children: [
                       Container(
                         width: 200,
-                        // color: Colors.blue,
                         child: Text(
                           overflow: TextOverflow.ellipsis,
                           '${_data[index].Subject.toString()}',
@@ -410,7 +406,6 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
                         ),
                       ),
                       Container(
-                        // color: Colors.red,
                         child: Text(
                           overflow: TextOverflow.ellipsis,
 
@@ -427,20 +422,14 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
                   ),
                   SizedBox(height: 9), // Jarak antara baris pertama dan kedua
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: Container(
-                          color: Colors.green,
-                          height: 2.0,
+                        child: LinearProgressIndicator(
+                          value: 1,
+                          valueColor: AlwaysStoppedAnimation(Colors.green),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          color: Colors.red,
-                          height: 2.0,
-                        ),
-                      ),
+                      )
                     ],
                   ),
                 ],

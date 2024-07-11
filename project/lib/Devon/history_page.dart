@@ -542,7 +542,7 @@ mail(BuildContext context, List<MailSent>? _data, int index) {
                       overflow: TextOverflow.ellipsis,
                       DateFormat('d-MMM')
                           .format(_data[index].tgl as DateTime)
-                          .toString(), // Tanggal disini
+                          .toString(),
                       style: TextStyle(
                           color: prov.enableDarkMode == true
                               ? Colors.white
@@ -589,23 +589,13 @@ mail(BuildContext context, List<MailSent>? _data, int index) {
                     ],
                   ),
                   SizedBox(height: 9), // Jarak antara baris pertama dan kedua
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          color: Colors.green,
-                          height: 2.0,
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          color: Colors.red,
-                          height: 2.0,
-                        ),
-                      ),
-                    ],
-                  ),
+                  LinearProgressIndicator(
+                    value: 1,
+                    backgroundColor: Colors.red[300],
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Colors.green, // Warna biru untuk yang lainnya
+                    ),
+                  )
                 ],
               ),
             ),
@@ -614,4 +604,18 @@ mail(BuildContext context, List<MailSent>? _data, int index) {
       ),
     ),
   );
+}
+
+// Function untuk menghitung nilai progress
+double _calculateProgress(String progress) {
+  switch (progress) {
+    case 'Pending':
+      return 0.2; // Contoh nilai untuk 'Pending'
+    case 'Finished':
+      return 1.0; // Contoh nilai untuk 'Finished'
+    case 'Cancelled':
+      return 0.5; // Contoh nilai untuk 'Cancelled'
+    default:
+      return 0.0;
+  }
 }
