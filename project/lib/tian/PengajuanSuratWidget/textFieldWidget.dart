@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:project/Devon/providers.dart';
+import 'package:provider/provider.dart';
 
 class TextFieldExample extends StatefulWidget {
   final bool isBorder;
-  const TextFieldExample({super.key, required this.isBorder});
+  final String title;
+  List subjectValue;
+  TextFieldExample({
+    required this.subjectValue,
+    super.key,
+    required this.isBorder,
+    required this.title,
+  });
 
   @override
   State<TextFieldExample> createState() => _TextFieldExampleState();
@@ -25,36 +34,20 @@ class _TextFieldExampleState extends State<TextFieldExample> {
 
   @override
   Widget build(BuildContext context) {
+    widget.subjectValue[0] = " ";
     return TextField(
+      onChanged: (value) {
+        widget.subjectValue[0] = value;
+      },
       scrollPhysics: const NeverScrollableScrollPhysics(),
       decoration: InputDecoration(
-          hintText: "Subject",
+          hintText: widget.title,
           border:
               widget.isBorder ? const UnderlineInputBorder() : InputBorder.none,
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 18, vertical: 8)),
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 8)),
       maxLines: null,
       controller: _controller,
-      onSubmitted: (String value) async {
-        await showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Thanks!'),
-              content: Text(
-                  'You typed "$value", which has length ${value.characters.length}.'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      },
     );
   }
 }

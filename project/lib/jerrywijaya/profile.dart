@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:project/Devon/error_page.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:project/Devon/history_page.dart';
+import 'package:project/Devon/error_page.dart';
+
 import 'package:project/Devon/home_page.dart';
 import 'package:project/Devon/loading_page.dart';
 import 'package:project/Devon/maintenance_page.dart';
@@ -10,6 +12,7 @@ import 'package:project/jerry/setting.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePageWidget extends StatefulWidget {
   const ProfilePageWidget({Key? key}) : super(key: key);
@@ -19,12 +22,36 @@ class ProfilePageWidget extends StatefulWidget {
 }
 
 class _ProfilePageWidgetState extends State<ProfilePageWidget> {
+  bool userFetched = false;
+
+  late User userData;
+  initPrefsAndGetUserData() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (!prefs.containsKey('token'))
+        throw Exception("You have to logged in first");
+      String token = prefs.getString('token')!;
+      setState(() {
+        userData = User.fromJson(JwtDecoder.decode(token));
+        userFetched = true;
+        print("axis");
+      });
+    } catch (e) {
+      print('error di profile');
+      print(e);
+    }
+  }
+
+  @override
+  initState() {
+    super.initState();
+    initPrefsAndGetUserData();
+  }
+
   int _selectedIndex = 2;
   @override
   Widget build(BuildContext context) {
     final prov = Provider.of<Settings_provider>(context);
-    final userListProvider = Provider.of<UserListProvider>(context);
-    final userList = userListProvider.onlineusers[0];
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -56,25 +83,25 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget> {
                   MaterialPageRoute(builder: (context) => SettingWidget()),
                 );
               } else if (value == 'Maintenance') {
-                // print('maintenace');
+                print('maintenace');
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Maintenance_page()),
                 );
               } else if (value == 'Updating') {
-                // print('updating');
+                print('updating');
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Updating_page()),
                 );
               } else if (value == 'Loading') {
-                // print('Loading');
+                print('Loading');
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Loading_page()),
                 );
               } else {
-                // print('error');
+                print('error');
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Error_page()),
@@ -101,39 +128,12 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget> {
           ),
         ],
       ),
-      body: body(context, userList),
-      // bottomNavigationBar: ConvexAppBar(
-      //     initialActiveIndex: _selectedIndex,
-      //     color: Colors.white,
-      //     backgroundColor: Colors.grey,
-      //     items: [
-      //       TabItem(icon: Icons.mail),
-      //       TabItem(icon: Icons.history),
-      //       TabItem(icon: Icons.person),
-      //     ],
-      //     onTap: (int index) {
-      //       if (index == 0) {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => HomePage()),
-      //         );
-      //       } else if (index == 1) {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => HistoryPage()),
-      //         );
-      //       } else {
-      //         // Navigator.push(
-      //         //   context,
-      //         //   MaterialPageRoute(builder: (context) => ProfilePageWidget()),
-      //         // );
-      //       }
-      //     }),
+      body: body(context, userData),
     );
   }
 }
 
-body(BuildContext context, User user) {
+body(BuildContext context, User? user) {
   final prov = Provider.of<Settings_provider>(context);
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +149,7 @@ body(BuildContext context, User user) {
                 backgroundColor: Colors.grey,
                 child: Center(
                   child: Text(
-                    user.name[0].toUpperCase(),
+                    user!.name[0].toUpperCase(),
                     style: TextStyle(
                         color: prov.enableDarkMode == true
                             ? Colors.white

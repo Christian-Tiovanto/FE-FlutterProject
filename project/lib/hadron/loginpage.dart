@@ -4,7 +4,12 @@ import 'package:project/jerry/user.dart';
 import 'package:project/Devon/home_page.dart';
 import 'dart:async';
 
+import 'package:project/jerrywijaya/walkthrough.dart';
+
 class WelcomePage extends StatefulWidget {
+  final bool enabled;
+  const WelcomePage({super.key, required this.enabled});
+
   @override
   _WelcomePageState createState() => _WelcomePageState();
 }
@@ -13,10 +18,11 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
+    if (!widget.enabled) return;
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
+        MaterialPageRoute(builder: (context) => const WalkthroughSlider()),
       );
     });
   }
@@ -24,9 +30,6 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Welcome Page'),
-      ),
       body: Center(
         child: Image.asset('assets/logo.png', width: 300),
       ),
@@ -35,6 +38,8 @@ class _WelcomePageState extends State<WelcomePage> {
 }
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -66,56 +71,59 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image(
+            const Image(
               image: AssetImage('assets/logo.png'),
               width: 300,
             ),
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 90, vertical: 3),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 90, vertical: 3),
                 child: TextField(
                   controller: _usernameController,
                   decoration: InputDecoration(
-                    suffixStyle: TextStyle(color: Colors.red),
-                    contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                    suffixStyle: const TextStyle(color: Colors.red),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(27.10),
                     ),
                     filled: true,
                     hintStyle: TextStyle(color: Colors.grey[800]),
-                    prefixIcon: Icon(Icons.account_circle),
+                    prefixIcon: const Icon(Icons.account_circle),
                     hintText: "Username",
                     fillColor: Colors.grey[200],
                   ),
                 )),
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 90, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 90, vertical: 6),
                 child: TextField(
                   obscureText: true,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(27.10),
                     ),
                     filled: true,
                     hintStyle: TextStyle(color: Colors.grey[800]),
-                    prefixIcon: Icon(Icons.lock),
+                    prefixIcon: const Icon(Icons.lock),
                     hintText: "Password",
                     fillColor: Colors.grey[200],
                   ),
                 )),
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 90, vertical: 25),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 90, vertical: 25),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
-                    backgroundColor: Color.fromARGB(255, 0, 201, 7),
+                    backgroundColor: const Color.fromARGB(255, 0, 201, 7),
                     elevation: 3,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(27.10)),
-                    minimumSize: Size(2000, 50),
+                    minimumSize: const Size(2000, 50),
                   ),
                   onPressed: _handleLogin,
-                  child: Text('Login'),
+                  child: const Text('Login'),
                 )),
           ],
         ),

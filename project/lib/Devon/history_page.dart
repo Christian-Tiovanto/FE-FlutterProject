@@ -1,17 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:project/Devon/home_page.dart';
+import 'package:intl/intl.dart';
 import 'package:project/Devon/providers.dart';
 import 'package:project/hadron/tesdate.dart';
-import 'package:project/jerrywijaya/profile.dart';
+import 'package:project/services/user_services.dart';
 import 'package:provider/provider.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:project/Devon/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
 class HistoryPage extends StatefulWidget {
-  const HistoryPage({Key? key}) : super(key: key);
+  const HistoryPage({super.key});
 
   @override
   State<HistoryPage> createState() => _HistoryPageState();
@@ -21,75 +19,24 @@ class _HistoryPageState extends State<HistoryPage>
     with SingleTickerProviderStateMixin {
   // int _selectedIndex = 1;
   List<String>? selectedFilters = ['Urgent', 'Regular'];
-  Future<void> _refresh() async {
-    await Future.delayed(Duration(seconds: 1));
-
-    setState(() {
-      _allusers.add(
-        {
-          "name": "Ayu ",
-          "Subject": "Surat Pengajuan Pembelian Unit",
-          "tgl": "Apr 25",
-          "status": "Urgent",
-          "progres": "Pending"
-        },
-      );
-    });
-  }
-
-  List<Map<String, dynamic>> _allusers = [
-    {
-      "name": "andy",
-      "Subject": "Surat Pengunduran Diri",
-      "tgl": "Apr 17",
-      "status": "Regular",
-      "progres": "Pending"
-    },
-    {
-      "name": "Devon",
-      "Subject": "Surat Pengajuan Cuti",
-      "tgl": "Apr 18",
-      "status": "Regular",
-      "progres": "Pending"
-    },
-    {
-      "name": "Chris",
-      "Subject": "Surat Pengajuan Pembelian Unit",
-      "tgl": "Apr 19",
-      "status": "Urgent",
-      "progres": "Finished"
-    },
-    {
-      "name": "Jerry",
-      "Subject": "Surat Pengajuan Cuti",
-      "tgl": "Apr 18",
-      "status": "Regular",
-      "progres": "Cancelled"
-    },
-    {
-      "name": "Jerry W",
-      "Subject": "Surat Pengajuan Pembelian Unit",
-      "tgl": "Apr 19",
-      "status": "Urgent",
-      "progres": "Pending"
-    },
-    {
-      "name": "Hadron",
-      "Subject": "Surat Pengajuan Cuti",
-      "tgl": "Apr 18",
-      "status": "Regular",
-      "progres": "Finished"
-    },
-    {
-      "name": "Lina ",
-      "Subject": "Surat Pengajuan Pembelian Unit",
-      "tgl": "Apr 19",
-      "status": "Urgent",
-      "progres": "Pending"
-    },
-  ];
-
+  List<MailSent> lettersList = [];
   late TabController _convexTabController;
+  bool resultFetched = false;
+
+  void getUserLetter() async {
+    try {
+      final results = await LetterService().getUserCreatedLetter("finished");
+      setState(() {
+        lettersList = results;
+        resultFetched = true;
+        print('lettersList');
+        print(lettersList);
+      });
+    } catch (error) {
+      print('error history');
+      print(error);
+    }
+  }
 
   @override
   void initState() {
@@ -97,10 +44,19 @@ class _HistoryPageState extends State<HistoryPage>
     // Mengatur initialIndex pada TabController ke 2 untuk ConvexAppBar
     _convexTabController =
         TabController(length: 3, vsync: this, initialIndex: 1);
+    getUserLetter();
   }
 
   @override
   Widget build(BuildContext context) {
+    final LoggedInUser = Provider.of<UserListProvider>(context).onlineusers;
+
+    Future<void> refresh() async {
+      await Future.delayed(const Duration(seconds: 1));
+      getUserLetter();
+      setState(() {});
+    }
+
     return DefaultTabController(
         length: 3,
         child: Scaffold(
@@ -108,13 +64,13 @@ class _HistoryPageState extends State<HistoryPage>
             automaticallyImplyLeading: false,
 
             title: const Text(
-              'History',
+              'History Kirim Surat',
               style: TextStyle(fontWeight: FontWeight.bold),
             ), // Judul AppBar
             bottom: const TabBar(
               tabs: [
                 Tab(
-                  text: 'Pending',
+                  text: 'Ongoing',
                 ),
                 Tab(
                   text: 'Finished',
@@ -144,9 +100,9 @@ class _HistoryPageState extends State<HistoryPage>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(11, 13, 0, 0),
                           child: ElevatedButton.icon(
-                            label: Icon(
+                            label: const Icon(
                               Icons.arrow_drop_down,
                               color: Colors.black,
                             ),
@@ -154,14 +110,15 @@ class _HistoryPageState extends State<HistoryPage>
                                     selectedFilters!.length > 1
                                 ? Text(
                                     "${selectedFilters![0]}+${selectedFilters!.length - 1}",
-                                    style: TextStyle(color: Colors.black),
+                                    style: const TextStyle(color: Colors.black),
                                   )
                                 : selectedFilters!.isNotEmpty
                                     ? Text(
-                                        "${selectedFilters![0]}",
-                                        style: TextStyle(color: Colors.black),
+                                        selectedFilters![0],
+                                        style: const TextStyle(
+                                            color: Colors.black),
                                       )
-                                    : Text(
+                                    : const Text(
                                         'Filter',
                                         style: TextStyle(color: Colors.black),
                                       ),
@@ -183,22 +140,22 @@ class _HistoryPageState extends State<HistoryPage>
                               }
                             },
                             style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       10), // Atur radius di sini
                                 ),
                               ),
-                              minimumSize: MaterialStateProperty.all(
-                                  Size(90, 35)), // Atur ukuran di sini
+                              minimumSize: WidgetStateProperty.all(
+                                  const Size(90, 35)), // Atur ukuran di sini
                               // Atau menggunakan fixedSize:
                               // fixedSize: MaterialStateProperty.all(Size(100, 50)),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              elevation: MaterialStateProperty.all<double>(0),
-                              side: MaterialStateProperty.all<BorderSide>(
-                                BorderSide(
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(Colors.white),
+                              elevation: WidgetStateProperty.all<double>(0),
+                              side: WidgetStateProperty.all<BorderSide>(
+                                const BorderSide(
                                   color: Color.fromARGB(255, 94, 94,
                                       94), // Atur warna border di sini
                                   width: 1.0, // Atur lebar border di sini
@@ -208,7 +165,7 @@ class _HistoryPageState extends State<HistoryPage>
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(11, 13, 0, 0),
                           child: ElevatedButton(
                             onPressed: () async {
                               final DateTimeRange? picked =
@@ -226,33 +183,33 @@ class _HistoryPageState extends State<HistoryPage>
                               }
                             },
                             style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       10), // Atur radius di sini
                                 ),
                               ),
-                              minimumSize: MaterialStateProperty.all(
-                                  Size(132, 26)), // Atur ukuran di sini
+                              minimumSize: WidgetStateProperty.all(
+                                  const Size(132, 26)), // Atur ukuran di sini
                               // Atau menggunakan fixedSize:
                               fixedSize:
-                                  MaterialStateProperty.all(Size(132, 26)),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              elevation: MaterialStateProperty.all<double>(0),
-                              side: MaterialStateProperty.all<BorderSide>(
-                                BorderSide(
+                                  WidgetStateProperty.all(const Size(132, 26)),
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(Colors.white),
+                              elevation: WidgetStateProperty.all<double>(0),
+                              side: WidgetStateProperty.all<BorderSide>(
+                                const BorderSide(
                                   color: Color.fromARGB(255, 94, 94,
                                       94), // Atur warna border di sini
                                   width: 1.0, // Atur lebar border di sini
                                 ),
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text(
+                                Text(
                                   'Date Filter',
                                   style: TextStyle(color: Colors.black),
                                 ),
@@ -269,29 +226,29 @@ class _HistoryPageState extends State<HistoryPage>
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        'Pending',
+                        'Ongoing',
                         style: TextStyle(
                           fontSize: 15,
-                          color: Theme.of(context).textTheme.bodyText1?.color,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                       ),
                     ),
                     Expanded(
                       child: RefreshIndicator(
-                        onRefresh: _refresh,
+                        onRefresh: refresh,
                         child: ListView.builder(
-                            itemCount: _allusers
+                            itemCount: lettersList
                                 .where((user) =>
-                                    user['progres'] == 'Pending' &&
-                                    selectedFilters!.contains(user['status']))
+                                    user.letterStatus == 'ongoing' &&
+                                    selectedFilters!.contains(user.status))
                                 .length,
                             itemBuilder: (context, index) {
-                              final filteredUsers = _allusers
+                              final filteredUsers = lettersList
                                   .where((user) =>
-                                      user['progres'] == 'Pending' &&
-                                      selectedFilters!.contains(user['status']))
+                                      user.letterStatus == 'ongoing' &&
+                                      selectedFilters!.contains(user.status))
                                   .toList();
                               final user = filteredUsers[index];
                               return mail(context, filteredUsers, index);
@@ -310,9 +267,9 @@ class _HistoryPageState extends State<HistoryPage>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(11, 13, 0, 0),
                           child: ElevatedButton.icon(
-                            label: Icon(
+                            label: const Icon(
                               Icons.arrow_drop_down,
                               color: Colors.black,
                             ),
@@ -320,14 +277,15 @@ class _HistoryPageState extends State<HistoryPage>
                                     selectedFilters!.length > 1
                                 ? Text(
                                     "${selectedFilters![0]}+${selectedFilters!.length - 1}",
-                                    style: TextStyle(color: Colors.black),
+                                    style: const TextStyle(color: Colors.black),
                                   )
                                 : selectedFilters!.isNotEmpty
                                     ? Text(
-                                        "${selectedFilters![0]}",
-                                        style: TextStyle(color: Colors.black),
+                                        selectedFilters![0],
+                                        style: const TextStyle(
+                                            color: Colors.black),
                                       )
-                                    : Text(
+                                    : const Text(
                                         'Filter',
                                         style: TextStyle(color: Colors.black),
                                       ),
@@ -349,22 +307,22 @@ class _HistoryPageState extends State<HistoryPage>
                               }
                             },
                             style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       10), // Atur radius di sini
                                 ),
                               ),
-                              minimumSize: MaterialStateProperty.all(
-                                  Size(90, 35)), // Atur ukuran di sini
+                              minimumSize: WidgetStateProperty.all(
+                                  const Size(90, 35)), // Atur ukuran di sini
                               // Atau menggunakan fixedSize:
                               // fixedSize: MaterialStateProperty.all(Size(100, 50)),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              elevation: MaterialStateProperty.all<double>(0),
-                              side: MaterialStateProperty.all<BorderSide>(
-                                BorderSide(
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(Colors.white),
+                              elevation: WidgetStateProperty.all<double>(0),
+                              side: WidgetStateProperty.all<BorderSide>(
+                                const BorderSide(
                                   color: Color.fromARGB(255, 94, 94,
                                       94), // Atur warna border di sini
                                   width: 1.0, // Atur lebar border di sini
@@ -373,115 +331,114 @@ class _HistoryPageState extends State<HistoryPage>
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              final DateTimeRange? picked =
-                                  await showDialog<DateTimeRange?>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return DateRangePickerWidget();
-                                },
-                              );
+                        ElevatedButton(
+                          onPressed: () async {
+                            final DateTimeRange? picked =
+                                await showDialog<DateTimeRange?>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return DateRangePickerWidget();
+                              },
+                            );
 
-                              if (picked != null) {
-                                // Lakukan sesuatu dengan tanggal yang dipilih
-                                print(
-                                    'Start Date: ${picked.start}, End Date: ${picked.end}');
-                              }
-                            },
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10), // Atur radius di sini
-                                ),
-                              ),
-                              minimumSize: MaterialStateProperty.all(
-                                  Size(132, 26)), // Atur ukuran di sini
-                              // Atau menggunakan fixedSize:
-                              fixedSize:
-                                  MaterialStateProperty.all(Size(132, 26)),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              elevation: MaterialStateProperty.all<double>(0),
-                              side: MaterialStateProperty.all<BorderSide>(
-                                BorderSide(
-                                  color: Color.fromARGB(255, 94, 94,
-                                      94), // Atur warna border di sini
-                                  width: 1.0, // Atur lebar border di sini
-                                ),
+                            if (picked != null) {
+                              // Lakukan sesuatu dengan tanggal yang dipilih
+                              print(
+                                  'Start Date: ${picked.start}, End Date: ${picked.end}');
+                            }
+                          },
+                          style: ButtonStyle(
+                            shape:
+                                WidgetStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    10), // Atur radius di sini
                               ),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'Date Filter',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                SizedBox(
-                                    width: 4), // Jarak antara teks dan ikon
-                                Icon(Icons.calendar_today,
-                                    size: 15,
-                                    color: Colors
-                                        .black), // Ganti dengan ikon yang diinginkan
-                              ],
+                            minimumSize: WidgetStateProperty.all(
+                                const Size(132, 26)), // Atur ukuran di sini
+                            // Atau menggunakan fixedSize:
+                            fixedSize:
+                                WidgetStateProperty.all(const Size(132, 26)),
+                            backgroundColor:
+                                WidgetStateProperty.all<Color>(Colors.white),
+                            elevation: WidgetStateProperty.all<double>(0),
+                            side: WidgetStateProperty.all<BorderSide>(
+                              const BorderSide(
+                                color: Color.fromARGB(255, 94, 94,
+                                    94), // Atur warna border di sini
+                                width: 1.0, // Atur lebar border di sini
+                              ),
                             ),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Date Filter',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              SizedBox(width: 4), // Jarak antara teks dan ikon
+                              Icon(Icons.calendar_today,
+                                  size: 15,
+                                  color: Colors
+                                      .black), // Ganti dengan ikon yang diinginkan
+                            ],
                           ),
                         ),
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Text(
                         'Finished',
                         style: TextStyle(
                           fontSize: 15,
-                          color: Theme.of(context).textTheme.bodyText1?.color,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                       ),
                     ),
                     Expanded(
                       child: RefreshIndicator(
-                        onRefresh: _refresh,
+                        onRefresh: refresh,
                         child: ListView.builder(
-                          itemCount: _allusers
-                              .where((user) =>
-                                  user['progres'] == 'Finished' &&
-                                  selectedFilters!.contains(user['status']))
-                              .length,
+                          itemCount: lettersList.where((user) {
+                            print('user di finished');
+                            print(user);
+                            return user.letterStatus == 'finished' &&
+                                selectedFilters!.contains(user.status);
+                          }).length,
                           itemBuilder: (context, index) {
-                            final filteredUsers = _allusers
+                            final filteredUsers = lettersList
                                 .where((user) =>
-                                    user['progres'] == 'Finished' &&
-                                    selectedFilters!.contains(user['status']))
+                                    user.letterStatus == 'finished' &&
+                                    selectedFilters!.contains(user.status))
                                 .toList();
                             final user = filteredUsers[index];
                             return Dismissible(
-                                key: Key(filteredUsers[index][
-                                    'name']), // Gunakan nilai yang unik sebagai key
+                                key: Key(filteredUsers[index]
+                                    .name), // Gunakan nilai yang unik sebagai key
                                 direction: DismissDirection
                                     .startToEnd, // Slide dari kiri ke kanan
                                 background: Container(
                                   color: Colors.red,
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   alignment: Alignment.centerLeft,
-                                  child: Icon(Icons.delete),
+                                  child: const Icon(Icons.delete),
                                 ),
                                 secondaryBackground: Container(
                                   color: Colors.red,
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   alignment: Alignment.centerRight,
-                                  child: Icon(Icons.delete),
+                                  child: const Icon(Icons.delete),
                                 ),
                                 onDismissed: (direction) {
                                   // Aksi ketika item di-slide
                                   setState(() {
                                     // Hapus item dari daftar
-                                    _allusers.remove(user);
+                                    lettersList.remove(user);
                                   });
                                 },
                                 child: mail(context, filteredUsers, index));
@@ -501,9 +458,9 @@ class _HistoryPageState extends State<HistoryPage>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(11, 13, 0, 0),
                           child: ElevatedButton.icon(
-                            label: Icon(
+                            label: const Icon(
                               Icons.arrow_drop_down,
                               color: Colors.black,
                             ),
@@ -511,14 +468,15 @@ class _HistoryPageState extends State<HistoryPage>
                                     selectedFilters!.length > 1
                                 ? Text(
                                     "${selectedFilters![0]}+${selectedFilters!.length - 1}",
-                                    style: TextStyle(color: Colors.black),
+                                    style: const TextStyle(color: Colors.black),
                                   )
                                 : selectedFilters!.isNotEmpty
                                     ? Text(
-                                        "${selectedFilters![0]}",
-                                        style: TextStyle(color: Colors.black),
+                                        selectedFilters![0],
+                                        style: const TextStyle(
+                                            color: Colors.black),
                                       )
-                                    : Text(
+                                    : const Text(
                                         'Filter',
                                         style: TextStyle(color: Colors.black),
                                       ),
@@ -540,22 +498,22 @@ class _HistoryPageState extends State<HistoryPage>
                               }
                             },
                             style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       10), // Atur radius di sini
                                 ),
                               ),
-                              minimumSize: MaterialStateProperty.all(
-                                  Size(90, 35)), // Atur ukuran di sini
+                              minimumSize: WidgetStateProperty.all(
+                                  const Size(90, 35)), // Atur ukuran di sini
                               // Atau menggunakan fixedSize:
                               // fixedSize: MaterialStateProperty.all(Size(100, 50)),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              elevation: MaterialStateProperty.all<double>(0),
-                              side: MaterialStateProperty.all<BorderSide>(
-                                BorderSide(
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(Colors.white),
+                              elevation: WidgetStateProperty.all<double>(0),
+                              side: WidgetStateProperty.all<BorderSide>(
+                                const BorderSide(
                                   color: Color.fromARGB(255, 94, 94,
                                       94), // Atur warna border di sini
                                   width: 1.0, // Atur lebar border di sini
@@ -565,7 +523,7 @@ class _HistoryPageState extends State<HistoryPage>
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(11, 13, 0, 0),
                           child: ElevatedButton(
                             onPressed: () async {
                               final DateTimeRange? picked =
@@ -583,33 +541,33 @@ class _HistoryPageState extends State<HistoryPage>
                               }
                             },
                             style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       10), // Atur radius di sini
                                 ),
                               ),
-                              minimumSize: MaterialStateProperty.all(
-                                  Size(132, 26)), // Atur ukuran di sini
+                              minimumSize: WidgetStateProperty.all(
+                                  const Size(132, 26)), // Atur ukuran di sini
                               // Atau menggunakan fixedSize:
                               fixedSize:
-                                  MaterialStateProperty.all(Size(132, 26)),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              elevation: MaterialStateProperty.all<double>(0),
-                              side: MaterialStateProperty.all<BorderSide>(
-                                BorderSide(
+                                  WidgetStateProperty.all(const Size(132, 26)),
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(Colors.white),
+                              elevation: WidgetStateProperty.all<double>(0),
+                              side: WidgetStateProperty.all<BorderSide>(
+                                const BorderSide(
                                   color: Color.fromARGB(255, 94, 94,
                                       94), // Atur warna border di sini
                                   width: 1.0, // Atur lebar border di sini
                                 ),
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text(
+                                Text(
                                   'Date Filter',
                                   style: TextStyle(color: Colors.black),
                                 ),
@@ -626,53 +584,55 @@ class _HistoryPageState extends State<HistoryPage>
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Text(
                         'Cancelled',
                         style: TextStyle(
                           fontSize: 15,
-                          color: Theme.of(context).textTheme.bodyText1?.color,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                       ),
                     ),
                     Expanded(
                       child: RefreshIndicator(
-                        onRefresh: _refresh,
+                        onRefresh: refresh,
                         child: ListView.builder(
-                          itemCount: _allusers
+                          itemCount: lettersList
                               .where((user) =>
-                                  user['progres'] == 'Cancelled' &&
-                                  selectedFilters!.contains(user['status']))
+                                  user.name == 'Cancelled' &&
+                                  selectedFilters!.contains(user.status))
                               .length,
                           itemBuilder: (context, index) {
-                            final filteredUsers = _allusers
+                            final filteredUsers = lettersList
                                 .where((user) =>
-                                    user['progres'] == 'Cancelled' &&
-                                    selectedFilters!.contains(user['status']))
+                                    user.name == 'Cancelled' &&
+                                    selectedFilters!.contains(user.status))
                                 .toList();
                             final user = filteredUsers[index];
                             return Dismissible(
-                                key: Key(filteredUsers[index][
-                                    'name']), // Gunakan nilai yang unik sebagai key
+                                key: Key(filteredUsers[index]
+                                    .name), // Gunakan nilai yang unik sebagai key
                                 direction: DismissDirection
                                     .startToEnd, // Slide dari kiri ke kanan
                                 background: Container(
                                   color: Colors.red,
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   alignment: Alignment.centerLeft,
-                                  child: Icon(Icons.delete),
+                                  child: const Icon(Icons.delete),
                                 ),
                                 secondaryBackground: Container(
                                   color: Colors.red,
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   alignment: Alignment.centerRight,
-                                  child: Icon(Icons.delete),
+                                  child: const Icon(Icons.delete),
                                 ),
                                 onDismissed: (direction) {
                                   // Aksi ketika item di-slide
                                   setState(() {
                                     // Hapus item dari daftar
-                                    _allusers.remove(user);
+                                    lettersList.remove(user);
                                   });
                                 },
                                 child: mail(context, filteredUsers, index));
@@ -718,12 +678,12 @@ class _HistoryPageState extends State<HistoryPage>
   }
 }
 
-mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
+mail(BuildContext context, List<MailSent>? data, int index) {
   final prov = Provider.of<Settings_provider>(context);
   return InkWell(
     onTap: () {
       // Tambahkan logika yang ingin dilakukan saat card diklik di sini
-      print('Card clicked: ${_data[index]['name']}');
+      print('Card clicked: ${data[index].name}');
     },
     child: Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -735,9 +695,9 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 16),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               leading: Container(
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.black, width: 2),
@@ -746,8 +706,8 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                   radius: 24,
                   backgroundColor: Colors.blue,
                   child: Text(
-                    _data[index]['name'][0].toUpperCase(),
-                    style: TextStyle(
+                    data![index].name[0].toUpperCase(),
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
                     ),
@@ -757,12 +717,12 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
+                  SizedBox(
                     // color: Colors.red,
                     width: 200,
                     child: Text(
                       overflow: TextOverflow.ellipsis,
-                      _data[index]['name'].toString(),
+                      data[index].name.toString(),
                       style: TextStyle(
                           color: prov.enableDarkMode == true
                               ? Colors.white
@@ -773,7 +733,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                   Container(
                     child: Text(
                       overflow: TextOverflow.ellipsis,
-                      _data[index]['tgl'].toString(), // Tanggal disini
+                      DateFormat('d-MMM').format(data[index].tgl).toString(),
                       style: TextStyle(
                           color: prov.enableDarkMode == true
                               ? Colors.white
@@ -789,12 +749,12 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
+                      SizedBox(
                         width: 200,
                         // color: Colors.blue,
                         child: Text(
                           overflow: TextOverflow.ellipsis,
-                          '${_data[index]["Subject"].toString()}',
+                          data[index].Subject.toString(),
                           style: TextStyle(
                             color: prov.enableDarkMode == true
                                 ? Colors.white
@@ -808,7 +768,7 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                         child: Text(
                           overflow: TextOverflow.ellipsis,
 
-                          '${_data[index]["status"].toString()}', // Teks urgent disini
+                          data[index].status.toString(), // Teks urgent disini
                           style: TextStyle(
                             color: prov.enableDarkMode == true
                                 ? Colors.white
@@ -819,24 +779,15 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
                       ),
                     ],
                   ),
-                  SizedBox(height: 9), // Jarak antara baris pertama dan kedua
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          color: Colors.green,
-                          height: 2.0,
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          color: Colors.red,
-                          height: 2.0,
-                        ),
-                      ),
-                    ],
-                  ),
+                  const SizedBox(
+                      height: 9), // Jarak antara baris pertama dan kedua
+                  LinearProgressIndicator(
+                    value: data[index].progresValue,
+                    backgroundColor: Colors.red[300],
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      Colors.green, // Warna biru untuk yang lainnya
+                    ),
+                  )
                 ],
               ),
             ),
@@ -845,4 +796,18 @@ mail(BuildContext context, List<Map<String, dynamic>> _data, int index) {
       ),
     ),
   );
+}
+
+// Function untuk menghitung nilai progress
+double _calculateProgress(String progress) {
+  switch (progress) {
+    case 'Pending':
+      return 0.2; // Contoh nilai untuk 'Pending'
+    case 'Finished':
+      return 1.0; // Contoh nilai untuk 'Finished'
+    case 'Cancelled':
+      return 0.5; // Contoh nilai untuk 'Cancelled'
+    default:
+      return 0.0;
+  }
 }

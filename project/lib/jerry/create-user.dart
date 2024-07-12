@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:http/http.dart' as http;
-import 'package:jwt_decode/jwt_decode.dart';
 
 // import 'package:scrappingwebsite/login_screen.dart';
 // import 'package:scrappingwebsite/user_provider.dart';
@@ -36,7 +35,7 @@ class _Signup_screenState extends State<Signup_screen> {
   void registerUser(
       String nik, String name, String password, String role) async {
     final apiUrl =
-        'http://localhost:3000/api/v1/users/register'; // Ganti dengan URL API register Anda
+        'http://192.168.1.146:3000/api/v1/users/register'; // Ganti dengan URL API register Anda
 
     try {
       final response = await http.post(
@@ -389,7 +388,9 @@ class _Signup_screenState extends State<Signup_screen> {
                   nik: _nikController.text,
                   password: _passwordController.text,
                   role: dropdown,
-                  number: _numberController.text);
+                  number: _numberController.text,
+                  MailInbox: [],
+                  userId: "");
               // userListProvider.addUser(newUser);
               registerUser(_nikController.text, _usernameController.text,
                   _passwordController.text, dropdown);
