@@ -224,7 +224,7 @@ class ResponsePopUpFormWidget extends StatelessWidget {
         ),
       ),
       style: ButtonStyle(
-        fixedSize: WidgetStateProperty.all(
+        fixedSize: MaterialStateProperty.all(
           Size.fromWidth(MediaQuery.of(context).size.width - 10),
         ),
       ),

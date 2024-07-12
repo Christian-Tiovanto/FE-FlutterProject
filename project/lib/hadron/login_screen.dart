@@ -169,10 +169,10 @@ class _Login_screenState extends State<Login_screen> {
                         });
                       },
                       checkColor: Colors.white,
-                      fillColor: WidgetStateProperty.resolveWith<Color>(
-                          (Set<WidgetState> states) {
+                      fillColor: MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
                         // Warna latar belakang ketika checkbox dicentang
-                        if (states.contains(WidgetState.selected)) {
+                        if (states.contains(MaterialState.selected)) {
                           return Colors
                               .orange; // Warna orange ketika checkbox dicentang
                         }

@@ -229,20 +229,20 @@ class _HomePageState extends State<HomePage> {
                     }
                   },
                   style: ButtonStyle(
-                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.circular(10), // Atur radius di sini
                       ),
                     ),
-                    minimumSize: WidgetStateProperty.all(
+                    minimumSize: MaterialStateProperty.all(
                         const Size(90, 35)), // Atur ukuran di sini
                     // Atau menggunakan fixedSize:
                     // fixedSize: MaterialStateProperty.all(Size(100, 50)),
                     backgroundColor:
-                        WidgetStateProperty.all<Color>(Colors.white),
-                    elevation: WidgetStateProperty.all<double>(0),
-                    side: WidgetStateProperty.all<BorderSide>(
+                        MaterialStateProperty.all<Color>(Colors.white),
+                    elevation: MaterialStateProperty.all<double>(0),
+                    side: MaterialStateProperty.all<BorderSide>(
                       const BorderSide(
                         color: Color.fromARGB(
                             255, 94, 94, 94), // Atur warna border di sini
@@ -277,20 +277,20 @@ class _HomePageState extends State<HomePage> {
                     }
                   },
                   style: ButtonStyle(
-                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.circular(10), // Atur radius di sini
                       ),
                     ),
-                    minimumSize: WidgetStateProperty.all(
+                    minimumSize: MaterialStateProperty.all(
                         const Size(140, 35)), // Atur ukuran di sini
                     // Atau menggunakan fixedSize:
                     // fixedSize: MaterialStateProperty.all(Size(130, 9)),
                     backgroundColor:
-                        WidgetStateProperty.all<Color>(Colors.white),
-                    elevation: WidgetStateProperty.all<double>(0),
-                    side: WidgetStateProperty.all<BorderSide>(
+                        MaterialStateProperty.all<Color>(Colors.white),
+                    elevation: MaterialStateProperty.all<double>(0),
+                    side: MaterialStateProperty.all<BorderSide>(
                       const BorderSide(
                         color: Color.fromARGB(
                             255, 94, 94, 94), // Atur warna border di sini

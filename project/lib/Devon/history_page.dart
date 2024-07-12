@@ -140,21 +140,21 @@ class _HistoryPageState extends State<HistoryPage>
                               }
                             },
                             style: ButtonStyle(
-                              shape: WidgetStateProperty.all<
+                              shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       10), // Atur radius di sini
                                 ),
                               ),
-                              minimumSize: WidgetStateProperty.all(
+                              minimumSize: MaterialStateProperty.all(
                                   const Size(90, 35)), // Atur ukuran di sini
                               // Atau menggunakan fixedSize:
                               // fixedSize: MaterialStateProperty.all(Size(100, 50)),
-                              backgroundColor:
-                                  WidgetStateProperty.all<Color>(Colors.white),
-                              elevation: WidgetStateProperty.all<double>(0),
-                              side: WidgetStateProperty.all<BorderSide>(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              side: MaterialStateProperty.all<BorderSide>(
                                 const BorderSide(
                                   color: Color.fromARGB(255, 94, 94,
                                       94), // Atur warna border di sini
@@ -183,22 +183,22 @@ class _HistoryPageState extends State<HistoryPage>
                               }
                             },
                             style: ButtonStyle(
-                              shape: WidgetStateProperty.all<
+                              shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       10), // Atur radius di sini
                                 ),
                               ),
-                              minimumSize: WidgetStateProperty.all(
+                              minimumSize: MaterialStateProperty.all(
                                   const Size(132, 26)), // Atur ukuran di sini
                               // Atau menggunakan fixedSize:
-                              fixedSize:
-                                  WidgetStateProperty.all(const Size(132, 26)),
-                              backgroundColor:
-                                  WidgetStateProperty.all<Color>(Colors.white),
-                              elevation: WidgetStateProperty.all<double>(0),
-                              side: WidgetStateProperty.all<BorderSide>(
+                              fixedSize: MaterialStateProperty.all(
+                                  const Size(132, 26)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              side: MaterialStateProperty.all<BorderSide>(
                                 const BorderSide(
                                   color: Color.fromARGB(255, 94, 94,
                                       94), // Atur warna border di sini
@@ -307,21 +307,21 @@ class _HistoryPageState extends State<HistoryPage>
                               }
                             },
                             style: ButtonStyle(
-                              shape: WidgetStateProperty.all<
+                              shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       10), // Atur radius di sini
                                 ),
                               ),
-                              minimumSize: WidgetStateProperty.all(
+                              minimumSize: MaterialStateProperty.all(
                                   const Size(90, 35)), // Atur ukuran di sini
                               // Atau menggunakan fixedSize:
                               // fixedSize: MaterialStateProperty.all(Size(100, 50)),
-                              backgroundColor:
-                                  WidgetStateProperty.all<Color>(Colors.white),
-                              elevation: WidgetStateProperty.all<double>(0),
-                              side: WidgetStateProperty.all<BorderSide>(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              side: MaterialStateProperty.all<BorderSide>(
                                 const BorderSide(
                                   color: Color.fromARGB(255, 94, 94,
                                       94), // Atur warna border di sini
@@ -348,22 +348,22 @@ class _HistoryPageState extends State<HistoryPage>
                             }
                           },
                           style: ButtonStyle(
-                            shape:
-                                WidgetStateProperty.all<RoundedRectangleBorder>(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
                                     10), // Atur radius di sini
                               ),
                             ),
-                            minimumSize: WidgetStateProperty.all(
+                            minimumSize: MaterialStateProperty.all(
                                 const Size(132, 26)), // Atur ukuran di sini
                             // Atau menggunakan fixedSize:
                             fixedSize:
-                                WidgetStateProperty.all(const Size(132, 26)),
+                                MaterialStateProperty.all(const Size(132, 26)),
                             backgroundColor:
-                                WidgetStateProperty.all<Color>(Colors.white),
-                            elevation: WidgetStateProperty.all<double>(0),
-                            side: WidgetStateProperty.all<BorderSide>(
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            elevation: MaterialStateProperty.all<double>(0),
+                            side: MaterialStateProperty.all<BorderSide>(
                               const BorderSide(
                                 color: Color.fromARGB(255, 94, 94,
                                     94), // Atur warna border di sini
@@ -498,21 +498,21 @@ class _HistoryPageState extends State<HistoryPage>
                               }
                             },
                             style: ButtonStyle(
-                              shape: WidgetStateProperty.all<
+                              shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       10), // Atur radius di sini
                                 ),
                               ),
-                              minimumSize: WidgetStateProperty.all(
+                              minimumSize: MaterialStateProperty.all(
                                   const Size(90, 35)), // Atur ukuran di sini
                               // Atau menggunakan fixedSize:
                               // fixedSize: MaterialStateProperty.all(Size(100, 50)),
-                              backgroundColor:
-                                  WidgetStateProperty.all<Color>(Colors.white),
-                              elevation: WidgetStateProperty.all<double>(0),
-                              side: WidgetStateProperty.all<BorderSide>(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              side: MaterialStateProperty.all<BorderSide>(
                                 const BorderSide(
                                   color: Color.fromARGB(255, 94, 94,
                                       94), // Atur warna border di sini
@@ -541,22 +541,22 @@ class _HistoryPageState extends State<HistoryPage>
                               }
                             },
                             style: ButtonStyle(
-                              shape: WidgetStateProperty.all<
+                              shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       10), // Atur radius di sini
                                 ),
                               ),
-                              minimumSize: WidgetStateProperty.all(
+                              minimumSize: MaterialStateProperty.all(
                                   const Size(132, 26)), // Atur ukuran di sini
                               // Atau menggunakan fixedSize:
-                              fixedSize:
-                                  WidgetStateProperty.all(const Size(132, 26)),
-                              backgroundColor:
-                                  WidgetStateProperty.all<Color>(Colors.white),
-                              elevation: WidgetStateProperty.all<double>(0),
-                              side: WidgetStateProperty.all<BorderSide>(
+                              fixedSize: MaterialStateProperty.all(
+                                  const Size(132, 26)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              side: MaterialStateProperty.all<BorderSide>(
                                 const BorderSide(
                                   color: Color.fromARGB(255, 94, 94,
                                       94), // Atur warna border di sini
