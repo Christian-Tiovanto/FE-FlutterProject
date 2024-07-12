@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project/Devon/providers.dart';
 import 'package:project/devon/history_page.dart';
+import 'package:project/hadron/tesdate.dart';
 import 'package:project/jerrywijaya/profile.dart';
 import 'package:project/services/user_services.dart';
 import 'package:project/tian/LetterContentWidget.dart';
@@ -30,13 +31,18 @@ class _HomePageState extends State<HomePage> {
   List<String> searchhistory = [];
 
   void getUserLetter() async {
-    final results = await LetterService().getUserLetter();
-    setState(() {
-      lettersList = results;
-      resultFetched = true;
-      print('lettersList');
-      print(lettersList);
-    });
+    try {
+      final results = await LetterService().getUserLetter();
+
+      setState(() {
+        lettersList = results;
+        resultFetched = true;
+        print('lettersList');
+      });
+    } catch (error) {
+      print("error di home");
+      print(error);
+    }
   }
 
   @override
@@ -46,18 +52,16 @@ class _HomePageState extends State<HomePage> {
     getUserLetter();
   }
 
+  Future<void> _refresh() async {
+    getUserLetter();
+  }
+
+  DateTime startDate = DateTime(2023, 4, 19);
+  DateTime endDate = DateTime(2024, 10, 30);
+
   @override
   Widget build(BuildContext context) {
-    Future<void> _refresh() async {
-      // await Future.delayed(Duration(seconds: 1));
-      getUserLetter();
-    }
-
     final prov = Provider.of<Settings_provider>(context);
-    // return Scaffold(
-    //   body: Text("ea"),
-    // );
-
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, innerBoxIsScrolled) => [
@@ -185,7 +189,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SliverToBoxAdapter(
-              child: Column(
+              child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
@@ -250,6 +254,68 @@ class _HomePageState extends State<HomePage> {
               ),
               Padding(
                 padding: EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final DateTimeRange? picked =
+                        await showDialog<DateTimeRange?>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return DateRangePickerWidget();
+                      },
+                    );
+
+                    if (picked != null) {
+                      // Lakukan sesuatu dengan tanggal yang dipilih
+                      print(
+                          'Start Date: ${picked.start}, End Date: ${picked.end}');
+                    }
+                  },
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(10), // Atur radius di sini
+                      ),
+                    ),
+                    minimumSize: MaterialStateProperty.all(
+                        Size(140, 35)), // Atur ukuran di sini
+                    // Atau menggunakan fixedSize:
+                    // fixedSize: MaterialStateProperty.all(Size(130, 9)),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                    elevation: MaterialStateProperty.all<double>(0),
+                    side: MaterialStateProperty.all<BorderSide>(
+                      BorderSide(
+                        color: Color.fromARGB(
+                            255, 94, 94, 94), // Atur warna border di sini
+                        width: 1.0, // Atur lebar border di sini
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Date Filter',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      SizedBox(width: 5), // Jarak antara teks dan ikon
+                      Icon(Icons.calendar_today,
+                          size: 15,
+                          color: Colors
+                              .black), // Ganti dengan ikon yang diinginkan
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          )),
+          SliverToBoxAdapter(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(10.0),
                 child: Text(
                   'Mailbox',
                   style: TextStyle(
@@ -267,8 +333,14 @@ class _HomePageState extends State<HomePage> {
           onRefresh: _refresh,
           child: ListView.builder(
               itemCount: lettersList.where((user) {
+                DateTime userdate = user.tgl;
+                print('user.progres count');
+                print(user.progres);
+
                 return user.progres == 'request' &&
                     selectedFilters!.contains(user.status) &&
+                    // userdate.isAfter(startDate.subtract(Duration(days: 1))) &&
+                    // userdate.isBefore(endDate.add(Duration(days: 1))) &&
                     (controller.text.isEmpty ||
                         user.name
                             .toString()
@@ -277,8 +349,13 @@ class _HomePageState extends State<HomePage> {
               }).length,
               itemBuilder: (context, index) {
                 final filteredUsers = lettersList.where((user) {
+                  DateTime userdate = user.tgl;
+                  print('user.progres');
+                  print(user.progres);
                   return user.progres == 'request' &&
                       selectedFilters!.contains(user.status) &&
+                      // userdate.isAfter(startDate.subtract(Duration(days: 1))) &&
+                      // userdate.isBefore(endDate.add(Duration(days: 1))) &&
                       (controller.text.isEmpty ||
                           user.name
                               .toString()
@@ -314,6 +391,9 @@ class _HomePageState extends State<HomePage> {
 
 mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
   final prov = Provider.of<Settings_provider>(context);
+  print('_data');
+  print(_data);
+  // return Text("ea");
   return InkWell(
     onTap: () async {
       final response = await Navigator.push(
@@ -426,7 +506,8 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
                     children: [
                       Expanded(
                         child: LinearProgressIndicator(
-                          value: 1,
+                          value: _data[index].progresValue.toDouble(),
+                          backgroundColor: Colors.red,
                           valueColor: AlwaysStoppedAnimation(Colors.green),
                         ),
                       )

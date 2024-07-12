@@ -12,7 +12,7 @@ class Updating_page extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: 150,
+              height: 110,
             ),
             Center(child: Image.asset('assets/upgrade.jpg', width: 400)),
             Text(
@@ -20,21 +20,25 @@ class Updating_page extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'We are updating the system to give you a better experience.',
+                  'We are Updating the System to give you',
                   style: TextStyle(fontSize: 13, color: Colors.grey),
                 ),
-                Text('Please be patient, service will return in a few moments.',
+                Text(
+                  'A better Experience. Please be patient,',
+                  style: TextStyle(fontSize: 13, color: Colors.grey),
+                ),
+                Text('Service will return in a few moments.',
                     style: TextStyle(fontSize: 13, color: Colors.grey))
               ],
             ),
             SizedBox(
-              height: 180,
+              height: 120,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -12,7 +12,7 @@ class Error_page extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: 150,
+              height: 100,
             ),
             Center(child: Image.asset('assets/error.jpg', width: 400)),
             SizedBox(
@@ -49,14 +49,16 @@ class Error_page extends StatelessWidget {
                 minimumSize: Size(100, 45),
                 // shadowColor: Colors.black,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: Text(
                 'Back',
                 style: TextStyle(color: Colors.white),
               ),
             ),
             SizedBox(
-              height: 160,
+              height: 110,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

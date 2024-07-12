@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Settings_provider extends ChangeNotifier {
   var light = ThemeData(
@@ -43,8 +47,10 @@ class Mail {
   String progres;
   final String description;
   final String mailId;
+  final double progresValue;
   factory Mail.fromJson(Map<String, dynamic> json) {
     return Mail(
+        progresValue: json['progres'],
         Subject: json['subject'],
         name: json['recipients'][0]['userId']['name'],
         tgl: DateTime.parse(json['dateCreated']) as DateTime,
@@ -56,6 +62,7 @@ class Mail {
 
   Mail(
       {required this.Subject,
+      required this.progresValue,
       required this.mailId,
       required this.name,
       required this.tgl,
@@ -69,12 +76,14 @@ class MailSent {
   final String Subject;
   final DateTime tgl;
   final String status;
+  final double progresValue;
   String progres;
   final String description;
   final String mailId;
   final String letterStatus;
   factory MailSent.fromJson(Map<String, dynamic> json) {
     return MailSent(
+        progresValue: json['progres'],
         Subject: json['subject'],
         name: json['creator']['name'],
         tgl: DateTime.parse(json['dateCreated']) as DateTime,
@@ -86,7 +95,8 @@ class MailSent {
   }
 
   MailSent(
-      {required this.Subject,
+      {required this.progresValue,
+      required this.Subject,
       required this.mailId,
       required this.name,
       required this.letterStatus,
@@ -244,5 +254,27 @@ class UserListProvider extends ChangeNotifier {
   void removeOnlineUser() {
     _onlineusers = null;
     notifyListeners();
+  }
+
+  Future<void> getAllUsers(BuildContext context) async {
+    final apiUrl =
+        'http://localhost:3000/api/v1/users/list-all-users'; // Ganti dengan URL API Anda
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        // Jika permintaan berhasil, parse JSON response
+        _users = jsonDecode(response.body)['data'];
+        notifyListeners(); // Memberitahu listener bahwa data telah berubah
+      } else {
+        // Jika terjadi kesalahan pada permintaan HTTP
+        throw Exception('Failed to load users');
+      }
+    } catch (e) {
+      // Tangkap dan cetak kesalahan
+      print('Error: $e');
+      throw Exception('Server error');
+    }
   }
 }

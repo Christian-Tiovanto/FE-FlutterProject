@@ -5,6 +5,8 @@ import 'package:project/Devon/providers.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 // import 'package:scrappingwebsite/login_screen.dart';
 // import 'package:scrappingwebsite/user_provider.dart';
@@ -39,6 +41,42 @@ class _UserDetail_screenState extends State<UserDetail_screen> {
     final _numberController =
         TextEditingController(text: userList[widget.index].number);
     String? dropdownValue;
+    String niksebelum = userList[widget.index].nik;
+
+    void updateUserData(String nik, String updatedName, String updatedNik,
+        String updatedRole, int updatedPhoneNum, String updatedPas) async {
+      final apiUrl =
+          'http://localhost:3000/api/v1/users/updateUserData'; // Ganti dengan URL API update data user Anda
+
+      try {
+        final response = await http.patch(
+          Uri.parse(apiUrl),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            'nik': nik,
+            'updatedName': updatedName,
+            'updatedNik': updatedNik,
+            'updatedRole': updatedRole,
+            'updatedPhoneNum': updatedPhoneNum,
+            'updatedPas': updatedPas,
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          print('User updated successfully!');
+        } else if (response.statusCode == 404) {
+          print(jsonDecode(
+              response.body)['message']); // Cetak pesan error dari server
+        } else {
+          throw Exception('Failed to update user');
+        }
+      } catch (e) {
+        print('Error: $e');
+        throw Exception('Server error');
+      }
+    }
 
     if (dropdown.isEmpty) {
       dropdown = userList[widget.index].role;
@@ -271,47 +309,47 @@ class _UserDetail_screenState extends State<UserDetail_screen> {
               shadowColor: Colors.black,
             ),
             onPressed: () {
-              if (_usernameController.text.isEmpty ||
-                  _nikController.text.isEmpty ||
-                  dropdown.isEmpty ||
-                  _numberController.text.isEmpty ||
-                  _passwordController.text.isEmpty) {
-                // Show dialog for empty username
-                String errorMessage = "";
-                if (_usernameController.text.isEmpty) {
-                  errorMessage = 'Username is required.';
-                } else if (_nikController.text.isEmpty) {
-                  errorMessage = 'NIK is required.';
-                } else if (dropdown.isEmpty) {
-                  errorMessage = 'Role is required.';
-                } else if (_numberController.text.isEmpty) {
-                  errorMessage = 'Number is required.';
-                } else if (_passwordController.text.isEmpty) {
-                  errorMessage = 'Password is required.';
-                }
-                AwesomeDialog(
-                  context: context,
-                  animType: AnimType.scale,
-                  dialogType: DialogType.error,
-                  body: Center(
-                    child: Text(
-                      errorMessage,
-                      style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        color: prov.enableDarkMode == true
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                    ),
-                  ),
-                  title: 'This is Ignored',
-                  desc: 'This is also Ignored',
-                  btnOkColor: Colors.red,
-                  btnOkOnPress: () {},
-                ).show();
+              // if (_usernameController.text.isEmpty ||
+              //     _nikController.text.isEmpty ||
+              //     dropdown.isEmpty ||
+              //     _numberController.text.isEmpty ||
+              //     _passwordController.text.isEmpty) {
+              //   // Show dialog for empty username
+              //   String errorMessage = "";
+              //   if (_usernameController.text.isEmpty) {
+              //     errorMessage = 'Username is required.';
+              //   } else if (_nikController.text.isEmpty) {
+              //     errorMessage = 'NIK is required.';
+              //   } else if (dropdown.isEmpty) {
+              //     errorMessage = 'Role is required.';
+              //   } else if (_numberController.text.isEmpty) {
+              //     errorMessage = 'Number is required.';
+              //   } else if (_passwordController.text.isEmpty) {
+              //     errorMessage = 'Password is required.';
+              //   }
+              //   AwesomeDialog(
+              //     context: context,
+              //     animType: AnimType.scale,
+              //     dialogType: DialogType.error,
+              //     body: Center(
+              //       child: Text(
+              //         errorMessage,
+              //         style: TextStyle(
+              //           fontStyle: FontStyle.italic,
+              //           color: prov.enableDarkMode == true
+              //               ? Colors.white
+              //               : Colors.black,
+              //         ),
+              //       ),
+              //     ),
+              //     title: 'This is Ignored',
+              //     desc: 'This is also Ignored',
+              //     btnOkColor: Colors.red,
+              //     btnOkOnPress: () {},
+              //   ).show();
 
-                return;
-              }
+              //   return;
+              // }
 
               // AwesomeDialog(
               //   context: context,
@@ -341,6 +379,13 @@ class _UserDetail_screenState extends State<UserDetail_screen> {
                   userId: "");
               // userListProvider.addUser(newUser);
               userListProvider.updateUser(widget.index, updateUser);
+              updateUserData(
+                  niksebelum,
+                  _usernameController.text,
+                  _nikController.text,
+                  dropdown,
+                  int.parse(_numberController.text),
+                  _passwordController.text);
 
               Navigator.pop(context, true);
             },

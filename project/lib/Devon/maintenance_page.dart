@@ -12,7 +12,7 @@ class Maintenance_page extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: 230,
+              height: 150,
             ),
             Center(child: Image.asset('assets/Maintenance.jpg', width: 400)),
             SizedBox(
@@ -29,15 +29,19 @@ class Maintenance_page extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Our Application is currently undergoing scheduled maintenance.',
+                  'Our Application is currently undergoing ',
                   style: TextStyle(fontSize: 13, color: Colors.grey),
                 ),
-                Text('We should be back shortly. Thank you for your patience.',
+                Text(
+                  'Scheduled Maintenance. We should be back shortly.',
+                  style: TextStyle(fontSize: 13, color: Colors.grey),
+                ),
+                Text('Thank you for your patience.',
                     style: TextStyle(fontSize: 13, color: Colors.grey))
               ],
             ),
             SizedBox(
-              height: 220,
+              height: 160,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

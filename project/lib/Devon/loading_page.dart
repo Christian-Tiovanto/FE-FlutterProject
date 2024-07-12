@@ -12,11 +12,11 @@ class Loading_page extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
-            height: 100,
+            height: 30,
           ),
           Image.asset('assets/Loading.jpg', width: 400),
           SizedBox(
-            height: 50,
+            height: 10,
           ),
           Container(
             // color: Colors.red,
@@ -50,7 +50,7 @@ class Loading_page extends StatelessWidget {
           SpinKitFadingCircle(
             color: Colors.black,
             size: 100.0,
-          ),  
+          ),
           SizedBox(
             height: 15,
           ),

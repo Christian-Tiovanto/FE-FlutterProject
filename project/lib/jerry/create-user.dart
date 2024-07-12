@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5,6 +7,7 @@ import 'package:project/Devon/providers.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:http/http.dart' as http;
 
 // import 'package:scrappingwebsite/login_screen.dart';
 // import 'package:scrappingwebsite/user_provider.dart';
@@ -28,6 +31,38 @@ class _Signup_screenState extends State<Signup_screen> {
   final _numberController = TextEditingController();
   final _roleController = TextEditingController();
   String dropdown = "";
+
+  void registerUser(
+      String nik, String name, String password, String role) async {
+    final apiUrl =
+        'http://localhost:3000/api/v1/users/register'; // Ganti dengan URL API register Anda
+
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'nik': nik,
+          'name': name,
+          'password': password,
+          'role': role,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('User registered successfully!');
+      } else if (response.statusCode == 400) {
+        print(jsonDecode(response.body)); // Cetak pesan error dari server
+      } else {
+        throw Exception('Failed to register user');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Server error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -357,6 +392,8 @@ class _Signup_screenState extends State<Signup_screen> {
                   MailInbox: [],
                   userId: "");
               // userListProvider.addUser(newUser);
+              registerUser(_nikController.text, _usernameController.text,
+                  _passwordController.text, dropdown);
 
               Navigator.pop(context, newUser);
             },

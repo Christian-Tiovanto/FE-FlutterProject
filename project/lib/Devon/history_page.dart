@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:project/Devon/home_page.dart';
 import 'package:project/Devon/providers.dart';
+import 'package:project/hadron/tesdate.dart';
 import 'package:project/jerrywijaya/profile.dart';
 import 'package:project/services/user_services.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,7 @@ class _HistoryPageState extends State<HistoryPage>
 
   void getUserLetter() async {
     try {
-      final results = await LetterService().getUserCreatedLetter("ongoing");
+      final results = await LetterService().getUserCreatedLetter("finished");
       setState(() {
         lettersList = results;
         resultFetched = true;
@@ -56,7 +57,7 @@ class _HistoryPageState extends State<HistoryPage>
 
     Future<void> _refresh() async {
       await Future.delayed(Duration(seconds: 1));
-
+      getUserLetter();
       setState(() {});
     }
 
@@ -99,69 +100,133 @@ class _HistoryPageState extends State<HistoryPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
-                      child: ElevatedButton.icon(
-                        label: Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.black,
-                        ),
-                        icon: selectedFilters != null &&
-                                selectedFilters!.length > 1
-                            ? Text(
-                                "${selectedFilters![0]}+${selectedFilters!.length - 1}",
-                                style: TextStyle(color: Colors.black),
-                              )
-                            : selectedFilters!.isNotEmpty
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
+                          child: ElevatedButton.icon(
+                            label: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            icon: selectedFilters != null &&
+                                    selectedFilters!.length > 1
                                 ? Text(
-                                    "${selectedFilters![0]}",
+                                    "${selectedFilters![0]}+${selectedFilters!.length - 1}",
                                     style: TextStyle(color: Colors.black),
                                   )
-                                : Text(
-                                    'Filter',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                        onPressed: () async {
-                          final List<String>? Filter =
-                              await showDialog<List<String>>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return FilterPopup(
-                                  selectedFilters: selectedFilters);
-                            },
-                          );
+                                : selectedFilters!.isNotEmpty
+                                    ? Text(
+                                        "${selectedFilters![0]}",
+                                        style: TextStyle(color: Colors.black),
+                                      )
+                                    : Text(
+                                        'Filter',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                            onPressed: () async {
+                              final List<String>? Filter =
+                                  await showDialog<List<String>>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return FilterPopup(
+                                      selectedFilters: selectedFilters);
+                                },
+                              );
 
-                          // Handle selected filters here
-                          if (Filter != null) {
-                            setState(() {
-                              selectedFilters = Filter;
-                            });
-                          }
-                        },
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  10), // Atur radius di sini
-                            ),
-                          ),
-                          minimumSize: MaterialStateProperty.all(
-                              Size(90, 35)), // Atur ukuran di sini
-                          // Atau menggunakan fixedSize:
-                          // fixedSize: MaterialStateProperty.all(Size(100, 50)),
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white),
-                          elevation: MaterialStateProperty.all<double>(0),
-                          side: MaterialStateProperty.all<BorderSide>(
-                            BorderSide(
-                              color: Color.fromARGB(
-                                  255, 94, 94, 94), // Atur warna border di sini
-                              width: 1.0, // Atur lebar border di sini
+                              // Handle selected filters here
+                              if (Filter != null) {
+                                setState(() {
+                                  selectedFilters = Filter;
+                                });
+                              }
+                            },
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10), // Atur radius di sini
+                                ),
+                              ),
+                              minimumSize: MaterialStateProperty.all(
+                                  Size(90, 35)), // Atur ukuran di sini
+                              // Atau menggunakan fixedSize:
+                              // fixedSize: MaterialStateProperty.all(Size(100, 50)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              side: MaterialStateProperty.all<BorderSide>(
+                                BorderSide(
+                                  color: Color.fromARGB(255, 94, 94,
+                                      94), // Atur warna border di sini
+                                  width: 1.0, // Atur lebar border di sini
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              final DateTimeRange? picked =
+                                  await showDialog<DateTimeRange?>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return DateRangePickerWidget();
+                                },
+                              );
+
+                              if (picked != null) {
+                                // Lakukan sesuatu dengan tanggal yang dipilih
+                                print(
+                                    'Start Date: ${picked.start}, End Date: ${picked.end}');
+                              }
+                            },
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10), // Atur radius di sini
+                                ),
+                              ),
+                              minimumSize: MaterialStateProperty.all(
+                                  Size(132, 26)), // Atur ukuran di sini
+                              // Atau menggunakan fixedSize:
+                              fixedSize:
+                                  MaterialStateProperty.all(Size(132, 26)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              side: MaterialStateProperty.all<BorderSide>(
+                                BorderSide(
+                                  color: Color.fromARGB(255, 94, 94,
+                                      94), // Atur warna border di sini
+                                  width: 1.0, // Atur lebar border di sini
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Date Filter',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                SizedBox(
+                                    width: 4), // Jarak antara teks dan ikon
+                                Icon(Icons.calendar_today,
+                                    size: 15,
+                                    color: Colors
+                                        .black), // Ganti dengan ikon yang diinginkan
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     Padding(
                       padding: EdgeInsets.all(10.0),
@@ -201,69 +266,133 @@ class _HistoryPageState extends State<HistoryPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
-                      child: ElevatedButton.icon(
-                        label: Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.black,
-                        ),
-                        icon: selectedFilters != null &&
-                                selectedFilters!.length > 1
-                            ? Text(
-                                "${selectedFilters![0]}+${selectedFilters!.length - 1}",
-                                style: TextStyle(color: Colors.black),
-                              )
-                            : selectedFilters!.isNotEmpty
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
+                          child: ElevatedButton.icon(
+                            label: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            icon: selectedFilters != null &&
+                                    selectedFilters!.length > 1
                                 ? Text(
-                                    "${selectedFilters![0]}",
+                                    "${selectedFilters![0]}+${selectedFilters!.length - 1}",
                                     style: TextStyle(color: Colors.black),
                                   )
-                                : Text(
-                                    'Filter',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                        onPressed: () async {
-                          final List<String>? Filter =
-                              await showDialog<List<String>>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return FilterPopup(
-                                  selectedFilters: selectedFilters);
-                            },
-                          );
+                                : selectedFilters!.isNotEmpty
+                                    ? Text(
+                                        "${selectedFilters![0]}",
+                                        style: TextStyle(color: Colors.black),
+                                      )
+                                    : Text(
+                                        'Filter',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                            onPressed: () async {
+                              final List<String>? Filter =
+                                  await showDialog<List<String>>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return FilterPopup(
+                                      selectedFilters: selectedFilters);
+                                },
+                              );
 
-                          // Handle selected filters here
-                          if (Filter != null) {
-                            setState(() {
-                              selectedFilters = Filter;
-                            });
-                          }
-                        },
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  10), // Atur radius di sini
-                            ),
-                          ),
-                          minimumSize: MaterialStateProperty.all(
-                              Size(90, 35)), // Atur ukuran di sini
-                          // Atau menggunakan fixedSize:
-                          // fixedSize: MaterialStateProperty.all(Size(100, 50)),
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white),
-                          elevation: MaterialStateProperty.all<double>(0),
-                          side: MaterialStateProperty.all<BorderSide>(
-                            BorderSide(
-                              color: Color.fromARGB(
-                                  255, 94, 94, 94), // Atur warna border di sini
-                              width: 1.0, // Atur lebar border di sini
+                              // Handle selected filters here
+                              if (Filter != null) {
+                                setState(() {
+                                  selectedFilters = Filter;
+                                });
+                              }
+                            },
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10), // Atur radius di sini
+                                ),
+                              ),
+                              minimumSize: MaterialStateProperty.all(
+                                  Size(90, 35)), // Atur ukuran di sini
+                              // Atau menggunakan fixedSize:
+                              // fixedSize: MaterialStateProperty.all(Size(100, 50)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              side: MaterialStateProperty.all<BorderSide>(
+                                BorderSide(
+                                  color: Color.fromARGB(255, 94, 94,
+                                      94), // Atur warna border di sini
+                                  width: 1.0, // Atur lebar border di sini
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              final DateTimeRange? picked =
+                                  await showDialog<DateTimeRange?>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return DateRangePickerWidget();
+                                },
+                              );
+
+                              if (picked != null) {
+                                // Lakukan sesuatu dengan tanggal yang dipilih
+                                print(
+                                    'Start Date: ${picked.start}, End Date: ${picked.end}');
+                              }
+                            },
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10), // Atur radius di sini
+                                ),
+                              ),
+                              minimumSize: MaterialStateProperty.all(
+                                  Size(132, 26)), // Atur ukuran di sini
+                              // Atau menggunakan fixedSize:
+                              fixedSize:
+                                  MaterialStateProperty.all(Size(132, 26)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              side: MaterialStateProperty.all<BorderSide>(
+                                BorderSide(
+                                  color: Color.fromARGB(255, 94, 94,
+                                      94), // Atur warna border di sini
+                                  width: 1.0, // Atur lebar border di sini
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Date Filter',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                SizedBox(
+                                    width: 4), // Jarak antara teks dan ikon
+                                Icon(Icons.calendar_today,
+                                    size: 15,
+                                    color: Colors
+                                        .black), // Ganti dengan ikon yang diinginkan
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     Padding(
                       padding: EdgeInsets.all(10.0),
@@ -279,15 +408,16 @@ class _HistoryPageState extends State<HistoryPage>
                       child: RefreshIndicator(
                         onRefresh: _refresh,
                         child: ListView.builder(
-                          itemCount: lettersList
-                              .where((user) =>
-                                  user.progres == 'Finished' &&
-                                  selectedFilters!.contains(user.status))
-                              .length,
+                          itemCount: lettersList.where((user) {
+                            print('user di finished');
+                            print(user);
+                            return user.letterStatus == 'finished' &&
+                                selectedFilters!.contains(user.status);
+                          }).length,
                           itemBuilder: (context, index) {
                             final filteredUsers = lettersList
                                 .where((user) =>
-                                    user.progres == 'Finished' &&
+                                    user.letterStatus == 'finished' &&
                                     selectedFilters!.contains(user.status))
                                 .toList();
                             final user = filteredUsers![index];
@@ -328,69 +458,133 @@ class _HistoryPageState extends State<HistoryPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
-                      child: ElevatedButton.icon(
-                        label: Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.black,
-                        ),
-                        icon: selectedFilters != null &&
-                                selectedFilters!.length > 1
-                            ? Text(
-                                "${selectedFilters![0]}+${selectedFilters!.length - 1}",
-                                style: TextStyle(color: Colors.black),
-                              )
-                            : selectedFilters!.isNotEmpty
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
+                          child: ElevatedButton.icon(
+                            label: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            icon: selectedFilters != null &&
+                                    selectedFilters!.length > 1
                                 ? Text(
-                                    "${selectedFilters![0]}",
+                                    "${selectedFilters![0]}+${selectedFilters!.length - 1}",
                                     style: TextStyle(color: Colors.black),
                                   )
-                                : Text(
-                                    'Filter',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                        onPressed: () async {
-                          final List<String>? Filter =
-                              await showDialog<List<String>>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return FilterPopup(
-                                  selectedFilters: selectedFilters);
-                            },
-                          );
+                                : selectedFilters!.isNotEmpty
+                                    ? Text(
+                                        "${selectedFilters![0]}",
+                                        style: TextStyle(color: Colors.black),
+                                      )
+                                    : Text(
+                                        'Filter',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                            onPressed: () async {
+                              final List<String>? Filter =
+                                  await showDialog<List<String>>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return FilterPopup(
+                                      selectedFilters: selectedFilters);
+                                },
+                              );
 
-                          // Handle selected filters here
-                          if (Filter != null) {
-                            setState(() {
-                              selectedFilters = Filter;
-                            });
-                          }
-                        },
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  10), // Atur radius di sini
-                            ),
-                          ),
-                          minimumSize: MaterialStateProperty.all(
-                              Size(90, 35)), // Atur ukuran di sini
-                          // Atau menggunakan fixedSize:
-                          // fixedSize: MaterialStateProperty.all(Size(100, 50)),
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white),
-                          elevation: MaterialStateProperty.all<double>(0),
-                          side: MaterialStateProperty.all<BorderSide>(
-                            BorderSide(
-                              color: Color.fromARGB(
-                                  255, 94, 94, 94), // Atur warna border di sini
-                              width: 1.0, // Atur lebar border di sini
+                              // Handle selected filters here
+                              if (Filter != null) {
+                                setState(() {
+                                  selectedFilters = Filter;
+                                });
+                              }
+                            },
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10), // Atur radius di sini
+                                ),
+                              ),
+                              minimumSize: MaterialStateProperty.all(
+                                  Size(90, 35)), // Atur ukuran di sini
+                              // Atau menggunakan fixedSize:
+                              // fixedSize: MaterialStateProperty.all(Size(100, 50)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              side: MaterialStateProperty.all<BorderSide>(
+                                BorderSide(
+                                  color: Color.fromARGB(255, 94, 94,
+                                      94), // Atur warna border di sini
+                                  width: 1.0, // Atur lebar border di sini
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              final DateTimeRange? picked =
+                                  await showDialog<DateTimeRange?>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return DateRangePickerWidget();
+                                },
+                              );
+
+                              if (picked != null) {
+                                // Lakukan sesuatu dengan tanggal yang dipilih
+                                print(
+                                    'Start Date: ${picked.start}, End Date: ${picked.end}');
+                              }
+                            },
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10), // Atur radius di sini
+                                ),
+                              ),
+                              minimumSize: MaterialStateProperty.all(
+                                  Size(132, 26)), // Atur ukuran di sini
+                              // Atau menggunakan fixedSize:
+                              fixedSize:
+                                  MaterialStateProperty.all(Size(132, 26)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              side: MaterialStateProperty.all<BorderSide>(
+                                BorderSide(
+                                  color: Color.fromARGB(255, 94, 94,
+                                      94), // Atur warna border di sini
+                                  width: 1.0, // Atur lebar border di sini
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Date Filter',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                SizedBox(
+                                    width: 4), // Jarak antara teks dan ikon
+                                Icon(Icons.calendar_today,
+                                    size: 15,
+                                    color: Colors
+                                        .black), // Ganti dengan ikon yang diinginkan
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     Padding(
                       padding: EdgeInsets.all(10.0),
@@ -590,7 +784,7 @@ mail(BuildContext context, List<MailSent>? _data, int index) {
                   ),
                   SizedBox(height: 9), // Jarak antara baris pertama dan kedua
                   LinearProgressIndicator(
-                    value: 1,
+                    value: _data[index].progresValue,
                     backgroundColor: Colors.red[300],
                     valueColor: AlwaysStoppedAnimation<Color>(
                       Colors.green, // Warna biru untuk yang lainnya

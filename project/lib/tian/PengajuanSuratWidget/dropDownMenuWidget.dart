@@ -22,6 +22,7 @@ class _DropdownButtonExampleState extends State<DropdownMenuExample> {
   @override
   Widget build(BuildContext context) {
     final PrioritasSuratValue = Provider.of<MailValue>(context).PrioritasSurat;
+    final responseSuratValue = Provider.of<MailValue>(context).responseSurat;
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: 500, maxWidth: 200),
       child: DropdownButton<String>(
@@ -35,6 +36,7 @@ class _DropdownButtonExampleState extends State<DropdownMenuExample> {
           setState(() {
             PrioritasSuratValue[0] = value!;
             widget.value = value!;
+            responseSuratValue[0] = value!;
             print('PrioritasSuratValue');
             print(widget.value);
             print(PrioritasSuratValue);

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:project/Devon/user_detail_screen.dart';
@@ -9,6 +11,7 @@ import 'package:project/jerry/create-user2.dart';
 import 'package:provider/provider.dart';
 import 'package:project/Devon/providers.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:http/http.dart' as http;
 
 // class User {
 //   final String name;
@@ -37,6 +40,35 @@ class UserPage extends StatefulWidget {
   _UserPageState createState() => _UserPageState();
 }
 
+void deleteUser(String nik) async {
+  final apiUrl =
+      'http://localhost:3000/api/v1/users/deleteUser'; // Ganti dengan URL API delete user Anda
+
+  try {
+    final response = await http.delete(
+      Uri.parse(apiUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'nik': nik,
+      }),
+    );
+
+    if (response.statusCode == 204) {
+      print('User deleted successfully!');
+    } else if (response.statusCode == 404) {
+      print(jsonDecode(
+          response.body)['message']); // Cetak pesan error dari server
+    } else {
+      throw Exception('Failed to delete user');
+    }
+  } catch (e) {
+    print('Error: $e');
+    throw Exception('Server error');
+  }
+}
+
 class _UserPageState extends State<UserPage> {
   // List<User> users = [];
   String searchTerm = '';
@@ -58,11 +90,16 @@ class _UserPageState extends State<UserPage> {
   //     print(error);
   //   }
   // }
+  void fetchData() async {
+    final userListProvider = Provider.of<UserListProvider>(context);
+    await userListProvider.getAllUsers(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     final userListProvider = Provider.of<UserListProvider>(context);
-
+    fetchData();
+    userListProvider.getAllUsers(context);
     final userList = userListProvider.users;
     return Scaffold(
       appBar: AppBar(
@@ -243,6 +280,9 @@ card(BuildContext context, User user, int index) {
                               btnCancelOnPress: () {},
                               btnOkOnPress: () {
                                 userListProvider.removeUser(index);
+                                deleteUser(user.nik);
+
+                                //delete data
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     snackbarDelete(
                                         context, user.name, user.role));
