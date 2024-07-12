@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:project/jerry/create-user.dart';
 import 'package:project/jerry/create-user2.dart';
+import 'package:project/services/user_services.dart';
 import 'package:provider/provider.dart';
 import 'package:project/Devon/providers.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -36,13 +37,15 @@ import 'package:http/http.dart' as http;
 
 class UserPage extends StatefulWidget {
   bool isupdated = false;
+
+  UserPage({super.key});
   @override
   _UserPageState createState() => _UserPageState();
 }
 
 void deleteUser(String nik) async {
-  final apiUrl =
-      'http://localhost:3000/api/v1/users/deleteUser'; // Ganti dengan URL API delete user Anda
+  const apiUrl =
+      'http://192.168.1.146:3000/api/v1/users/deleteUser'; // Ganti dengan URL API delete user Anda
 
   try {
     final response = await http.delete(
@@ -70,46 +73,42 @@ void deleteUser(String nik) async {
 }
 
 class _UserPageState extends State<UserPage> {
-  // List<User> users = [];
+  List<User> users = [];
   String searchTerm = '';
 
   @override
   void initState() {
     super.initState();
-    // _fetchData();
+    _fetchData();
   }
 
-  // Future<void> _fetchData() async {
-  //   try {
-  //     final fetchedUsers = await UserService.getUsers();
-  //     setState(() {
-  //       users = fetchedUsers;
-  //     });
-  //   } catch (error) {
-  //     // Handle errors appropriately
-  //     print(error);
-  //   }
-  // }
-  void fetchData() async {
-    final userListProvider = Provider.of<UserListProvider>(context);
-    await userListProvider.getAllUsers(context);
+  Future<void> _fetchData() async {
+    try {
+      final fetchedUsers = await UserService().getAllUsers();
+      setState(() {
+        users = fetchedUsers;
+      });
+    } catch (error) {
+      // Handle errors appropriately
+      print(error);
+    }
   }
+  // void fetchData() async {
+  //   final userListProvider = Provider.of<UserListProvider>(context);
+  //   await userListProvider.getAllUsers(context);
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final userListProvider = Provider.of<UserListProvider>(context);
-    fetchData();
-    userListProvider.getAllUsers(context);
-    final userList = userListProvider.users;
     return Scaffold(
       appBar: AppBar(
-        title: Text("User"),
+        title: const Text("User"),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(kToolbarHeight),
+          preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Search by Name',
                 prefixIcon: Icon(Icons.search),
               ),
@@ -123,14 +122,14 @@ class _UserPageState extends State<UserPage> {
         ),
       ),
       body: ListView.builder(
-        itemCount: userList.length,
+        itemCount: users.length,
         itemBuilder: (context, index) {
-          final user = userList[index];
+          final user = users[index];
           final lowerCaseName = user.name.toLowerCase();
           if (searchTerm.isEmpty || lowerCaseName.contains(searchTerm)) {
             return card(context, user, index);
           } else {
-            return SizedBox(); // Hide unmatched items
+            return const SizedBox(); // Hide unmatched items
           }
         },
       ),
@@ -140,20 +139,20 @@ class _UserPageState extends State<UserPage> {
           // Navigate to CreateUserPage and await result
           final newUserName = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Signup_screen()),
+            MaterialPageRoute(builder: (context) => const Signup_screen()),
           );
 
           if (newUserName != null) {
             // Add the new user to the list and update state
             setState(() {
               // users.add(User(newUserName));
-              userListProvider.addUser(newUserName);
+              // userListProvider.addUser(newUserName);
               ScaffoldMessenger.of(context)
                   .showSnackBar(snackbarCreate(context));
             });
           }
         },
-        label: Icon(Icons.add),
+        label: const Icon(Icons.add),
       ),
     );
   }
@@ -165,11 +164,11 @@ card(BuildContext context, User user, int index) {
 
   return InkWell(
     onTap: () async {
-      final _isupdated = await Navigator.push(
+      final isupdated = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => UserDetail_screen(index: index)));
-      if (_isupdated == true) {
+      if (isupdated == true) {
         ScaffoldMessenger.of(context)
             .showSnackBar(snackbarUpdate(context, user.name, user.role));
       }
@@ -187,22 +186,22 @@ card(BuildContext context, User user, int index) {
                 Container(
                   width: 40.0,
                   height: 40.0,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.red, // Set background color to red
                   ),
                   child: Center(
                     child: Text(
                       user.name.isNotEmpty ? user.name[0].toUpperCase() : '',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18.0,
                         color: Colors.white, // Set text color to white
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: 10.0),
-                Container(
+                const SizedBox(width: 10.0),
+                SizedBox(
                   width: 290,
                   height: 45,
                   // color: Colors.red,
@@ -214,7 +213,7 @@ card(BuildContext context, User user, int index) {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${user.name}',
+                            user.name,
                             style: TextStyle(
                               color: prov.enableDarkMode == true
                                   ? Colors.white
@@ -289,7 +288,7 @@ card(BuildContext context, User user, int index) {
                               },
                             ).show();
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.delete,
                             color: Colors.red,
                           ))
@@ -314,7 +313,7 @@ card(BuildContext context, User user, int index) {
 
 snackbarCreate(BuildContext context) {
   return SnackBar(
-    content: Text('New User Has been Created'),
+    content: const Text('New User Has been Created'),
     action: SnackBarAction(
       label: 'OK',
       onPressed: () {
@@ -326,7 +325,7 @@ snackbarCreate(BuildContext context) {
 
 snackbarUpdate(BuildContext context, String name, String role) {
   return SnackBar(
-    content: Text('${name} - ${role} Has been Updated'),
+    content: Text('$name - $role Has been Updated'),
     action: SnackBarAction(
       label: 'OK',
       onPressed: () {
@@ -338,7 +337,7 @@ snackbarUpdate(BuildContext context, String name, String role) {
 
 snackbarDelete(BuildContext context, String name, String role) {
   return SnackBar(
-    content: Text('${name} - ${role} Has been Deleted'),
+    content: Text('$name - $role Has been Deleted'),
     action: SnackBarAction(
       label: 'OK',
       onPressed: () {

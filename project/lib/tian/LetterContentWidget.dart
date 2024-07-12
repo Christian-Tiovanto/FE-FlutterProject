@@ -31,12 +31,12 @@ class _LetterContentWidgetState extends State<LetterContentWidget> {
     String responseValue = "";
     return Scaffold(
       appBar: PengajuanSuratAppBarWidget(
-        Subject: [],
+        Subject: const [],
         sendIcon: false,
         contextPage: context,
-        prioritas: [],
-        selectedUser: [],
-        description: [],
+        prioritas: const [],
+        selectedUser: const [],
+        description: const [],
       ),
       body: ListView(
         children: [
@@ -46,7 +46,7 @@ class _LetterContentWidgetState extends State<LetterContentWidget> {
                 leading: CircleAvatar(
                     radius: 24,
                     child: Text(
-                      this.widget.dataSurat.name[0].toUpperCase(),
+                      widget.dataSurat.name[0].toUpperCase(),
                       style: TextStyle(
                         fontSize: 20,
                         color:
@@ -56,19 +56,19 @@ class _LetterContentWidgetState extends State<LetterContentWidget> {
                 title: Row(
                   children: [
                     Text(
-                      this.widget.dataSurat.name,
+                      widget.dataSurat.name,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color:
                             prov.enableDarkMode ? Colors.white : Colors.black,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Text(
                       DateFormat("yyyy-MM-dd")
-                          .format(this.widget.dataSurat.tgl)
+                          .format(widget.dataSurat.dateCreated)
                           .toString(),
                       style: TextStyle(
                         color:
@@ -98,7 +98,7 @@ class _LetterContentWidgetState extends State<LetterContentWidget> {
               ),
               Container(
                 child: Text(
-                  this.widget.dataSurat.Subject,
+                  widget.dataSurat.subject,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -106,7 +106,7 @@ class _LetterContentWidgetState extends State<LetterContentWidget> {
                   ),
                 ),
               ),
-              Divider(
+              const Divider(
                 color: Colors.black,
                 height: 50,
                 thickness: 1,
@@ -122,7 +122,8 @@ class _LetterContentWidgetState extends State<LetterContentWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Text(
                   widget.dataSurat.description,
                   style: TextStyle(
@@ -174,23 +175,23 @@ class ResponsePopUpFormWidget extends StatelessWidget {
                 ),
                 DropdownMenuExample(
                   value: "",
-                  listData: ["rejected", "approved"],
+                  listData: const ["rejected", "approved"],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   "TANGGAPAN",
                   style: TextStyle(
                     color: prov.enableDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
                   color: Colors.grey.shade100,
                   width: double.infinity,
                   child: TextFieldExample(
                     isBorder: false,
                     title: "",
-                    subjectValue: [""],
+                    subjectValue: const [""],
                   ),
                 ),
               ],
@@ -203,9 +204,9 @@ class ResponsePopUpFormWidget extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                final snackBar = SnackBar(
+                const snackBar = SnackBar(
                   backgroundColor: Colors.green,
-                  content: const Text('Berhasil Memberikan respon !'),
+                  content: Text('Berhasil Memberikan respon !'),
                 );
                 final response = await LetterService()
                     .updateLetterRecipientStatus(
@@ -222,12 +223,12 @@ class ResponsePopUpFormWidget extends StatelessWidget {
           ],
         ),
       ),
-      child: const Text('Beri Respon'),
       style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(
+        fixedSize: WidgetStateProperty.all(
           Size.fromWidth(MediaQuery.of(context).size.width - 10),
         ),
       ),
+      child: const Text('Beri Respon'),
     );
   }
 }

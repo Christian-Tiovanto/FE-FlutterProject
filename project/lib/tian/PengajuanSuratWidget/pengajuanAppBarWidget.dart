@@ -23,7 +23,7 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     // final sender = Provider.of<UserListProvider>(context).users[0];
-    final PrioritasSuratValue = Provider.of<MailValue>(context).PrioritasSurat;
+    final PrioritasSuratValue = Provider.of<MailValue>(context).mailPriority;
     final prov = Provider.of<Settings_provider>(context);
 
     return AppBar(
@@ -35,20 +35,20 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
           color: prov.enableDarkMode == true ? Colors.white : Colors.black,
         ),
         onPressed: () {
-          Navigator.pop(this.contextPage);
+          Navigator.pop(contextPage);
         },
       ),
       actions: [
-        this.sendIcon
+        sendIcon
             ? Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: RotatedBox(
                   quarterTurns: 3,
                   child: TextButton(
                     onPressed: () async {
-                      final snackBar = SnackBar(
+                      const snackBar = SnackBar(
                         backgroundColor: Colors.red,
-                        content: const Text('No Recipient Selected !'),
+                        content: Text('No Recipient Selected !'),
                       );
                       if (selectedUser.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -63,19 +63,19 @@ class PengajuanSuratAppBarWidget extends StatelessWidget
                       } catch (error) {
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
-                      Navigator.pop(this.contextPage, "OK");
+                      Navigator.pop(contextPage, "OK");
                     },
                     child: Icon(
                         color: prov.enableDarkMode == true
                             ? Colors.white
                             : Colors.black,
-                        IconData(0xe571,
+                        const IconData(0xe571,
                             fontFamily: 'MaterialIcons',
                             matchTextDirection: true)),
                   ),
                 ),
               )
-            : Text("")
+            : const Text("")
       ],
     );
   }

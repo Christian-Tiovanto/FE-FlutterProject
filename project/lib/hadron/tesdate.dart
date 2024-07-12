@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import intl package
 
 class DateRangePickerWidget extends StatefulWidget {
+  const DateRangePickerWidget({super.key});
+
   @override
   _DateRangePickerWidgetState createState() => _DateRangePickerWidgetState();
 }
 
 class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
   DateTime _startDate = DateTime.now();
-  DateTime _endDate = DateTime.now().add(Duration(days: 7));
+  DateTime _endDate = DateTime.now().add(const Duration(days: 7));
 
   Future<void> _selectDateRange(BuildContext context) async {
     final DateTimeRange? picked = await showDateRangePicker(
       context: context,
-      firstDate: DateTime.now().subtract(Duration(days: 365)),
-      lastDate: DateTime.now().add(Duration(days: 365)),
+      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
       initialDateRange: DateTimeRange(start: _startDate, end: _endDate),
     );
 
@@ -29,43 +31,51 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Center(
-        // Menggunakan Center untuk membuat judul berada di tengah
-        child: Text(
-          'Select Date Range',
-          textAlign: TextAlign.center, // Pusatkan teks judul
-        ),
-      ),
-      content: Column(
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const Text(
+            "Select date range",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
           Text('Start Date : ${DateFormat('dd-MM-yyyy').format(_startDate)}'),
           Text('End Date   : ${DateFormat('dd-MM-yyyy').format(_endDate)}'),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               _selectDateRange(context);
             },
-            child: Text('Filter Date'),
+            child: const Text('Filter Date'),
           ),
+          const SizedBox(
+            height: 50,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .pop(DateTimeRange(start: _startDate, end: _endDate));
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          )
         ],
       ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () {
-            print('Start Date: $_startDate, End Date: $_endDate');
-            Navigator.of(context).pop();
-          },
-          child: Text('OK'),
-        ),
-      ],
     );
   }
 }

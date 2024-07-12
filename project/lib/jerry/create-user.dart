@@ -35,7 +35,7 @@ class _Signup_screenState extends State<Signup_screen> {
   void registerUser(
       String nik, String name, String password, String role) async {
     final apiUrl =
-        'http://localhost:3000/api/v1/users/register'; // Ganti dengan URL API register Anda
+        'http://192.168.1.146:3000/api/v1/users/register'; // Ganti dengan URL API register Anda
 
     try {
       final response = await http.post(

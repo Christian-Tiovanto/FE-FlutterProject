@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:project/Devon/filterpopup.dart';
 import 'package:project/Devon/providers.dart';
-import 'package:project/devon/history_page.dart';
 import 'package:project/hadron/tesdate.dart';
 import 'package:project/jerrywijaya/profile.dart';
 import 'package:project/services/user_services.dart';
@@ -11,19 +11,18 @@ import 'package:project/tian/LetterContentWidget.dart';
 import 'package:project/tian/PengajuanSurat.dart';
 import 'package:intl/intl.dart';
 // import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
-import 'package:project/devon/filterpopup.dart'; // Sesuaikan dengan lokasi FilterPopup
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
   List<String>? selectedFilters = ['Urgent', 'Regular'];
   List<Mail> lettersList = [];
   bool resultFetched = false;
@@ -56,8 +55,8 @@ class _HomePageState extends State<HomePage> {
     getUserLetter();
   }
 
-  DateTime startDate = DateTime(2023, 4, 19);
-  DateTime endDate = DateTime(2024, 10, 30);
+  DateTime? startDate;
+  DateTime? endDate;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +77,7 @@ class _HomePageState extends State<HomePage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 15.0,
                     ),
                     SearchAnchor(
@@ -120,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                       suggestionsBuilder: (context, controller) {
                         return [
                           Padding(
-                            padding: EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(10.0),
                             child: Text(
                               'Recent Mail Searches',
                               style: TextStyle(
@@ -137,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                               return Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: ChoiceChip(
-                                  side: BorderSide(color: Colors.white),
+                                  side: const BorderSide(color: Colors.white),
                                   label: Text(item),
                                   selected: item == controller.text,
                                   shape: const RoundedRectangleBorder(
@@ -193,28 +192,29 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(11, 8, 0, 0),
+                padding: const EdgeInsets.fromLTRB(11, 8, 0, 0),
                 child: ElevatedButton.icon(
-                  label: Icon(
+                  label: const Icon(
                     Icons.arrow_drop_down,
                     color: Colors.black,
                   ),
                   icon: selectedFilters != null && selectedFilters!.length > 1
                       ? Text(
                           "${selectedFilters![0]}+${selectedFilters!.length - 1}",
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                         )
                       : selectedFilters!.isNotEmpty
                           ? Text(
-                              "${selectedFilters![0]}",
-                              style: TextStyle(color: Colors.black),
+                              selectedFilters![0],
+                              style: const TextStyle(color: Colors.black),
                             )
-                          : Text(
+                          : const Text(
                               'Filter',
                               style: TextStyle(color: Colors.black),
                             ),
                   onPressed: () async {
-                    final List<String>? Filter = await showDialog<List<String>>(
+                    final List<String>? typeFilter =
+                        await showDialog<List<String>>(
                       context: context,
                       builder: (BuildContext context) {
                         return FilterPopup(selectedFilters: selectedFilters);
@@ -222,28 +222,28 @@ class _HomePageState extends State<HomePage> {
                     );
 
                     // Handle selected filters here
-                    if (Filter != null) {
+                    if (typeFilter != null) {
                       setState(() {
-                        selectedFilters = Filter;
+                        selectedFilters = typeFilter;
                       });
                     }
                   },
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.circular(10), // Atur radius di sini
                       ),
                     ),
-                    minimumSize: MaterialStateProperty.all(
-                        Size(90, 35)), // Atur ukuran di sini
+                    minimumSize: WidgetStateProperty.all(
+                        const Size(90, 35)), // Atur ukuran di sini
                     // Atau menggunakan fixedSize:
                     // fixedSize: MaterialStateProperty.all(Size(100, 50)),
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
-                    elevation: MaterialStateProperty.all<double>(0),
-                    side: MaterialStateProperty.all<BorderSide>(
-                      BorderSide(
+                        WidgetStateProperty.all<Color>(Colors.white),
+                    elevation: WidgetStateProperty.all<double>(0),
+                    side: WidgetStateProperty.all<BorderSide>(
+                      const BorderSide(
                         color: Color.fromARGB(
                             255, 94, 94, 94), // Atur warna border di sini
                         width: 1.0, // Atur lebar border di sini
@@ -253,39 +253,45 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
                   onPressed: () async {
-                    final DateTimeRange? picked =
-                        await showDialog<DateTimeRange?>(
+                    final DateTimeRange? dateFilter =
+                        await showModalBottomSheet<DateTimeRange?>(
                       context: context,
                       builder: (BuildContext context) {
                         return DateRangePickerWidget();
                       },
                     );
 
-                    if (picked != null) {
+                    if (dateFilter != null) {
                       // Lakukan sesuatu dengan tanggal yang dipilih
-                      print(
-                          'Start Date: ${picked.start}, End Date: ${picked.end}');
+                      setState(() {
+                        startDate = dateFilter.start;
+                        endDate = dateFilter.end;
+                        lettersList = lettersList.where((e) {
+                          return e.dateCreated.isBefore(endDate!) &&
+                              e.dateCreated.isAfter(startDate!);
+                        }).toList();
+                      });
                     }
                   },
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.circular(10), // Atur radius di sini
                       ),
                     ),
-                    minimumSize: MaterialStateProperty.all(
-                        Size(140, 35)), // Atur ukuran di sini
+                    minimumSize: WidgetStateProperty.all(
+                        const Size(140, 35)), // Atur ukuran di sini
                     // Atau menggunakan fixedSize:
                     // fixedSize: MaterialStateProperty.all(Size(130, 9)),
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
-                    elevation: MaterialStateProperty.all<double>(0),
-                    side: MaterialStateProperty.all<BorderSide>(
-                      BorderSide(
+                        WidgetStateProperty.all<Color>(Colors.white),
+                    elevation: WidgetStateProperty.all<double>(0),
+                    side: WidgetStateProperty.all<BorderSide>(
+                      const BorderSide(
                         color: Color.fromARGB(
                             255, 94, 94, 94), // Atur warna border di sini
                         width: 1.0, // Atur lebar border di sini
@@ -295,12 +301,14 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Date Filter',
-                        style: TextStyle(color: Colors.black),
+                      Text(
+                        startDate != null && endDate != null
+                            ? '${DateFormat('dd mm yy').format(startDate!)} - ${DateFormat('dd mm yy').format(endDate!)}'
+                            : 'Date Filter',
+                        style: const TextStyle(color: Colors.black),
                       ),
-                      SizedBox(width: 5), // Jarak antara teks dan ikon
-                      Icon(Icons.calendar_today,
+                      const SizedBox(width: 5), // Jarak antara teks dan ikon
+                      const Icon(Icons.calendar_today,
                           size: 15,
                           color: Colors
                               .black), // Ganti dengan ikon yang diinginkan
@@ -315,7 +323,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Text(
                   'Mailbox',
                   style: TextStyle(
@@ -333,9 +341,7 @@ class _HomePageState extends State<HomePage> {
           onRefresh: _refresh,
           child: ListView.builder(
               itemCount: lettersList.where((user) {
-                DateTime userdate = user.tgl;
-                print('user.progres count');
-                print(user.progres);
+                DateTime userdate = user.dateCreated;
 
                 return user.progres == 'request' &&
                     selectedFilters!.contains(user.status) &&
@@ -349,9 +355,7 @@ class _HomePageState extends State<HomePage> {
               }).length,
               itemBuilder: (context, index) {
                 final filteredUsers = lettersList.where((user) {
-                  DateTime userdate = user.tgl;
-                  print('user.progres');
-                  print(user.progres);
+                  DateTime userdate = user.dateCreated;
                   return user.progres == 'request' &&
                       selectedFilters!.contains(user.status) &&
                       // userdate.isAfter(startDate.subtract(Duration(days: 1))) &&
@@ -370,13 +374,16 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.grey[300],
         // elevation: 10.0,
         label: Icon(Icons.edit,
-            color: Theme.of(context).textTheme.bodyText2?.color),
+            color: Theme.of(context).textTheme.bodyMedium!.color),
         // icon: Icon(Icons.edit),
         onPressed: () async {
           final response = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PengajuanSurat()),
+            MaterialPageRoute(
+              builder: (context) => const PengajuanSurat(),
+            ),
           );
+
           print('response');
           print(response);
           if (response == "OK") {
@@ -389,10 +396,10 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
+mail(BuildContext context, List<Mail> data, int index, refreshFunction) {
   final prov = Provider.of<Settings_provider>(context);
   print('_data');
-  print(_data);
+  print(data);
   // return Text("ea");
   return InkWell(
     onTap: () async {
@@ -400,7 +407,7 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
           context,
           MaterialPageRoute(
               builder: (context) => LetterContentWidget(
-                    dataSurat: _data[index],
+                    dataSurat: data[index],
                   )));
       if (response == "OK") {
         refreshFunction();
@@ -417,9 +424,9 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 16),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               leading: Container(
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.black, width: 2),
@@ -428,8 +435,8 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
                   radius: 24,
                   backgroundColor: Colors.blue,
                   child: Text(
-                    _data[index].name[0].toUpperCase(),
-                    style: TextStyle(
+                    data[index].name[0].toUpperCase(),
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                     ),
@@ -439,11 +446,11 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 200,
                     child: Text(
                       overflow: TextOverflow.ellipsis,
-                      _data[index].name.toString(),
+                      data[index].name.toString(),
                       style: TextStyle(
                           color: prov.enableDarkMode == true
                               ? Colors.white
@@ -455,7 +462,7 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
                     child: Text(
                       overflow: TextOverflow.ellipsis,
                       DateFormat('d-MMM')
-                          .format(_data[index].tgl as DateTime)
+                          .format(data[index].dateCreated)
                           .toString(), // Tanggal disini
                       style: TextStyle(
                           color: prov.enableDarkMode == true
@@ -472,11 +479,11 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
+                      SizedBox(
                         width: 200,
                         child: Text(
                           overflow: TextOverflow.ellipsis,
-                          '${_data[index].Subject.toString()}',
+                          data[index].subject.toString(),
                           style: TextStyle(
                             color: prov.enableDarkMode == true
                                 ? Colors.white
@@ -489,7 +496,7 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
                         child: Text(
                           overflow: TextOverflow.ellipsis,
 
-                          '${_data[index].status.toString()}', // Teks urgent disini
+                          data[index].status.toString(), // Teks urgent disini
                           style: TextStyle(
                             color: prov.enableDarkMode == true
                                 ? Colors.white
@@ -500,15 +507,17 @@ mail(BuildContext context, List<Mail> _data, int index, refreshFunction) {
                       ),
                     ],
                   ),
-                  SizedBox(height: 9), // Jarak antara baris pertama dan kedua
+                  const SizedBox(
+                      height: 9), // Jarak antara baris pertama dan kedua
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
                         child: LinearProgressIndicator(
-                          value: _data[index].progresValue.toDouble(),
+                          value: data[index].progresValue.toDouble(),
                           backgroundColor: Colors.red,
-                          valueColor: AlwaysStoppedAnimation(Colors.green),
+                          valueColor:
+                              const AlwaysStoppedAnimation(Colors.green),
                         ),
                       )
                     ],

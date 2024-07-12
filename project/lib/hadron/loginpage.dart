@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:project/jerry/user.dart';
 import 'package:project/Devon/home_page.dart';
 import 'dart:async';
+
 import 'package:project/jerrywijaya/walkthrough.dart';
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({super.key});
+  final bool enabled;
+  const WelcomePage({super.key, required this.enabled});
+
   @override
   _WelcomePageState createState() => _WelcomePageState();
 }
@@ -15,6 +18,7 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
     super.initState();
+    if (!widget.enabled) return;
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
@@ -35,14 +39,17 @@ class _WelcomePageState extends State<WelcomePage> {
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
+
   void _handleLogin() {
     String username = _usernameController.text;
+
     if (username == "admin") {
       Navigator.pushReplacement(
         context,

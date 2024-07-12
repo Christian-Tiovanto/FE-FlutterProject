@@ -46,7 +46,7 @@ class _UserDetail_screenState extends State<UserDetail_screen> {
     void updateUserData(String nik, String updatedName, String updatedNik,
         String updatedRole, int updatedPhoneNum, String updatedPas) async {
       final apiUrl =
-          'http://localhost:3000/api/v1/users/updateUserData'; // Ganti dengan URL API update data user Anda
+          'http://192.168.1.146:3000/api/v1/users/updateUserData'; // Ganti dengan URL API update data user Anda
 
       try {
         final response = await http.patch(

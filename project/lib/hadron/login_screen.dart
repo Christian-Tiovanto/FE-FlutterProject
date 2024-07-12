@@ -77,7 +77,7 @@ class _Login_screenState extends State<Login_screen> {
         children: [
           Container(
             // color: Colors.blue,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color(0xFFFF9900),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(0),
@@ -96,9 +96,9 @@ class _Login_screenState extends State<Login_screen> {
             ),
             width: double.infinity,
             height: 180.0,
-            child: Text(''),
+            child: const Text(''),
           ),
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
           Text(
@@ -110,28 +110,28 @@ class _Login_screenState extends State<Login_screen> {
               color: prov.enableDarkMode == true ? Colors.white : Colors.black,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
-          Container(
+          SizedBox(
             width: 300,
             child: TextField(
               controller: _nikController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 // labelText: 'Password',
                 hintText: 'NIK',
                 prefixIcon: Icon(Icons.vpn_key), // Ikon di depan TextField
               ),
               keyboardType: TextInputType.number,
               inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatter.digitsOnly
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
-          Container(
+          SizedBox(
             width: 300,
             child: TextField(
               controller: _passwordController,
@@ -139,22 +139,22 @@ class _Login_screenState extends State<Login_screen> {
               decoration: InputDecoration(
                 // labelText: 'Password',
                 hintText: 'Password',
-                prefixIcon: Icon(Icons.lock), // Ikon di depan TextField
+                prefixIcon: const Icon(Icons.lock), // Ikon di depan TextField
                 suffixIcon: InkWell(
                     onTap: () {
                       setState(() {
                         _obscureText = _obscureText ? false : true;
                       });
                     },
-                    child: Icon(Icons.remove_red_eye)),
+                    child: const Icon(Icons.remove_red_eye)),
                 // suffixIcon: Icon(Icons.check),
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
-          Container(
+          SizedBox(
             width: 300,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -169,10 +169,10 @@ class _Login_screenState extends State<Login_screen> {
                         });
                       },
                       checkColor: Colors.white,
-                      fillColor: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
+                      fillColor: WidgetStateProperty.resolveWith<Color>(
+                          (Set<WidgetState> states) {
                         // Warna latar belakang ketika checkbox dicentang
-                        if (states.contains(MaterialState.selected)) {
+                        if (states.contains(WidgetState.selected)) {
                           return Colors
                               .orange; // Warna orange ketika checkbox dicentang
                         }
@@ -197,7 +197,7 @@ class _Login_screenState extends State<Login_screen> {
                   },
                   borderRadius: BorderRadius.circular(
                       5), // Membuat efek ink menyesuaikan bentuk CircleAvatar
-                  child: Text(
+                  child: const Text(
                     'Forgot Password?',
                     style: TextStyle(color: Colors.orange),
                   ),
@@ -205,55 +205,26 @@ class _Login_screenState extends State<Login_screen> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              foregroundColor: Color(0xFFCACACA),
+              foregroundColor: const Color(0xFFCACACA),
               backgroundColor: Colors.orange,
               elevation: 30,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(27.10)),
-              minimumSize: Size(200, 45),
+              minimumSize: const Size(200, 45),
               shadowColor: Colors.black,
             ),
             onPressed: () async {
-              if (_nikController.text == "0000" &&
-                  _passwordController.text == "admin") {
-                AwesomeDialog(
-                  context: context,
-                  animType: AnimType.scale,
-                  dialogType: DialogType.success,
-                  body: Center(
-                    child: Text(
-                      'Welcome Admin',
-                      style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        color: prov.enableDarkMode == true
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                    ),
-                  ),
-                  title: 'This is Ignored',
-                  desc: 'This is also Ignored',
-                  btnOkOnPress: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UserPage()),
-                  ),
-                ).show();
-              } else {
-                try {
-                  await UserService().login(
-                      _nikController.text, _passwordController.text, context);
-                } catch (e) {
-                  print('e');
-                  print(e);
-                }
-              }
+              try {
+                await UserService().login(
+                    _nikController.text, _passwordController.text, context);
+              } catch (e) {}
             },
-            child: Text('Log In'),
+            child: const Text('Log In'),
           ),
           // SizedBox(
           //   height: 100,

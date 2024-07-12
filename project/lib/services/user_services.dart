@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:project/Devon/providers.dart';
+import 'package:project/jerry/user.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,7 +13,8 @@ class UserService {
   Future getAllUsers() async {
     print('getAllUsers');
     final prefs = await SharedPreferences.getInstance();
-    final url = Uri.parse("http://localhost:3000/api/v1/users/list-all-users");
+    final url =
+        Uri.parse("http://192.168.1.146:3000/api/v1/users/list-all-users");
     try {
       final response = await http.get(
         url,
@@ -36,7 +39,7 @@ class UserService {
   Future login(String name, String password, BuildContext context) async {
     final prov = Provider.of<Settings_provider>(context, listen: false);
     final prefs = await SharedPreferences.getInstance();
-    final url = Uri.parse("http://localhost:3000/api/v1/users/login");
+    final url = Uri.parse("http://192.168.1.146:3000/api/v1/users/login");
     try {
       final response = await http.post(url,
           headers: <String, String>{
@@ -64,7 +67,7 @@ class LetterService {
     final prefs = await SharedPreferences.getInstance();
     try {
       final url = Uri.parse(
-          'http://localhost:3000/api/v1/letters/$letterId/recipient-checked/$recipientResponse');
+          'http://192.168.1.146:3000/api/v1/letters/$letterId/recipient-checked/$recipientResponse');
       final response = await http.put(url, headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         "Authorization": prefs.getString('token')!
@@ -80,7 +83,7 @@ class LetterService {
   Future postUserLetter(subject, description, priority, recipients) async {
     final prefs = await SharedPreferences.getInstance();
     try {
-      final url = Uri.parse("http://localhost:3000/api/v1/letters/");
+      final url = Uri.parse("http://192.168.1.146:3000/api/v1/letters/");
       final response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -101,7 +104,9 @@ class LetterService {
     final prefs = await SharedPreferences.getInstance();
     try {
       final url = Uri.parse(
-          "http://localhost:3000/api/v1/letters/current-user?checkedStatusIsRequest=true&status=ongoing");
+          "http://192.168.1.146:3000/api/v1/letters/current-user?checkedStatusIsRequest=true&status=ongoing");
+
+      print(url);
       final response = await http.get(
         url,
         headers: <String, String>{
@@ -110,6 +115,7 @@ class LetterService {
         },
       );
       List results = jsonDecode(response.body)['letters'];
+      print(results);
       List<Mail> lettersList =
           List<Mail>.from(results.map((value) => Mail.fromJson(value)));
       return lettersList;
@@ -122,7 +128,8 @@ class LetterService {
     final prefs = await SharedPreferences.getInstance();
     try {
       final url = Uri.parse(
-          "http://localhost:3000/api/v1/letters/userCreatedLetters/$status");
+          "http://192.168.1.146:3000/api/v1/letters/userCreatedLetters/$status");
+      // finished, cancelled, ongoing
       final response = await http.get(
         url,
         headers: <String, String>{
@@ -131,10 +138,8 @@ class LetterService {
         },
       );
       List results = jsonDecode(response.body)['data'];
-      print(results);
       List<MailSent> lettersList =
           List<MailSent>.from(results.map((value) => MailSent.fromJson(value)));
-      print(lettersList);
       return lettersList;
     } catch (e) {
       throw Exception(e.toString());
@@ -160,7 +165,20 @@ void AwesomeDialogCall(
     desc: 'This is also Ignored',
     btnOkColor: login ? Colors.green : Colors.red,
     btnOkOnPress: login
-        ? () {
+        ? () async {
+            final prefs = await SharedPreferences.getInstance();
+            String token = prefs.getString('token') ?? "";
+            Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+            if (token.isEmpty) {
+              return;
+            }
+
+            if (JwtDecoder.decode(token)['role'] == "super_admin") {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => UserPage()));
+              return;
+            }
+
             Navigator.pushNamed(context, "/HomeScreen");
             print('terlogin');
           }

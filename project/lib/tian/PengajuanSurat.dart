@@ -23,7 +23,7 @@ class PengajuanSurat extends StatefulWidget {
 }
 
 class _PengajuanSuratState extends State<PengajuanSurat> {
-  bool _visible = false;
+  final bool _visible = false;
   final List<User> SelectedUser = [];
   final String IsiSurat = '';
   bool userFetched = false;
@@ -32,8 +32,9 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
   initPrefsAndGetUserData() async {
     final prefs = await SharedPreferences.getInstance();
     try {
-      if (!prefs.containsKey('token'))
+      if (!prefs.containsKey('token')) {
         throw Exception("You have to logged in first");
+      }
       String token = prefs.getString('token')!;
       setState(() {
         userData = JwtDecoder.decode(token);
@@ -53,7 +54,7 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
 
   @override
   Widget build(BuildContext context) {
-    final PrioritasSuratValue = Provider.of<MailValue>(context).PrioritasSurat;
+    final PrioritasSuratValue = Provider.of<MailValue>(context).mailPriority;
 
     List subjectValue = Provider.of<MailValue>(context).subjectValue;
     List descriptionValue = Provider.of<MailValue>(context).descriptionValue;
@@ -63,7 +64,7 @@ class _PengajuanSuratState extends State<PengajuanSurat> {
     // );
 
     return !userFetched
-        ? CircularProgressIndicator()
+        ? const CircularProgressIndicator()
         : Scaffold(
             appBar: PengajuanSuratAppBarWidget(
                 contextPage: context,

@@ -8,7 +8,7 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:provider/provider.dart';
 
 class SettingWidget extends StatefulWidget {
-  const SettingWidget({Key? key}) : super(key: key);
+  const SettingWidget({super.key});
 
   @override
   State<SettingWidget> createState() => _SettingWidgetState();
@@ -23,13 +23,13 @@ class _SettingWidgetState extends State<SettingWidget> {
     final prov = Provider.of<Settings_provider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Settings',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -43,11 +43,11 @@ class _SettingWidgetState extends State<SettingWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Divider(
+                const Divider(
                   color: Colors.grey,
                   thickness: 1,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -55,7 +55,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                       'Dark Theme',
                       style: TextStyle(
                           fontSize: 20,
-                          color: Theme.of(context).textTheme.bodyText1?.color),
+                          color: Theme.of(context).textTheme.bodyLarge!.color),
                     ),
                     Switch(
                         value: prov.enableDarkMode,
@@ -65,12 +65,12 @@ class _SettingWidgetState extends State<SettingWidget> {
                         })
                   ],
                 ),
-                SizedBox(height: 10),
-                Divider(
+                const SizedBox(height: 10),
+                const Divider(
                   color: Colors.grey,
                   thickness: 1,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -78,16 +78,16 @@ class _SettingWidgetState extends State<SettingWidget> {
                       'Logout',
                       style: TextStyle(
                           fontSize: 20,
-                          color: Theme.of(context).textTheme.bodyText1?.color),
+                          color: Theme.of(context).textTheme.bodyLarge?.color),
                     ),
                     IconButton(
-                      icon: Icon(Icons.logout),
+                      icon: const Icon(Icons.logout),
                       onPressed: () {
                         userListProvider.removeOnlineUser();
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Login_screen()),
+                              builder: (context) => const Login_screen()),
                           (route) =>
                               false, // fungsi ini mengembalikan false untuk menghapus semua route lainnya dari stack
                         );
@@ -98,7 +98,7 @@ class _SettingWidgetState extends State<SettingWidget> {
               ],
             ),
           ),
-          Spacer(),
+          const Spacer(),
         ],
       ),
     );

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Settings_provider extends ChangeNotifier {
@@ -15,10 +14,10 @@ class Settings_provider extends ChangeNotifier {
     primarySwatch: Colors.purple,
     scaffoldBackgroundColor:
         Colors.grey[900], // Ubah latar belakang gelap di sini
-    textTheme: TextTheme(
-      bodyText1: TextStyle(
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(
           color: Colors.white), // Teks tubuh putih di latar belakang gelap
-      bodyText2: TextStyle(
+      bodyMedium: TextStyle(
           color: Colors.black), // Teks tubuh putih di latar belakang gelap
     ),
   );
@@ -35,14 +34,14 @@ class Settings_provider extends ChangeNotifier {
 class MailValue extends ChangeNotifier {
   List subjectValue = [''];
   List descriptionValue = [''];
-  List PrioritasSurat = ['Urgent'];
+  List mailPriority = ['Urgent'];
   List responseSurat = ['rejected'];
 }
 
 class Mail {
   final String name;
-  final String Subject;
-  final DateTime tgl;
+  final String subject;
+  final DateTime dateCreated;
   final String status;
   String progres;
   final String description;
@@ -51,9 +50,9 @@ class Mail {
   factory Mail.fromJson(Map<String, dynamic> json) {
     return Mail(
         progresValue: json['progres'],
-        Subject: json['subject'],
+        subject: json['subject'],
         name: json['recipients'][0]['userId']['name'],
-        tgl: DateTime.parse(json['dateCreated']) as DateTime,
+        dateCreated: DateTime.parse(json['dateCreated']).toLocal(),
         status: json['priority'],
         description: json['description'],
         progres: json['recipients'][0]['checked'],
@@ -61,11 +60,11 @@ class Mail {
   }
 
   Mail(
-      {required this.Subject,
+      {required this.subject,
       required this.progresValue,
       required this.mailId,
       required this.name,
-      required this.tgl,
+      required this.dateCreated,
       required this.status,
       required this.progres,
       required this.description});
@@ -86,7 +85,7 @@ class MailSent {
         progresValue: json['progres'],
         Subject: json['subject'],
         name: json['creator']['name'],
-        tgl: DateTime.parse(json['dateCreated']) as DateTime,
+        tgl: DateTime.parse(json['dateCreated']),
         status: json['priority'],
         letterStatus: json['status'],
         description: json['description'],
@@ -119,11 +118,11 @@ class User {
     return User(
         userId: json['_id'],
         MailInbox: [],
-        name: json['name'] == null ? "none1" : json['name'],
-        role: json['role'] == null ? "none2" : json['role'],
+        name: json['name'] ?? "none1",
+        role: json['role'] ?? "none2",
         password: '',
-        nik: json['nik'].toString() == null ? "none3" : json['nik'].toString(),
-        number: json['phone_number'] == null ? "" : json['phone_number']);
+        nik: json['nik'].toString() ?? "none3",
+        number: json['phone_number'] ?? "");
   }
   User(
       {required this.name,
@@ -257,8 +256,8 @@ class UserListProvider extends ChangeNotifier {
   }
 
   Future<void> getAllUsers(BuildContext context) async {
-    final apiUrl =
-        'http://localhost:3000/api/v1/users/list-all-users'; // Ganti dengan URL API Anda
+    const apiUrl =
+        'http://192.168.1.146:3000/api/v1/users/list-all-users'; // Ganti dengan URL API Anda
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
